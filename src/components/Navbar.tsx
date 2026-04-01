@@ -23,7 +23,6 @@ export default function Navbar({ onApply }: NavbarProps) {
               alt="BBA Logo" 
               className="h-10 md:h-14 object-contain drop-shadow-[0_0_15px_rgba(255,215,0,0.3)]"
             />
-            />
           </a>
           <span className="font-black uppercase tracking-tighter text-sm sm:text-base md:text-xl italic leading-none hidden sm:flex items-center gap-1">
             <span className="text-brand-gold">$</span>Billion Barber <span className="text-brand-gold">Academy</span>
