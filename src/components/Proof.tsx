@@ -192,15 +192,17 @@ export default function Proof() {
           </div>
         </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-8 text-center text-xs md:text-sm italic text-white/40 tracking-wide will-change-transform"
+          className="mt-12 text-center will-change-transform"
         >
-          "Teaching the exact blueprint to financial freedom at 20 years old"
-        </motion.p>
+          <p className="text-lg sm:text-xl md:text-2xl font-black uppercase italic text-brand-gold tracking-wide">
+            "Teaching the exact blueprint to financial freedom at 20 years old"
+          </p>
+        </motion.div>
       </div>
     </section>
   );
