@@ -91,7 +91,7 @@ export default function Results() {
                 <div className="text-center mb-3">
                   <span className="text-xs font-black uppercase tracking-[0.3em] text-brand-gold">After</span>
                 </div>
-                <div className="rounded-2xl overflow-hidden border border-brand-gold/30 shadow-[0_0_40px_rgba(198,165,109,0.15)] max-w-[280px] mx-auto">
+                <div className="rounded-2xl overflow-hidden border border-brand-gold/30 shadow-[0_0_40px_rgba(198,165,109,0.15)] max-w-[280px] h-[600px] mx-auto">
                   <img
                     src={item.after}
                     alt={`${item.name} after`}
