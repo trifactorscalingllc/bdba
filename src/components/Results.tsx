@@ -75,11 +75,9 @@ export default function Results() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex flex-col items-center gap-2 py-4 md:py-0"
+                className="flex flex-col items-center gap-1 py-4 md:py-0"
               >
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-brand-gold/10 border-2 border-brand-gold flex items-center justify-center shadow-[0_0_30px_rgba(198,165,109,0.3)]">
-                  <ArrowRight className="w-8 h-8 md:w-10 md:h-10 text-brand-gold rotate-90 md:rotate-0" />
-                </div>
+                <ArrowRight className="w-10 h-10 md:w-14 md:h-14 text-brand-gold rotate-90 md:rotate-0 drop-shadow-[0_0_8px_rgba(198,165,109,0.5)]" />
                 <span className="text-xs font-black uppercase tracking-[0.2em] text-brand-gold">{item.label}</span>
               </motion.div>
 
