@@ -14,7 +14,30 @@ import review8 from '@/assets/reviews/review8.png';
 import review9 from '@/assets/reviews/review9.png';
 import review10 from '@/assets/reviews/review10.png';
 
-// ... keep existing code (caseStudies array stays the same)
+const caseStudies = [
+  {
+    name: "Yari",
+    metric: "Generated 12k Rev",
+    shortMetric: "12k Rev",
+    timeframe: "in 1 month",
+    shortTimeframe: "1 Month",
+    rating: "5.0",
+    projects: "1000+",
+    instagram: "https://www.instagram.com/yaricutz/",
+    image: yariImg
+  },
+  {
+    name: "George",
+    metric: "10x client booking",
+    shortMetric: "10x Growth",
+    timeframe: "and retention",
+    shortTimeframe: "Retention",
+    rating: "5.0",
+    projects: "750+",
+    instagram: "https://www.instagram.com/cutsbyygeorge/",
+    image: georgeImg
+  }
+];
 
 const studentReviews = [
   review1, review2, review3, review4, review5,
