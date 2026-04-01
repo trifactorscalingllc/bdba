@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { Star, TrendingUp, Users, CheckCircle2, Instagram } from 'lucide-react';
 import MergedOutline from './MergedOutline';
+import yariImg from '@/assets/yari.png';
+import georgeImg from '@/assets/george.png';
 
 const caseStudies = [
   {
@@ -12,7 +14,7 @@ const caseStudies = [
     rating: "5.0",
     projects: "1000+",
     instagram: "https://www.instagram.com/yaricutz/",
-    image: "https://i.ibb.co/1Gfj8Mfv/340337075-766262201731245-6783814181699090570-n.jpg"
+    image: yariImg
   },
   {
     name: "George",
@@ -23,7 +25,7 @@ const caseStudies = [
     rating: "5.0",
     projects: "750+",
     instagram: "https://www.instagram.com/cutsbyygeorge/",
-    image: "https://i.ibb.co/Q76NtnvJ/487857539-1058398809642327-353604875646274729-n.jpg"
+    image: georgeImg
   }
 ];
 
