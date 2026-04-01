@@ -190,4 +190,17 @@
       -webkit-text-stroke: calc(var(--desktop-stroke) * 0.5) var(--stroke-color);
     }
   }
+
+  @keyframes gold-pulse {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0 0 40px rgba(255, 215, 0, 0.1);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.6), 0 0 60px rgba(255, 215, 0, 0.3);
+    }
+  }
+
+  .gold-pulse {
+    animation: gold-pulse 2s ease-in-out infinite;
+  }
 }
