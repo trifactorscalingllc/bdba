@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { Star, TrendingUp, Users, CheckCircle2, Instagram } from 'lucide-react';
 import MergedOutline from './MergedOutline';
+import yariImg from '@/assets/yari.png';
+import georgeImg from '@/assets/george.png';
 
 const caseStudies = [
   {
