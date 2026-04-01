@@ -18,7 +18,7 @@ import review10 from '@/assets/reviews/review10.png';
 import review11 from '@/assets/reviews/review11.png';
 import review12 from '@/assets/reviews/review12.png';
 import review13 from '@/assets/reviews/review13.png';
-import review14 from '@/assets/reviews/review14.png';
+
 import review15 from '@/assets/reviews/review15.png';
 import review16 from '@/assets/reviews/review16.png';
 import review17 from '@/assets/reviews/review17.png';
