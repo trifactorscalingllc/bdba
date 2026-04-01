@@ -95,8 +95,7 @@ export default function Proof() {
         >
           <h2 className="text-sm font-black text-brand-gold tracking-[0.3em] uppercase mb-4">The Proof</h2>
           <h3 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase italic leading-none flex flex-col items-center gap-2">
-            <span className="text-white text-xl sm:text-2xl md:text-3xl">WHAT MY STUDENTS</span>
-            <MergedOutline strokeWidth="3px" strokeColor="white">HAVE TO SAY</MergedOutline>
+            <MergedOutline strokeWidth="3px" strokeColor="white">Meet My Students</MergedOutline>
           </h3>
         </motion.div>
 
