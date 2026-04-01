@@ -122,7 +122,7 @@ export default function Proof() {
           ))}
         </div>
 
-        <div className="mt-16 grid grid-cols-3 gap-4 max-w-5xl mx-auto">
+        <div className="mt-16 max-w-5xl mx-auto columns-2 md:columns-3 gap-3 space-y-3">
           {studentReviews.map((src, index) => (
             <motion.div
               key={index}
@@ -130,13 +130,12 @@ export default function Proof() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "100px" }}
               transition={{ duration: 0.5, delay: (index % 4) * 0.1 }}
-              className="overflow-hidden rounded-xl min-h-[80px] flex items-center justify-center"
+              className="overflow-hidden rounded-xl break-inside-avoid"
             >
               <img 
                 src={src} 
                 alt={`Student review ${index + 1}`} 
-                className="w-[80%] h-auto object-cover"
-                referrerPolicy="no-referrer"
+                className="w-full h-auto object-contain"
               />
             </motion.div>
           ))}
