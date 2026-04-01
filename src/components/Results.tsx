@@ -57,7 +57,7 @@ export default function Results() {
                 <div className="text-center mb-3">
                   <span className="text-xs font-black uppercase tracking-[0.3em] text-white/40">Before</span>
                 </div>
-                <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl max-w-[280px] mx-auto">
+                <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl max-w-[280px] h-[600px] mx-auto">
                   <img
                     src={item.before}
                     alt={`${item.name} before`}
