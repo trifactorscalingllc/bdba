@@ -75,6 +75,14 @@ const studentReviews = [
 ];
 
 export default function Proof() {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
+
   return (
     <section id="results" className="py-12 md:py-24 px-4">
       <div className="max-w-6xl mx-auto">
