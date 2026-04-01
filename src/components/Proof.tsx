@@ -14,7 +14,7 @@ const caseStudies = [
     rating: "5.0",
     projects: "1000+",
     instagram: "https://www.instagram.com/yaricutz/",
-    image: "https://i.ibb.co/1Gfj8Mfv/340337075-766262201731245-6783814181699090570-n.jpg"
+    image: yariImg
   },
   {
     name: "George",
