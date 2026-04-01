@@ -87,6 +87,12 @@ export default function Authority() {
           <p className="text-lg sm:text-xl md:text-2xl font-black uppercase italic text-brand-gold tracking-wide">
             "Teaching the exact blueprint to financial freedom at 20 years old"
           </p>
+          <a
+            href="#apply"
+            className="mt-6 inline-block px-10 py-4 bg-brand-gold text-black font-black uppercase tracking-widest text-sm md:text-base rounded-full shadow-[0_0_20px_rgba(198,165,109,0.4)] hover:shadow-[0_0_30px_rgba(198,165,109,0.6)] hover:scale-105 transition-all duration-300 animate-[pulse_2s_ease-in-out_infinite]"
+          >
+            Apply Now
+          </a>
         </motion.div>
       </div>
     </section>
