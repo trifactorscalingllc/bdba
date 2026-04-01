@@ -140,16 +140,24 @@ export default function Proof() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "100px" }}
               transition={{ duration: 0.5, delay: (index % 4) * 0.1 }}
-              className="overflow-hidden rounded-xl break-inside-avoid"
+              className="overflow-hidden rounded-xl break-inside-avoid cursor-pointer group"
+              onClick={() => openLightbox(index)}
             >
               <img 
                 src={src} 
                 alt={`Student review ${index + 1}`} 
-                className="w-full h-auto object-contain"
+                className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-300"
               />
             </motion.div>
           ))}
         </div>
+
+        <ImageLightbox
+          images={studentReviews}
+          currentIndex={lightboxIndex}
+          isOpen={lightboxOpen}
+          onClose={() => setLightboxOpen(false)}
+        />
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
