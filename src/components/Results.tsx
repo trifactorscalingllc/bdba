@@ -9,7 +9,7 @@ const transformations = [
     name: "Yari",
     headline: "25x Profile Views in 30 Days",
     statBefore: "7.8K views",
-    statAfter: "203.4K views",
+    statAfter: "302.2K views",
     label: "8K → 203K",
     before: yariBefore,
     after: yariAfter,

@@ -18,7 +18,7 @@ import review10 from '@/assets/reviews/review10.png';
 import review11 from '@/assets/reviews/review11.png';
 import review12 from '@/assets/reviews/review12.png';
 import review13 from '@/assets/reviews/review13.png';
-import review14 from '@/assets/reviews/review14.png';
+
 import review15 from '@/assets/reviews/review15.png';
 import review16 from '@/assets/reviews/review16.png';
 import review17 from '@/assets/reviews/review17.png';
@@ -33,11 +33,9 @@ import review25 from '@/assets/reviews/review25.png';
 import review26 from '@/assets/reviews/review26.png';
 import review27 from '@/assets/reviews/review27.png';
 import review28 from '@/assets/reviews/review28.png';
-import review29 from '@/assets/reviews/review29.png';
+
 import review30 from '@/assets/reviews/review30.png';
 import review31 from '@/assets/reviews/review31.png';
-import review32 from '@/assets/reviews/review32.png';
-import review33 from '@/assets/reviews/review33.png';
 
 const caseStudies = [
   {
@@ -67,11 +65,11 @@ const caseStudies = [
 const studentReviews = [
   review1, review2, review3, review4, review5,
   review6, review7, review8, review9, review10,
-  review11, review12, review13, review14, review15,
+  review11, review12, review13, review15,
   review16, review17, review18, review19, review20,
   review21, review22, review23, review24, review25,
-  review26, review27, review28, review29, review30,
-  review31, review32, review33
+  review26, review27, review28, review30,
+  review31
 ];
 
 export default function Proof() {
