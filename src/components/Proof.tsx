@@ -3,66 +3,22 @@ import { Star, TrendingUp, Users, CheckCircle2, Instagram } from 'lucide-react';
 import MergedOutline from './MergedOutline';
 import yariImg from '@/assets/yari.png';
 import georgeImg from '@/assets/george.png';
+import review1 from '@/assets/reviews/review1.png';
+import review2 from '@/assets/reviews/review2.png';
+import review3 from '@/assets/reviews/review3.png';
+import review4 from '@/assets/reviews/review4.png';
+import review5 from '@/assets/reviews/review5.png';
+import review6 from '@/assets/reviews/review6.png';
+import review7 from '@/assets/reviews/review7.png';
+import review8 from '@/assets/reviews/review8.png';
+import review9 from '@/assets/reviews/review9.png';
+import review10 from '@/assets/reviews/review10.png';
 
-const caseStudies = [
-  {
-    name: "Yari",
-    metric: "Generated 12k Rev",
-    shortMetric: "12k Rev",
-    timeframe: "in 1 month",
-    shortTimeframe: "1 Month",
-    rating: "5.0",
-    projects: "1000+",
-    instagram: "https://www.instagram.com/yaricutz/",
-    image: yariImg
-  },
-  {
-    name: "George",
-    metric: "10x client booking",
-    shortMetric: "10x Growth",
-    timeframe: "and retention",
-    shortTimeframe: "Retention",
-    rating: "5.0",
-    projects: "750+",
-    instagram: "https://www.instagram.com/cutsbyygeorge/",
-    image: georgeImg
-  }
-];
+// ... keep existing code (caseStudies array stays the same)
 
 const studentReviews = [
-  "https://i.ibb.co/TMHKDDZ9/image33.png",
-  "https://i.ibb.co/CpFSMSHT/image32.png",
-  "https://i.ibb.co/m52pj5FD/image30.png",
-  "https://i.ibb.co/WNhXtvzR/image31.png",
-  "https://i.ibb.co/twgW01Ms/image29.png",
-  "https://i.ibb.co/WvYSJmg9/image28.png",
-  "https://i.ibb.co/wZL5r7Y2/image27.png",
-  "https://i.ibb.co/HfGrLvZd/image26.png",
-  "https://i.ibb.co/mrF4VyMn/image25.png",
-  "https://i.ibb.co/WpnxMJ5K/image24.png",
-  "https://i.ibb.co/20yrhSzv/image23.png",
-  "https://i.ibb.co/q8wqMPn/image22.png",
-  "https://i.ibb.co/MyK3dtPJ/image21.png",
-  "https://i.ibb.co/0jJ95J76/image20.png",
-  "https://i.ibb.co/m5LD5ZdW/image19.png",
-  "https://i.ibb.co/XfdBQj1w/image18.png",
-  "https://i.ibb.co/211XY3MJ/image17.png",
-  "https://i.ibb.co/xqcpCjjk/image16.png",
-  "https://i.ibb.co/fVF2YRvm/image15.png",
-  "https://i.ibb.co/sJdNTHSY/image14.png",
-  "https://i.ibb.co/Q3hTsJG4/image13.png",
-  "https://i.ibb.co/R4vwnMqW/image12.png",
-  "https://i.ibb.co/r2FXkV2c/image11.png",
-  "https://i.ibb.co/MkRCQSjF/image10.png",
-  "https://i.ibb.co/rGt320rx/image9.png",
-  "https://i.ibb.co/394T6KV0/image8.png",
-  "https://i.ibb.co/35Skg1zc/image7.png",
-  "https://i.ibb.co/DHkZNyV5/image6.png",
-  "https://i.ibb.co/zWwjgTBT/image5.png",
-  "https://i.ibb.co/nM3nsjfT/image4.png",
-  "https://i.ibb.co/mrM0D6Nj/image3.png",
-  "https://i.ibb.co/v6vWC4nd/image2.png",
-  "https://i.ibb.co/39fmPhBJ/image.png"
+  review1, review2, review3, review4, review5,
+  review6, review7, review8, review9, review10
 ];
 
 export default function Proof() {
