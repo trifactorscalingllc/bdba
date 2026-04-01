@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Scissors, Menu } from 'lucide-react';
 import MergedOutline from './MergedOutline';
+import logoTransparent from '@/assets/logo-transparent.png';
 
 interface NavbarProps {
   onApply: () => void;
