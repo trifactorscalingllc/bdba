@@ -20,7 +20,7 @@ import review12 from '@/assets/reviews/review12.png';
 import review13 from '@/assets/reviews/review13.png';
 
 import review15 from '@/assets/reviews/review15.png';
-import review16 from '@/assets/reviews/review16.png';
+
 import review17 from '@/assets/reviews/review17.png';
 import review18 from '@/assets/reviews/review18.png';
 import review19 from '@/assets/reviews/review19.png';
