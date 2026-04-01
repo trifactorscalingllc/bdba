@@ -19,10 +19,10 @@ export default function Navbar({ onApply }: NavbarProps) {
         <div className="flex items-center gap-2 md:gap-4 z-10">
           <a href="/" className="block">
             <img 
-              src="https://i.ibb.co/N25g2k75/logo-transparent.png" 
-              alt="logo transparent" 
+              src={logoTransparent} 
+              alt="BBA Logo" 
               className="h-10 md:h-14 object-contain drop-shadow-[0_0_15px_rgba(255,215,0,0.3)]"
-              referrerPolicy="no-referrer"
+            />
             />
           </a>
           <span className="font-black uppercase tracking-tighter text-sm sm:text-base md:text-xl italic leading-none hidden sm:flex items-center gap-1">
