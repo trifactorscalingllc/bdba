@@ -33,7 +33,7 @@ import review25 from '@/assets/reviews/review25.png';
 import review26 from '@/assets/reviews/review26.png';
 import review27 from '@/assets/reviews/review27.png';
 import review28 from '@/assets/reviews/review28.png';
-import review29 from '@/assets/reviews/review29.png';
+
 import review30 from '@/assets/reviews/review30.png';
 import review31 from '@/assets/reviews/review31.png';
 import review32 from '@/assets/reviews/review32.png';
