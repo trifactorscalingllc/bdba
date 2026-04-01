@@ -57,11 +57,11 @@ export default function Results() {
                 <div className="text-center mb-3">
                   <span className="text-xs font-black uppercase tracking-[0.3em] text-white/40">Before</span>
                 </div>
-                <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl max-w-[280px] mx-auto">
+                <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl max-w-[280px] h-[600px] mx-auto">
                   <img
                     src={item.before}
                     alt={`${item.name} before`}
-                    className="w-full h-auto object-contain"
+                    className="w-full h-full object-cover object-top"
                   />
                 </div>
                 <div className="text-center mt-3">
@@ -75,10 +75,9 @@ export default function Results() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="flex flex-col items-center gap-1 py-4 md:py-0"
+                className="flex flex-col items-center py-4 md:py-0"
               >
                 <ArrowRight className="w-10 h-10 md:w-14 md:h-14 text-brand-gold rotate-90 md:rotate-0 drop-shadow-[0_0_8px_rgba(198,165,109,0.5)]" />
-                <span className="text-xs font-black uppercase tracking-[0.2em] text-brand-gold">{item.label}</span>
               </motion.div>
 
               {/* After */}
@@ -92,11 +91,11 @@ export default function Results() {
                 <div className="text-center mb-3">
                   <span className="text-xs font-black uppercase tracking-[0.3em] text-brand-gold">After</span>
                 </div>
-                <div className="rounded-2xl overflow-hidden border border-brand-gold/30 shadow-[0_0_40px_rgba(198,165,109,0.15)] max-w-[280px] mx-auto">
+                <div className="rounded-2xl overflow-hidden border border-brand-gold/30 shadow-[0_0_40px_rgba(198,165,109,0.15)] max-w-[280px] h-[600px] mx-auto">
                   <img
                     src={item.after}
                     alt={`${item.name} after`}
-                    className="w-full h-auto object-contain"
+                    className="w-full h-full object-cover object-top"
                   />
                 </div>
                 <div className="text-center mt-3">
