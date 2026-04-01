@@ -95,8 +95,7 @@ export default function Proof() {
         >
           <h2 className="text-sm font-black text-brand-gold tracking-[0.3em] uppercase mb-4">The Proof</h2>
           <h3 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase italic leading-none flex flex-col items-center gap-2">
-            <span className="text-white text-xl sm:text-2xl md:text-3xl">WHAT MY STUDENTS</span>
-            <MergedOutline strokeWidth="3px" strokeColor="white">HAVE TO SAY</MergedOutline>
+            <MergedOutline strokeWidth="3px" strokeColor="white">Meet My Students</MergedOutline>
           </h3>
         </motion.div>
 
@@ -132,7 +131,20 @@ export default function Proof() {
           ))}
         </div>
 
-        <div className="mt-16 max-w-5xl mx-auto columns-2 md:columns-3 gap-3 space-y-3">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-12 mt-16 will-change-transform"
+        >
+          <h3 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase italic leading-none flex flex-col items-center gap-2">
+            <span className="text-white text-sm sm:text-base md:text-lg font-bold tracking-widest">AND</span>
+            <MergedOutline strokeWidth="3px" strokeColor="white">What They Have to Say</MergedOutline>
+          </h3>
+        </motion.div>
+
+        <div className="max-w-5xl mx-auto columns-2 md:columns-3 gap-3 space-y-3">
           {studentReviews.map((src, index) => (
             <motion.div
               key={index}
