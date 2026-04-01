@@ -61,7 +61,7 @@ export default function Results() {
                   <img
                     src={item.before}
                     alt={`${item.name} before`}
-                    className="w-full h-auto object-contain"
+                    className="w-full h-full object-cover object-top"
                   />
                 </div>
                 <div className="text-center mt-3">
