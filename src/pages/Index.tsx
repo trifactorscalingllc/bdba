@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Authority from '@/components/Authority';
 import Proof from '@/components/Proof';
+import Results from '@/components/Results';
 import ApplicationForm from '@/components/ApplicationForm';
 import InlineForm from '@/components/InlineForm';
 import AdminDashboard from '@/components/AdminDashboard';
@@ -50,6 +51,8 @@ export default function Index() {
         <Authority />
         
         <Proof />
+        
+        <Results />
 
         <section className="py-16 md:py-32 px-2 md:px-4 text-center relative z-10 overflow-hidden">
           <motion.div
