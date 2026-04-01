@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import Authority from '@/components/Authority';
 import Proof from '@/components/Proof';
+import Results from '@/components/Results';
 import ApplicationForm from '@/components/ApplicationForm';
 import InlineForm from '@/components/InlineForm';
 import AdminDashboard from '@/components/AdminDashboard';
