@@ -25,7 +25,7 @@ const caseStudies = [
     rating: "5.0",
     projects: "750+",
     instagram: "https://www.instagram.com/cutsbyygeorge/",
-    image: "https://i.ibb.co/Q76NtnvJ/487857539-1058398809642327-353604875646274729-n.jpg"
+    image: georgeImg
   }
 ];
 
