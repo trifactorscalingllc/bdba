@@ -137,7 +137,7 @@ export default function Proof() {
           className="text-center mb-12 mt-16 will-change-transform"
         >
           <h3 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase italic leading-none flex flex-col items-center gap-2">
-            <span className="text-white text-sm sm:text-base md:text-lg font-bold tracking-widest">AND</span>
+            <span className="text-brand-gold text-sm sm:text-base md:text-lg font-bold tracking-widest">AND</span>
             <MergedOutline strokeWidth="3px" strokeColor="white">What They Have to Say</MergedOutline>
           </h3>
         </motion.div>
