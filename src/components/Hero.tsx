@@ -56,7 +56,7 @@ export default function Hero({ onApply }: HeroProps) {
           
           <button 
             onClick={onApply}
-            className="px-12 h-16 bg-brand-gold text-black font-black uppercase italic tracking-tighter text-xl glass-card rounded-full border-none hover:bg-white active:scale-95 transition-all btn-sheen border-barber-subtle"
+            className="px-12 h-16 bg-brand-gold text-black font-black uppercase italic tracking-tighter text-xl rounded-full border-none hover:bg-yellow-300 active:scale-95 transition-all btn-sheen shadow-[0_0_30px_rgba(255,215,0,0.4)]"
           >
             Apply Now
           </button>

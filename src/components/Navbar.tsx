@@ -66,7 +66,7 @@ export default function Navbar({ onApply }: NavbarProps) {
         <div className="md:hidden z-10">
           <button 
             onClick={onApply}
-            className="bg-brand-gold text-black px-6 py-2 glass-card rounded-full text-[10px] font-black uppercase italic hover:opacity-90 active:bg-white active:scale-95 transition-all btn-sheen border-barber-subtle"
+            className="bg-brand-gold text-black px-6 py-2 rounded-full text-[10px] font-black uppercase italic hover:bg-yellow-300 active:scale-95 transition-all btn-sheen shadow-[0_0_20px_rgba(255,215,0,0.3)]"
           >
             Apply
           </button>
