@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { Star, TrendingUp, Users, CheckCircle2, Instagram } from 'lucide-react';
+import ImageLightbox from './ImageLightbox';
 import MergedOutline from './MergedOutline';
 import yariImg from '@/assets/yari.png';
 import georgeImg from '@/assets/george.png';
