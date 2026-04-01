@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { Star, TrendingUp, Users, CheckCircle2, Instagram } from 'lucide-react';
+import ImageLightbox from './ImageLightbox';
 import MergedOutline from './MergedOutline';
 import yariImg from '@/assets/yari.png';
 import georgeImg from '@/assets/george.png';
@@ -73,6 +75,14 @@ const studentReviews = [
 ];
 
 export default function Proof() {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
+
   return (
     <section id="results" className="py-12 md:py-24 px-4">
       <div className="max-w-6xl mx-auto">
@@ -130,16 +140,24 @@ export default function Proof() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "100px" }}
               transition={{ duration: 0.5, delay: (index % 4) * 0.1 }}
-              className="overflow-hidden rounded-xl break-inside-avoid"
+              className="overflow-hidden rounded-xl break-inside-avoid cursor-pointer group"
+              onClick={() => openLightbox(index)}
             >
               <img 
                 src={src} 
                 alt={`Student review ${index + 1}`} 
-                className="w-full h-auto object-contain"
+                className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-300"
               />
             </motion.div>
           ))}
         </div>
+
+        <ImageLightbox
+          images={studentReviews}
+          currentIndex={lightboxIndex}
+          isOpen={lightboxOpen}
+          onClose={() => setLightboxOpen(false)}
+        />
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
