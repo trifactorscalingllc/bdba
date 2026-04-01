@@ -122,7 +122,7 @@ export default function Proof() {
           ))}
         </div>
 
-        <div className="mt-16 grid grid-cols-2 gap-4 max-w-3xl mx-auto">
+        <div className="mt-16 grid grid-cols-3 gap-4 max-w-5xl mx-auto">
           {studentReviews.map((src, index) => (
             <motion.div
               key={index}
