@@ -36,8 +36,6 @@ import review28 from '@/assets/reviews/review28.png';
 
 import review30 from '@/assets/reviews/review30.png';
 import review31 from '@/assets/reviews/review31.png';
-import review32 from '@/assets/reviews/review32.png';
-import review33 from '@/assets/reviews/review33.png';
 
 const caseStudies = [
   {
