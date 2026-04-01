@@ -20,13 +20,13 @@ import review12 from '@/assets/reviews/review12.png';
 import review13 from '@/assets/reviews/review13.png';
 
 import review15 from '@/assets/reviews/review15.png';
-import review16 from '@/assets/reviews/review16.png';
+
 import review17 from '@/assets/reviews/review17.png';
 import review18 from '@/assets/reviews/review18.png';
 import review19 from '@/assets/reviews/review19.png';
 import review20 from '@/assets/reviews/review20.png';
 import review21 from '@/assets/reviews/review21.png';
-import review22 from '@/assets/reviews/review22.png';
+
 import review23 from '@/assets/reviews/review23.png';
 import review24 from '@/assets/reviews/review24.png';
 import review25 from '@/assets/reviews/review25.png';
@@ -66,8 +66,8 @@ const studentReviews = [
   review1, review2, review3, review4, review5,
   review6, review7, review8, review9, review10,
   review11, review12, review13, review15,
-  review16, review17, review18, review19, review20,
-  review21, review22, review23, review24, review25,
+  review17, review18, review19, review20,
+  review21, review23, review24, review25,
   review26, review27, review28, review30,
   review31
 ];
