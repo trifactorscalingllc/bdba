@@ -191,6 +191,16 @@ export default function Proof() {
             <span className="text-[8px] md:text-[10px] uppercase font-black tracking-widest whitespace-nowrap">6-Figure Blueprint</span>
           </div>
         </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="mt-8 text-center text-xs md:text-sm italic text-white/40 tracking-wide will-change-transform"
+        >
+          "Teaching the exact blueprint to financial freedom at 20 years old"
+        </motion.p>
       </div>
     </section>
   );
