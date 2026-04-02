@@ -23,7 +23,7 @@ export default function Hero({ onApply }: HeroProps) {
           </div>
           <div className="flex justify-center items-center gap-x-[0.3em] whitespace-nowrap">
             <span className="text-brand-gold">6-FIGURE</span>
-            <span className="text-barber-pole pr-1">BARBERSHOP&nbsp;</span>
+            <span className="text-white pr-1">BARBERSHOP&nbsp;</span>
           </div>
         </motion.h1>
 
