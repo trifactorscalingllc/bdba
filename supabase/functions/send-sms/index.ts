@@ -19,7 +19,9 @@ Deno.serve(async (req) => {
       );
     }
 
-    const message = `New Lead for $Billion Barber Academy:\nName: ${fullName}\nIG: ${instagramHandle}\nPhone: ${phoneNumber}`;
+    const cleanHandle = instagramHandle.replace(/^@/, '');
+    const igUrl = `https://instagram.com/${cleanHandle}`;
+    const message = `New Lead for $Billion Barber Academy:\nName: ${fullName}\nIG: ${igUrl}\nPhone: ${phoneNumber}`;
 
     const pingram = new Pingram({
       apiKey: Deno.env.get("PINGRAM_API_KEY"),

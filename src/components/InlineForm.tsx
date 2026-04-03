@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { ChevronRight, Loader2 } from 'lucide-react';
+import { ChevronRight, Loader2, CheckCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 export default function InlineForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [fullName, setFullName] = useState('');
   const [instagramHandle, setInstagramHandle] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -24,8 +25,8 @@ export default function InlineForm() {
 
       if (error) throw error;
 
+      setIsSubmitted(true);
       toast.success('Application submitted successfully!');
-      window.location.href = "https://whop.com/high-ticket-barbers";
     } catch (err: any) {
       console.error('Submission error:', err);
       toast.error('Something went wrong. Please try again.');
@@ -33,6 +34,26 @@ export default function InlineForm() {
       setIsSubmitting(false);
     }
   };
+
+  if (isSubmitted) {
+    return (
+      <div className="w-full mx-auto glass-card bg-black/40 backdrop-blur-xl overflow-hidden relative z-10 shadow-[0_0_100px_rgba(0,0,0,1)]">
+        <div className="p-8 md:p-16 flex flex-col items-center justify-center text-center">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+          >
+            <CheckCircle className="w-16 h-16 text-green-400 mb-6" />
+          </motion.div>
+          <h3 className="text-2xl md:text-4xl font-black uppercase italic leading-none text-white tracking-tighter mb-4">
+            Application <span className="text-green-400">Submitted!</span>
+          </h3>
+          <p className="text-white/60 text-sm md:text-base">We'll be in touch soon. Stay tuned.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full mx-auto glass-card bg-black/40 backdrop-blur-xl overflow-hidden relative z-10 shadow-[0_0_100px_rgba(0,0,0,1)]">
@@ -83,7 +104,7 @@ export default function InlineForm() {
           </div>
         </motion.div>
 
-        <button 
+        <button
           onClick={handleSubmit}
           disabled={isSubmitting}
           className="w-full mt-8 md:mt-12 bg-brand-gold text-black font-black uppercase italic py-4 md:py-6 text-sm md:text-base rounded-full flex items-center justify-center gap-2 hover:bg-yellow-300 active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(255,215,0,0.4)] btn-sheen disabled:opacity-60 disabled:cursor-not-allowed"
