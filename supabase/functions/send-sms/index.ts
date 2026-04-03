@@ -19,7 +19,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    const message = `New Form Submission!\nName: ${fullName}\nIG: ${instagramHandle}\nPhone: ${phoneNumber}`;
+    const message = `New Lead for $Billion Barber Academy:\nName: ${fullName}\nIG: ${instagramHandle}\nPhone: ${phoneNumber}`;
 
     const pingram = new Pingram({
       apiKey: Deno.env.get("PINGRAM_API_KEY"),
