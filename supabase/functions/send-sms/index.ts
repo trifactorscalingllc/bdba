@@ -32,7 +32,7 @@ Deno.serve(async (req) => {
       type: "cutbydack",
       to: {
         id: "trifactorscaling@gmail.com",
-        number: "+14848602177",
+        number: "+19317716149",
       },
       parameters: {
         message: [message],
