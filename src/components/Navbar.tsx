@@ -40,7 +40,8 @@ export default function Navbar({ onApply }: NavbarProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              href="#story" 
+              href="#story"
+              onClick={(e) => { e.preventDefault(); document.getElementById('story')?.scrollIntoView({ behavior: 'smooth' }); }}
               className="technical-label hover:text-white transition-all"
             >
               Story
@@ -49,7 +50,8 @@ export default function Navbar({ onApply }: NavbarProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              href="#results" 
+              href="#results"
+              onClick={(e) => { e.preventDefault(); document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' }); }}
               className="technical-label hover:text-white transition-all"
             >
               Results
