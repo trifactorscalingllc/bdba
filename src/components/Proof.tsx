@@ -5,6 +5,7 @@ import ImageLightbox from './ImageLightbox';
 import MergedOutline from './MergedOutline';
 import yariImg from '@/assets/yari.png';
 import georgeImg from '@/assets/george.png';
+import jayvinImg from '@/assets/jayvin.png';
 import review1 from '@/assets/reviews/review1.png';
 import review2 from '@/assets/reviews/review2.png';
 import review3 from '@/assets/reviews/review3.png';
@@ -59,6 +60,17 @@ const caseStudies = [
     projects: "750+",
     instagram: "https://www.instagram.com/cutsbyygeorge/",
     image: georgeImg
+  },
+  {
+    name: "Jayvin",
+    metric: "Rapid growth",
+    shortMetric: "Growth",
+    timeframe: "with coaching",
+    shortTimeframe: "Coached",
+    rating: "5.0",
+    projects: "500+",
+    instagram: "https://www.instagram.com/jayvblends/",
+    image: jayvinImg
   }
 ];
 
