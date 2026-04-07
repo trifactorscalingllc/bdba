@@ -60,6 +60,17 @@ const caseStudies = [
     projects: "750+",
     instagram: "https://www.instagram.com/cutsbyygeorge/",
     image: georgeImg
+  },
+  {
+    name: "Jayvin",
+    metric: "Rapid growth",
+    shortMetric: "Growth",
+    timeframe: "with coaching",
+    shortTimeframe: "Coached",
+    rating: "5.0",
+    projects: "500+",
+    instagram: "https://www.instagram.com/jayvblends/",
+    image: jayvinImg
   }
 ];
 
