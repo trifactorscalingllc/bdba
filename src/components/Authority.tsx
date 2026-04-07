@@ -33,7 +33,7 @@ export default function Authority() {
                 I started exactly where a lot of you are—grinding <span className="text-red-400/80">12-hour days</span> right out of my mom's basement with just a pair of clippers and a phone. I had the skills, but I needed the right <span className="text-brand-gold font-bold">system.</span>
               </p>
               <p>
-                By combining high-level barbering with a strategic digital presence, I started clearing $10k+ a month before I even left that basement. I bought my dream car at 18, and eventually traded that limited environment for a penthouse in Miami.
+                By combining high-level barbering with a strategic digital presence, I cleared 6-Figures before I even got out of highschool. I bought my dream car at 18, and eventually traded that limited environment for a penthouse in Miami.
               </p>
             </div>
             
