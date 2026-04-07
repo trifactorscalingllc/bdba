@@ -83,7 +83,7 @@ const studentReviews = [
   review17, review18, review19, review20,
   review21, review23, review24, review25,
   review26, review27, review28, review30,
-  review31
+  review31, review32, review33
 ];
 
 export default function Proof() {
