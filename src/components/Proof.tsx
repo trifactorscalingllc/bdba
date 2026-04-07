@@ -37,6 +37,8 @@ import review28 from '@/assets/reviews/review28.png';
 
 import review30 from '@/assets/reviews/review30.png';
 import review31 from '@/assets/reviews/review31.png';
+import review32 from '@/assets/reviews/review32.png';
+import review33 from '@/assets/reviews/review33.png';
 
 const caseStudies = [
   {
@@ -81,7 +83,7 @@ const studentReviews = [
   review17, review18, review19, review20,
   review21, review23, review24, review25,
   review26, review27, review28, review30,
-  review31
+  review31, review32, review33
 ];
 
 export default function Proof() {
