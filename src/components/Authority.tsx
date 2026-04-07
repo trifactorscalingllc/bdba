@@ -16,7 +16,7 @@ export default function Authority() {
           <h2 className="text-sm font-black text-brand-gold tracking-[0.3em] uppercase mb-4">The Authority</h2>
           <h3 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase leading-none flex flex-col items-center gap-2">
             <span>From <span className="italic text-red-400/90">Broke</span> <span className="italic text-blue-400/80">Basement Barber</span></span>
-            <span>To <MergedOutline strokeWidth="3px"><span className="italic">Financial Freedom.</span></MergedOutline></span>
+            <span>To <span className="italic"><MergedOutline strokeWidth="3px">Financial Freedom.</MergedOutline></span></span>
           </h3>
         </motion.div>
 
