@@ -14,7 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      barber_leads: {
+        Row: {
+          capital_available: string | null
+          created_at: string
+          cuts_range: string | null
+          email: string
+          first_name: string
+          has_time: string | null
+          id: string
+          phone_number: string
+          qualified: boolean
+          revenue_goal: string | null
+          situation_text: string | null
+        }
+        Insert: {
+          capital_available?: string | null
+          created_at?: string
+          cuts_range?: string | null
+          email: string
+          first_name: string
+          has_time?: string | null
+          id?: string
+          phone_number: string
+          qualified?: boolean
+          revenue_goal?: string | null
+          situation_text?: string | null
+        }
+        Update: {
+          capital_available?: string | null
+          created_at?: string
+          cuts_range?: string | null
+          email?: string
+          first_name?: string
+          has_time?: string | null
+          id?: string
+          phone_number?: string
+          qualified?: boolean
+          revenue_goal?: string | null
+          situation_text?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
