@@ -90,13 +90,8 @@ export default function StandaloneForm() {
         },
       });
 
-      if (qualified) {
-        // Redirect to Calendly
-        window.location.href = CALENDLY_URL;
-      } else {
-        setIsQualified(false);
-        setIsSubmitted(true);
-      }
+      setIsSubmitted(true);
+      toast.success('Thank you for submitting your interest! Our team will reach out shortly.');
     } catch (err: any) {
       console.error('Submission error:', err);
       toast.error('Something went wrong. Please try again.');
