@@ -11,7 +11,7 @@ export default function StandaloneForm() {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isQualified, setIsQualified] = useState(false);
+  const [isQualified] = useState(false);
 
   const [hasTime, setHasTime] = useState<string | null>(null);
   const [revenueGoal, setRevenueGoal] = useState<string | null>(null);
