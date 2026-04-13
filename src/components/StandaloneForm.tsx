@@ -5,8 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
-const TOTAL_STEPS = 6;
-const CALENDLY_URL = 'https://calendly.com/cutbydack'; // Replace with actual Calendly link
+const TOTAL_STEPS = 5;
 
 export default function StandaloneForm() {
   const [step, setStep] = useState(1);
