@@ -25,7 +25,7 @@ export default function Navbar({ onApply }: NavbarProps) {
             />
           </a>
           <span className="font-black uppercase tracking-tighter text-sm sm:text-base md:text-xl italic leading-none hidden sm:flex items-center gap-1">
-            <span className="text-brand-red">$</span>Billion Barber <span className="text-brand-red">Academy</span>
+            <span className="text-brand-red">$</span>Billion Barber <span className="text-brand-silver">Academy</span>
           </span>
         </div>
 
