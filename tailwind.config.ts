@@ -52,6 +52,7 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         "brand-red": "var(--brand-red)",
+        "brand-silver": "var(--brand-silver)",
         "brand-black": "var(--brand-black)",
         "brand-gray": "var(--brand-gray)",
       },
