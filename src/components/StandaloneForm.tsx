@@ -29,7 +29,6 @@ export default function StandaloneForm() {
       case 3: return !!firstName && !!phoneNumber && !!email;
       case 4: return !!cutsRange && situationText.trim().length > 10;
       case 5: return !!capitalAvailable;
-      case 6: return true;
       default: return false;
     }
   };
