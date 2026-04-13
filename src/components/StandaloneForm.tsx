@@ -75,11 +75,16 @@ export default function StandaloneForm() {
 
       console.log('[External Supabase] Inserting into barber_leads:', insertPayload);
 
-      const { data, error } = await externalSupabase.from('barber_leads').insert(insertPayload).select();
+      const { data, error, status, statusText } = await externalSupabase.from('barber_leads').insert(insertPayload).select();
 
-      console.log('[External Supabase] Response - data:', data, 'error:', error);
+      console.log('[External Supabase] Response - status:', status, statusText);
+      console.log('[External Supabase] Data:', JSON.stringify(data));
 
-      if (error) throw error;
+      if (error) {
+        console.error('[External Supabase] FULL ERROR:', JSON.stringify(error, null, 2));
+        console.error('[External Supabase] Error details - code:', error.code, '| message:', error.message, '| hint:', error.hint, '| details:', error.details);
+        throw error;
+      }
 
       setIsSubmitted(true);
       toast.success('Thank you for submitting your interest! Our team will reach out shortly.');
