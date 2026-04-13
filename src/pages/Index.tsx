@@ -60,7 +60,7 @@ export default function Index() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full md:w-[50%] mx-auto p-4 md:p-16 relative will-change-transform"
+            className="w-full sm:w-[85%] md:w-[75%] lg:w-[50%] mx-auto p-4 md:p-16 relative will-change-transform"
           >
             <h2 className="text-2xl sm:text-4xl md:text-6xl font-black uppercase italic leading-none mb-12 relative z-10 flex flex-col items-center gap-4">
               <span className="text-white text-xl sm:text-2xl md:text-3xl"><span className="text-blue-400/80">Apply</span> for</span>
