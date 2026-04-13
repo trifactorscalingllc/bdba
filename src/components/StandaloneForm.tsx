@@ -5,14 +5,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
-const TOTAL_STEPS = 6;
-const CALENDLY_URL = 'https://calendly.com/cutbydack'; // Replace with actual Calendly link
+const TOTAL_STEPS = 5;
 
 export default function StandaloneForm() {
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isQualified, setIsQualified] = useState(false);
+  const [isQualified] = useState(false);
 
   const [hasTime, setHasTime] = useState<string | null>(null);
   const [revenueGoal, setRevenueGoal] = useState<string | null>(null);
@@ -30,7 +29,6 @@ export default function StandaloneForm() {
       case 3: return !!firstName && !!phoneNumber && !!email;
       case 4: return !!cutsRange && situationText.trim().length > 10;
       case 5: return !!capitalAvailable;
-      case 6: return true;
       default: return false;
     }
   };
@@ -92,13 +90,8 @@ export default function StandaloneForm() {
         },
       });
 
-      if (qualified) {
-        // Redirect to Calendly
-        window.location.href = CALENDLY_URL;
-      } else {
-        setIsQualified(false);
-        setIsSubmitted(true);
-      }
+      setIsSubmitted(true);
+      toast.success('Thank you for submitting your interest! Our team will reach out shortly.');
     } catch (err: any) {
       console.error('Submission error:', err);
       toast.error('Something went wrong. Please try again.');
@@ -107,7 +100,7 @@ export default function StandaloneForm() {
     }
   };
 
-  if (isSubmitted && !isQualified) {
+  if (isSubmitted) {
     return (
       <div className="w-full mx-auto glass-card bg-black/40 backdrop-blur-xl overflow-hidden relative z-10 shadow-[0_0_100px_rgba(0,0,0,1)]">
         <div className="p-6 sm:p-10 md:p-16 flex flex-col items-center justify-center text-center">
@@ -115,10 +108,10 @@ export default function StandaloneForm() {
             <CheckCircle className="w-12 h-12 sm:w-16 sm:h-16 text-green-400 mb-4 sm:mb-6" />
           </motion.div>
           <h3 className="text-xl sm:text-2xl md:text-4xl font-black uppercase italic leading-none text-white tracking-tighter mb-3">
-            Thanks for <span className="text-green-400">Applying!</span>
+            Thank You for <span className="text-green-400">Applying!</span>
           </h3>
           <p className="text-white/60 text-xs sm:text-sm md:text-base max-w-md leading-relaxed">
-            You aren't quite a fit for the 1-on-1 coaching yet, but we've got you. Check your SMS for an invite to our private Billionaire Barbers waiting room.
+            We appreciate your interest. Our team will review your application and reach out to you shortly.
           </p>
         </div>
       </div>
@@ -253,19 +246,6 @@ export default function StandaloneForm() {
                   {['$0 - $500', '$500 - $1,000', '$1,000 - $2,000', '$3,000+'].map((opt) => (
                     <OptionButton key={opt} label={opt} selected={capitalAvailable === opt} onClick={() => setCapitalAvailable(opt)} />
                   ))}
-                </div>
-              </motion.div>
-            )}
-
-            {step === 6 && (
-              <motion.div key="s6" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 sm:space-y-6 text-left">
-                <p className="text-white/80 text-xs sm:text-sm md:text-base font-medium leading-relaxed">
-                  Can you make sure to choose a time slot that you can 100% commit to showing up for so we don't waste each other's time?<span className="text-brand-red">*</span>
-                </p>
-                <div className="p-6 sm:p-8 glass-card border-brand-red/20 bg-brand-red/5 rounded-xl sm:rounded-2xl text-center">
-                  <div className="technical-label text-brand-red mb-3 opacity-100 text-[9px] sm:text-[10px]">Coming Soon</div>
-                  <h4 className="text-base sm:text-lg md:text-xl font-black uppercase italic mb-2">Calendar Booking</h4>
-                  <p className="text-[10px] sm:text-xs md:text-sm text-white/60">A calendar integration will be linked here for scheduling your call.</p>
                 </div>
               </motion.div>
             )}
