@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Scissors, Menu } from 'lucide-react';
 import MergedOutline from './MergedOutline';
-import logoTransparent from '@/assets/logo-transparent.png';
+import logoTransparent from '@/assets/pb-logo.png';
 
 interface NavbarProps {
   onApply: () => void;
@@ -20,12 +20,12 @@ export default function Navbar({ onApply }: NavbarProps) {
           <a href="/" className="block">
             <img 
               src={logoTransparent} 
-              alt="BBA Logo" 
-              className="h-10 md:h-14 object-contain drop-shadow-[0_0_15px_rgba(255,215,0,0.3)]"
+              alt="PB Logo" 
+              className="h-10 md:h-14 object-contain drop-shadow-[0_0_15px_rgba(220,38,38,0.3)]"
             />
           </a>
           <span className="font-black uppercase tracking-tighter text-sm sm:text-base md:text-xl italic leading-none hidden sm:flex items-center gap-1">
-            <span className="text-brand-gold">$</span>Billion Barber <span className="text-brand-gold">Academy</span>
+            <span className="text-brand-red">$</span>Billion Barber <span className="text-brand-red">Academy</span>
           </span>
         </div>
 
@@ -59,7 +59,7 @@ export default function Navbar({ onApply }: NavbarProps) {
           </div>
           <button 
             onClick={onApply}
-            className="bg-brand-gold text-black px-10 py-4 rounded-full text-xs font-black uppercase italic hover:bg-yellow-300 active:scale-95 transition-all btn-sheen gold-pulse"
+            className="bg-brand-red text-white px-10 py-4 rounded-full text-xs font-black uppercase italic hover:bg-red-500 active:scale-95 transition-all btn-sheen red-pulse"
           >
             Apply
           </button>
@@ -68,7 +68,7 @@ export default function Navbar({ onApply }: NavbarProps) {
         <div className="md:hidden z-10">
           <button 
             onClick={onApply}
-            className="bg-brand-gold text-black px-6 py-2 rounded-full text-[10px] font-black uppercase italic hover:bg-yellow-300 active:scale-95 transition-all btn-sheen gold-pulse"
+            className="bg-brand-red text-white px-6 py-2 rounded-full text-[10px] font-black uppercase italic hover:bg-red-500 active:scale-95 transition-all btn-sheen red-pulse"
           >
             Apply
           </button>

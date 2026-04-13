@@ -98,13 +98,13 @@ export default function InlineForm() {
       onClick={onClick}
       className={cn(
         "w-full text-left p-3.5 sm:p-4 glass-card border transition-all flex justify-between items-center group rounded-xl sm:rounded-2xl",
-        selected ? "border-brand-gold bg-brand-gold/10" : "border-white/10 hover:border-brand-gold bg-white/5"
+        selected ? "border-brand-red bg-brand-red/10" : "border-white/10 hover:border-brand-red bg-white/5"
       )}
     >
       <span className="font-bold text-xs sm:text-sm uppercase tracking-tight">{label}</span>
       <CheckCircle2
         size={16}
-        className={cn("text-brand-gold transition-opacity flex-shrink-0 ml-2", selected ? "opacity-100" : "opacity-0 group-hover:opacity-50")}
+        className={cn("text-brand-red transition-opacity flex-shrink-0 ml-2", selected ? "opacity-100" : "opacity-0 group-hover:opacity-50")}
       />
     </button>
   );
@@ -115,15 +115,15 @@ export default function InlineForm() {
         {/* Header */}
         <div className="mb-6 sm:mb-8 md:mb-10">
           <div className="flex justify-between items-center mb-4 sm:mb-6">
-            <span className="technical-label text-brand-gold text-[9px] sm:text-[10px]">Step {step} of {TOTAL_STEPS}</span>
+            <span className="technical-label text-brand-red text-[9px] sm:text-[10px]">Step {step} of {TOTAL_STEPS}</span>
             <div className="flex gap-1 sm:gap-1.5">
               {[...Array(TOTAL_STEPS)].map((_, i) => (
-                <div key={i} className={cn("h-0.5 w-3 sm:w-5 transition-all duration-500 rounded-full", i + 1 <= step ? "bg-brand-gold" : "bg-white/10")} />
+                <div key={i} className={cn("h-0.5 w-3 sm:w-5 transition-all duration-500 rounded-full", i + 1 <= step ? "bg-brand-red" : "bg-white/10")} />
               ))}
             </div>
           </div>
           <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase italic leading-none text-white tracking-tighter">
-            Lock In <span className="text-red-400/80">Your</span> Spot
+            Lock In <span className="text-brand-red">Your</span> Spot
           </h3>
         </div>
 
@@ -133,7 +133,7 @@ export default function InlineForm() {
             {step === 1 && (
               <motion.div key="s1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 sm:space-y-6 text-left">
                 <p className="text-white/80 text-xs sm:text-sm md:text-base font-medium leading-relaxed">
-                  Do you have at least 1-2 hours per day outside of the barbershop to actually implement these scaling systems?<span className="text-red-400">*</span>
+                  Do you have at least 1-2 hours per day outside of the barbershop to actually implement these scaling systems?<span className="text-brand-red">*</span>
                 </p>
                 <div className="grid gap-2.5 sm:gap-3">
                   <OptionButton label="Yes" selected={hasTime === 'Yes'} onClick={() => setHasTime('Yes')} />
@@ -145,7 +145,7 @@ export default function InlineForm() {
             {step === 2 && (
               <motion.div key="s2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 sm:space-y-6 text-left">
                 <p className="text-white/80 text-xs sm:text-sm md:text-base font-medium leading-relaxed">
-                  What is your long-term revenue goal for your barbering business?<span className="text-red-400">*</span>
+                  What is your long-term revenue goal for your barbering business?<span className="text-brand-red">*</span>
                 </p>
                 <div className="grid gap-2.5 sm:gap-3">
                   {['$5k - $10k/month', '$10k - $20k/month', '$20k - $30k/month', '$30k+/month'].map((opt) => (
@@ -158,20 +158,20 @@ export default function InlineForm() {
             {step === 3 && (
               <motion.div key="s3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 sm:space-y-6 text-left">
                 <p className="text-white/80 text-xs sm:text-sm md:text-base font-medium leading-relaxed">
-                  Before you submit your application, where should my team contact you?<span className="text-red-400">*</span>
+                  Before you submit your application, where should my team contact you?<span className="text-brand-red">*</span>
                 </p>
                 <div className="space-y-3 sm:space-y-4">
                   <label className="block">
-                    <span className="technical-label block mb-1.5 sm:mb-2 text-[9px] sm:text-[10px]">First Name<span className="text-red-400">*</span></span>
-                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full bg-white/5 border border-white/10 p-3 sm:p-4 rounded-xl sm:rounded-2xl focus:border-brand-gold outline-none transition-all text-white font-mono text-xs sm:text-sm" placeholder="John" />
+                    <span className="technical-label block mb-1.5 sm:mb-2 text-[9px] sm:text-[10px]">First Name<span className="text-brand-red">*</span></span>
+                    <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full bg-white/5 border border-white/10 p-3 sm:p-4 rounded-xl sm:rounded-2xl focus:border-brand-red outline-none transition-all text-white font-mono text-xs sm:text-sm" placeholder="John" />
                   </label>
                   <label className="block">
-                    <span className="technical-label block mb-1.5 sm:mb-2 text-[9px] sm:text-[10px]">Phone Number<span className="text-red-400">*</span></span>
-                    <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} className="w-full bg-white/5 border border-white/10 p-3 sm:p-4 rounded-xl sm:rounded-2xl focus:border-brand-gold outline-none transition-all text-white font-mono text-xs sm:text-sm" placeholder="+1 (555) 123-4567" />
+                    <span className="technical-label block mb-1.5 sm:mb-2 text-[9px] sm:text-[10px]">Phone Number<span className="text-brand-red">*</span></span>
+                    <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} className="w-full bg-white/5 border border-white/10 p-3 sm:p-4 rounded-xl sm:rounded-2xl focus:border-brand-red outline-none transition-all text-white font-mono text-xs sm:text-sm" placeholder="+1 (555) 123-4567" />
                   </label>
                   <label className="block">
-                    <span className="technical-label block mb-1.5 sm:mb-2 text-[9px] sm:text-[10px]">Email<span className="text-red-400">*</span></span>
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-white/5 border border-white/10 p-3 sm:p-4 rounded-xl sm:rounded-2xl focus:border-brand-gold outline-none transition-all text-white font-mono text-xs sm:text-sm" placeholder="you@email.com" />
+                    <span className="technical-label block mb-1.5 sm:mb-2 text-[9px] sm:text-[10px]">Email<span className="text-brand-red">*</span></span>
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full bg-white/5 border border-white/10 p-3 sm:p-4 rounded-xl sm:rounded-2xl focus:border-brand-red outline-none transition-all text-white font-mono text-xs sm:text-sm" placeholder="you@email.com" />
                   </label>
                 </div>
               </motion.div>
@@ -180,7 +180,7 @@ export default function InlineForm() {
             {step === 4 && (
               <motion.div key="s4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 sm:space-y-5 text-left">
                 <p className="text-white/80 text-xs sm:text-sm md:text-base font-medium leading-relaxed">
-                  We only select a handful of serious guys to mentor closely. How many cuts have you done in the last 6 months?<span className="text-red-400">*</span>
+                  We only select a handful of serious guys to mentor closely. How many cuts have you done in the last 6 months?<span className="text-brand-red">*</span>
                 </p>
                 <div className="grid grid-cols-4 gap-2 sm:gap-3">
                   {['0-50', '50-100', '100-150', '150+'].map((opt) => (
@@ -190,7 +190,7 @@ export default function InlineForm() {
                       onClick={() => setCutsRange(opt)}
                       className={cn(
                         "p-2.5 sm:p-3 glass-card border rounded-xl sm:rounded-2xl text-center font-bold text-[10px] sm:text-xs uppercase tracking-tight transition-all",
-                        cutsRange === opt ? "border-brand-gold bg-brand-gold/10 text-brand-gold" : "border-white/10 hover:border-brand-gold bg-white/5"
+                        cutsRange === opt ? "border-brand-red bg-brand-red/10 text-brand-red" : "border-white/10 hover:border-brand-red bg-white/5"
                       )}
                     >
                       {opt}
@@ -198,12 +198,12 @@ export default function InlineForm() {
                   ))}
                 </div>
                 <div>
-                  <p className="text-white/60 text-[10px] sm:text-xs mb-2">What makes you a solid fit to run these systems?<span className="text-red-400">*</span></p>
+                  <p className="text-white/60 text-[10px] sm:text-xs mb-2">What makes you a solid fit to run these systems?<span className="text-brand-red">*</span></p>
                   <textarea
                     value={situationText}
                     onChange={(e) => setSituationText(e.target.value)}
                     rows={4}
-                    className="w-full bg-white/5 border border-white/10 p-3 sm:p-4 rounded-xl sm:rounded-2xl focus:border-brand-gold outline-none transition-all text-white font-mono text-xs sm:text-sm resize-none"
+                    className="w-full bg-white/5 border border-white/10 p-3 sm:p-4 rounded-xl sm:rounded-2xl focus:border-brand-red outline-none transition-all text-white font-mono text-xs sm:text-sm resize-none"
                     placeholder="Tell us about your current situation and what makes you a solid fit... (Do not give a 1-word response)"
                   />
                   <p className="text-white/30 text-[9px] sm:text-xs mt-1">Shift ⇧ + Enter ↵ to make a line break</p>
@@ -214,7 +214,7 @@ export default function InlineForm() {
             {step === 5 && (
               <motion.div key="s5" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 sm:space-y-6 text-left">
                 <p className="text-white/80 text-xs sm:text-sm md:text-base font-medium leading-relaxed">
-                  Truly envision your shop and lifestyle 6 months from now when you finally scale past just grinding behind the chair. How much capital do you have available right now to invest into scaling your business?<span className="text-red-400">*</span>
+                  Truly envision your shop and lifestyle 6 months from now when you finally scale past just grinding behind the chair. How much capital do you have available right now to invest into scaling your business?<span className="text-brand-red">*</span>
                 </p>
                 <div className="grid gap-2.5 sm:gap-3">
                   {['$0 - $500', '$500 - $1,000', '$1,000 - $2,000', '$3,000+'].map((opt) => (
@@ -227,10 +227,10 @@ export default function InlineForm() {
             {step === 6 && (
               <motion.div key="s6" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 sm:space-y-6 text-left">
                 <p className="text-white/80 text-xs sm:text-sm md:text-base font-medium leading-relaxed">
-                  Can you make sure to choose a time slot that you can 100% commit to showing up for so we don't waste each other's time?<span className="text-red-400">*</span>
+                  Can you make sure to choose a time slot that you can 100% commit to showing up for so we don't waste each other's time?<span className="text-brand-red">*</span>
                 </p>
-                <div className="p-6 sm:p-8 glass-card border-brand-gold/20 bg-brand-gold/5 rounded-xl sm:rounded-2xl text-center">
-                  <div className="technical-label text-brand-gold mb-3 opacity-100 text-[9px] sm:text-[10px]">Coming Soon</div>
+                <div className="p-6 sm:p-8 glass-card border-brand-red/20 bg-brand-red/5 rounded-xl sm:rounded-2xl text-center">
+                  <div className="technical-label text-brand-red mb-3 opacity-100 text-[9px] sm:text-[10px]">Coming Soon</div>
                   <h4 className="text-base sm:text-lg md:text-xl font-black uppercase italic mb-2">Calendar Booking</h4>
                   <p className="text-[10px] sm:text-xs md:text-sm text-white/60">A calendar integration will be linked here for scheduling your call.</p>
                 </div>
@@ -254,7 +254,7 @@ export default function InlineForm() {
           <button
             onClick={handleNext}
             disabled={isSubmitting || !canProceed()}
-            className="flex-1 bg-brand-gold text-black font-black uppercase italic py-3 sm:py-4 md:py-5 text-xs sm:text-sm md:text-base rounded-full flex items-center justify-center gap-1.5 sm:gap-2 hover:bg-yellow-300 active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(255,215,0,0.4)] btn-sheen disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex-1 bg-brand-red text-white font-black uppercase italic py-3 sm:py-4 md:py-5 text-xs sm:text-sm md:text-base rounded-full flex items-center justify-center gap-1.5 sm:gap-2 hover:bg-red-500 active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(220,38,38,0.4)] btn-sheen disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <>
