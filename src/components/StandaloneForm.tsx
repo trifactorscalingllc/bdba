@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { ChevronRight, ChevronLeft, Loader2, CheckCircle, CheckCircle2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { externalSupabase } from '@/lib/external-supabase';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -61,7 +61,7 @@ export default function StandaloneForm() {
     try {
       const qualified = checkQualified();
 
-      const { error } = await supabase.from('barber_leads').insert({
+      const insertPayload = {
         first_name: firstName,
         phone_number: phoneNumber,
         email,
@@ -71,24 +71,15 @@ export default function StandaloneForm() {
         situation_text: situationText,
         capital_available: capitalAvailable,
         qualified,
-      } as any);
+      };
+
+      console.log('[External Supabase] Inserting into barber_leads:', insertPayload);
+
+      const { data, error } = await externalSupabase.from('barber_leads').insert(insertPayload).select();
+
+      console.log('[External Supabase] Response - data:', data, 'error:', error);
 
       if (error) throw error;
-
-      // Also fire the SMS notification
-      await supabase.functions.invoke('send-sms', {
-        body: {
-          fullName: firstName,
-          instagramHandle: `Revenue: ${revenueGoal} | Capital: ${capitalAvailable}`,
-          phoneNumber,
-          email,
-          hasTime,
-          revenueGoal,
-          cutsRange,
-          situationText,
-          capitalAvailable,
-        },
-      });
 
       setIsSubmitted(true);
       toast.success('Thank you for submitting your interest! Our team will reach out shortly.');
