@@ -18,11 +18,11 @@ export default function Hero({ onApply }: HeroProps) {
         >
           <div className="text-white block mb-2 whitespace-nowrap">REVEALING THE</div>
           <div className="flex justify-center items-center gap-x-[0.3em] mb-2 whitespace-nowrap">
-            <MergedOutline strokeWidth="3px">EXACT BLUEPRINT</MergedOutline>
+            <MergedOutline strokeWidth="3px" strokeColor="#DC2626">EXACT BLUEPRINT</MergedOutline>
             <span className="text-white">TO A</span>
           </div>
           <div className="flex justify-center items-center gap-x-[0.3em] whitespace-nowrap">
-            <span className="text-brand-gold">6-FIGURE</span>
+            <span className="text-brand-red">6-FIGURE</span>
             <span className="text-white pr-1">BUSINESS&nbsp;</span>
           </div>
         </motion.h1>
@@ -51,12 +51,12 @@ export default function Hero({ onApply }: HeroProps) {
           className="mt-8 flex flex-col items-center gap-8 will-change-transform"
         >
           <p className="text-white/60 font-medium tracking-wide uppercase text-sm">
-            Giving information for <span className="text-blue-400/80">free</span> because the game is meant to be <span className="text-red-400/80">shared</span>.
+            Giving information for <span className="text-blue-400/80">free</span> because the game is meant to be <span className="text-brand-red">shared</span>.
           </p>
           
           <button 
             onClick={onApply}
-            className="px-12 h-16 bg-brand-gold text-black font-black uppercase italic tracking-tighter text-xl rounded-full border-none hover:bg-yellow-300 active:scale-95 transition-all btn-sheen gold-pulse"
+            className="px-12 h-16 bg-brand-red text-white font-black uppercase italic tracking-tighter text-xl rounded-full border-none hover:bg-red-500 active:scale-95 transition-all btn-sheen red-pulse"
           >
             Apply Now
           </button>

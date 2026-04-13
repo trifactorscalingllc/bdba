@@ -18,7 +18,7 @@ export default function LiquidBackground() {
           scale: [1, 1.1, 0.95, 1],
         }}
         transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-[-10%] left-[-10%] w-[30vw] h-[30vw] rounded-full bg-brand-gold/15 blur-[150px]"
+        className="absolute top-[-10%] left-[-10%] w-[30vw] h-[30vw] rounded-full bg-brand-red/15 blur-[150px]"
       />
 
       <motion.div
@@ -28,7 +28,7 @@ export default function LiquidBackground() {
           scale: [1, 0.95, 1.1, 1],
         }}
         transition={{ duration: 35, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-[-20%] right-[-10%] w-[35vw] h-[35vw] rounded-full bg-brand-gold/10 blur-[180px]"
+        className="absolute bottom-[-20%] right-[-10%] w-[35vw] h-[35vw] rounded-full bg-brand-red/10 blur-[180px]"
       />
       
       <motion.div

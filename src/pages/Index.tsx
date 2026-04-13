@@ -35,11 +35,11 @@ export default function Index() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-brand-black selection:bg-brand-gold selection:text-black relative">
+    <div className="min-h-screen bg-brand-black selection:bg-brand-red selection:text-white relative">
       <LiquidBackground />
       
       <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-brand-gold z-[60] origin-left"
+        className="fixed top-0 left-0 right-0 h-1 bg-brand-red z-[60] origin-left"
         style={{ scaleX }}
       />
 
@@ -64,7 +64,7 @@ export default function Index() {
           >
             <h2 className="text-2xl sm:text-4xl md:text-6xl font-black uppercase italic leading-none mb-12 relative z-10 flex flex-col items-center gap-4">
               <span className="text-white text-xl sm:text-2xl md:text-3xl"><span className="text-blue-400/80">Apply</span> for</span>
-              <MergedOutline strokeWidth="4px">1-on-1 coaching</MergedOutline>
+              <MergedOutline strokeWidth="4px" strokeColor="#DC2626">1-on-1 coaching</MergedOutline>
             </h2>
             <InlineForm />
           </motion.div>
@@ -95,7 +95,7 @@ export default function Index() {
               href="https://www.instagram.com/cutbydack" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="w-12 h-12 glass-card rounded-full border-brand-gold text-white flex items-center justify-center hover:bg-brand-gold hover:text-black active:bg-white group transition-all"
+              className="w-12 h-12 glass-card rounded-full border-brand-red text-white flex items-center justify-center hover:bg-brand-red hover:text-white active:bg-white group transition-all"
             >
               <Instagram size={20} className="group-hover:scale-110 transition-transform" />
             </a>
@@ -103,7 +103,7 @@ export default function Index() {
               href="https://www.tiktok.com/@cutbydack" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="w-12 h-12 glass-card rounded-full border-brand-gold text-white flex items-center justify-center hover:bg-brand-gold hover:text-black active:bg-white group transition-all"
+              className="w-12 h-12 glass-card rounded-full border-brand-red text-white flex items-center justify-center hover:bg-brand-red hover:text-white active:bg-white group transition-all"
             >
               <svg 
                 viewBox="0 0 24 24" 
@@ -117,7 +117,7 @@ export default function Index() {
               href="https://www.youtube.com/@uncutdack" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="w-12 h-12 glass-card rounded-full border-brand-gold text-white flex items-center justify-center hover:bg-brand-gold hover:text-black active:bg-white group transition-all"
+              className="w-12 h-12 glass-card rounded-full border-brand-red text-white flex items-center justify-center hover:bg-brand-red hover:text-white active:bg-white group transition-all"
             >
               <Youtube size={20} className="group-hover:scale-110 transition-transform" />
             </a>

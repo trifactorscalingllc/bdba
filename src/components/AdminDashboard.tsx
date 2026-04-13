@@ -15,13 +15,13 @@ export default function AdminDashboard() {
       <div className="max-w-6xl mx-auto">
         <div className="flex items-end justify-between mb-12">
           <div>
-            <h2 className="text-sm font-black text-brand-gold tracking-[0.3em] uppercase mb-4">Admin View</h2>
+            <h2 className="text-sm font-black text-brand-red tracking-[0.3em] uppercase mb-4">Admin View</h2>
             <h3 className="text-4xl font-black uppercase italic leading-none">Funnel Analytics</h3>
           </div>
           <div className="text-right">
             <div className="text-xs font-bold uppercase tracking-widest text-white/40 mb-1">Live Status</div>
-            <div className="flex items-center gap-2 text-brand-gold font-bold">
-              <div className="w-2 h-2 rounded-full bg-brand-gold animate-pulse" />
+            <div className="flex items-center gap-2 text-brand-red font-bold">
+              <div className="w-2 h-2 rounded-full bg-brand-red animate-pulse" />
               Active
             </div>
           </div>
@@ -37,10 +37,10 @@ export default function AdminDashboard() {
               className="p-8 glass-card bg-black/40 backdrop-blur-xl"
             >
               <div className="flex items-center justify-between mb-6">
-                <stat.icon size={20} className="text-brand-gold" />
+                <stat.icon size={20} className="text-brand-red" />
                 <span className={cn(
                   "technical-label px-2 py-1 bg-white/5 rounded-full",
-                  stat.change.startsWith('+') ? "text-brand-gold" : "text-red-500"
+                  stat.change.startsWith('+') ? "text-brand-red" : "text-red-500"
                 )}>
                   {stat.change}
                 </span>
@@ -70,7 +70,7 @@ export default function AdminDashboard() {
                     initial={{ width: 0 }}
                     whileInView={{ width: `${flow.percent}%` }}
                     transition={{ duration: 1, delay: i * 0.2 }}
-                    className="h-full bg-brand-gold"
+                    className="h-full bg-brand-red"
                   />
                 </div>
                 {i < 3 && (
