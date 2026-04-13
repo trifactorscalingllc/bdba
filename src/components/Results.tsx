@@ -86,9 +86,9 @@ export default function Results() {
                 className="relative group w-full md:w-auto"
               >
                 <div className="text-center mb-3">
-                  <span className="text-xs font-black uppercase tracking-[0.3em] text-brand-red">After</span>
+                  <span className="text-xs font-black uppercase tracking-[0.3em] text-brand-silver">After</span>
                 </div>
-                <div className="rounded-2xl overflow-hidden border border-brand-red/30 shadow-[0_0_40px_rgba(220,38,38,0.15)] max-w-[280px] h-[600px] mx-auto">
+                <div className="rounded-2xl overflow-hidden border border-brand-silver/30 shadow-[0_0_40px_rgba(192,192,192,0.1)] max-w-[280px] h-[600px] mx-auto">
                   <img
                     src={item.after}
                     alt={`${item.name} after`}
