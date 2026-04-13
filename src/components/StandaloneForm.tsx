@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { ChevronRight, ChevronLeft, Loader2, CheckCircle, CheckCircle2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { externalSupabase } from '@/lib/external-supabase';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
