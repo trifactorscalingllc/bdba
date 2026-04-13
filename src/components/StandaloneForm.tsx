@@ -100,7 +100,7 @@ export default function StandaloneForm() {
     }
   };
 
-  if (isSubmitted && !isQualified) {
+  if (isSubmitted) {
     return (
       <div className="w-full mx-auto glass-card bg-black/40 backdrop-blur-xl overflow-hidden relative z-10 shadow-[0_0_100px_rgba(0,0,0,1)]">
         <div className="p-6 sm:p-10 md:p-16 flex flex-col items-center justify-center text-center">
@@ -108,10 +108,10 @@ export default function StandaloneForm() {
             <CheckCircle className="w-12 h-12 sm:w-16 sm:h-16 text-green-400 mb-4 sm:mb-6" />
           </motion.div>
           <h3 className="text-xl sm:text-2xl md:text-4xl font-black uppercase italic leading-none text-white tracking-tighter mb-3">
-            Thanks for <span className="text-green-400">Applying!</span>
+            Thank You for <span className="text-green-400">Applying!</span>
           </h3>
           <p className="text-white/60 text-xs sm:text-sm md:text-base max-w-md leading-relaxed">
-            You aren't quite a fit for the 1-on-1 coaching yet, but we've got you. Check your SMS for an invite to our private Billionaire Barbers waiting room.
+            We appreciate your interest. Our team will review your application and reach out to you shortly.
           </p>
         </div>
       </div>
