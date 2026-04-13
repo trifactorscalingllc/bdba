@@ -12,7 +12,7 @@ export default function MergedOutline({
   children, 
   className, 
   strokeWidth = '3px', 
-  strokeColor = '#FFD700',
+  strokeColor = '#DC2626',
   fillColor = '#000000'
 }: MergedOutlineProps) {
   return (
