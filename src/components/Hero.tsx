@@ -18,7 +18,7 @@ export default function Hero({ onApply }: HeroProps) {
         >
           <div className="text-white block mb-2 whitespace-nowrap">REVEALING THE</div>
           <div className="flex justify-center items-center gap-x-[0.3em] mb-2 whitespace-nowrap">
-            <MergedOutline strokeWidth="3px" strokeColor="#DC2626">EXACT BLUEPRINT</MergedOutline>
+            <MergedOutline strokeWidth="3px" strokeColor="#3B82F6">EXACT BLUEPRINT</MergedOutline>
             <span className="text-white">TO A</span>
           </div>
           <div className="flex justify-center items-center gap-x-[0.3em] whitespace-nowrap">
