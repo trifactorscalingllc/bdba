@@ -61,6 +61,12 @@ export default function StandaloneForm() {
     try {
       const qualified = checkQualified();
 
+      // Capture UTM params from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const utmSource = urlParams.get('utm_source') || '';
+      const utmCampaign = urlParams.get('utm_campaign') || '';
+
+      // 1) Insert into external Supabase
       const insertPayload = {
         first_name: firstName,
         phone_number: phoneNumber,
@@ -83,7 +89,41 @@ export default function StandaloneForm() {
       if (error) {
         console.error('[External Supabase] FULL ERROR:', JSON.stringify(error, null, 2));
         console.error('[External Supabase] Error details - code:', error.code, '| message:', error.message, '| hint:', error.hint, '| details:', error.details);
-        throw error;
+        // Don't throw — still try the webhook
+      }
+
+      // 2) POST to GHL webhook
+      const webhookPayload = {
+        first_name: firstName,
+        email,
+        phone: phoneNumber,
+        revenue_goal: revenueGoal || '',
+        cuts_count: cutsRange || '',
+        capital_available: capitalAvailable || '',
+        time_commitment: hasTime || '',
+        fit_description: situationText,
+        IG_Handle: '',
+        Discord_Username: '',
+        UTM_Source: utmSource,
+        UTM_Campaign: utmCampaign,
+      };
+
+      console.log('[GHL Webhook] Sending payload:', webhookPayload);
+
+      const webhookRes = await fetch(
+        'https://services.leadconnectorhq.com/hooks/tdcmXGR1SyxWs5m74u61/webhook-trigger/LmAah0e5UzWUeEruWJ69',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(webhookPayload),
+        }
+      );
+
+      console.log('[GHL Webhook] Response status:', webhookRes.status);
+
+      if (!webhookRes.ok) {
+        const errText = await webhookRes.text();
+        console.error('[GHL Webhook] Error:', webhookRes.status, errText);
       }
 
       setIsSubmitted(true);
