@@ -32,19 +32,18 @@ export default function Hero({ onApply }: HeroProps) {
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           className="relative w-full max-w-3xl mx-auto glass-card overflow-hidden bg-black shadow-2xl will-change-transform"
+          style={{ aspectRatio: '16/9' }}
         >
           <video
-            className="w-full h-full object-cover block"
+            className="absolute inset-0 w-full h-full"
             autoPlay
             muted
             loop
             playsInline
             controls
             preload="auto"
-            style={{ display: 'block' }}
-          >
-            <source src="/vsl.mp4" type="video/mp4" />
-          </video>
+            src="/vsl.mp4"
+          />
         </motion.div>
 
         <motion.div
