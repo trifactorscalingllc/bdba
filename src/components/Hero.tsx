@@ -57,7 +57,7 @@ export default function Hero({ onApply }: HeroProps) {
             <span className="text-white">Helping</span>{' '}
             <span className="text-blue-400/90 italic font-black">barbers</span>{' '}
             <span className="text-white">turn their</span>{' '}
-            <span className="font-mono text-brand-silver normal-case tracking-tight">clippers</span>{' '}
+            <span className="text-brand-silver">clippers</span>{' '}
             <span className="text-white">into</span>{' '}
             <span className="text-brand-red font-black italic">capital</span>.
           </p>
