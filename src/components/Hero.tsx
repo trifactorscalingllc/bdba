@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Play } from 'lucide-react';
 import MergedOutline from './MergedOutline';
 
 interface HeroProps {
@@ -32,15 +31,18 @@ export default function Hero({ onApply }: HeroProps) {
           whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          className="relative aspect-[4/3] w-full max-w-3xl mx-auto glass-card overflow-hidden bg-brand-gray/40 backdrop-blur-xl shadow-2xl group will-change-transform"
+          className="relative w-full max-w-3xl mx-auto glass-card overflow-hidden bg-brand-gray/40 backdrop-blur-xl shadow-2xl will-change-transform"
         >
-          <img 
-            src="https://i.ibb.co/KpKT5xyw/image-2026-03-30-223225063.png" 
-            alt="Academy Life" 
+          <video
             className="w-full h-full object-cover"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+            controls
+            playsInline
+            preload="metadata"
+            poster="https://i.ibb.co/KpKT5xyw/image-2026-03-30-223225063.png"
+          >
+            <source src="/vsl.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-transparent" />
         </motion.div>
 
         <motion.div
