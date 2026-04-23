@@ -53,8 +53,13 @@ export default function Hero({ onApply }: HeroProps) {
           transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
           className="mt-8 flex flex-col items-center gap-8 will-change-transform"
         >
-          <p className="text-brand-silver/60 font-medium tracking-wide uppercase text-sm">
-            Giving information for <span className="text-blue-400/80">free</span> because the game is meant to be <span className="text-brand-red">shared</span>.
+          <p className="text-brand-silver/70 font-medium tracking-wide uppercase text-sm sm:text-base">
+            <span className="text-white">Helping</span>{' '}
+            <span className="text-blue-400/90 italic font-black">barbers</span>{' '}
+            <span className="text-white">turn their</span>{' '}
+            <span className="font-mono text-brand-silver normal-case tracking-tight">clippers</span>{' '}
+            <span className="text-white">into</span>{' '}
+            <span className="text-brand-red font-black italic">capital</span>.
           </p>
           
           <button 
