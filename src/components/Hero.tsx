@@ -31,18 +31,20 @@ export default function Hero({ onApply }: HeroProps) {
           whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          className="relative w-full max-w-3xl mx-auto glass-card overflow-hidden bg-brand-gray/40 backdrop-blur-xl shadow-2xl will-change-transform"
+          className="relative w-full max-w-3xl mx-auto glass-card overflow-hidden bg-black shadow-2xl will-change-transform"
         >
           <video
-            className="w-full h-full object-cover"
-            controls
+            className="w-full h-full object-cover block"
+            autoPlay
+            muted
+            loop
             playsInline
-            preload="metadata"
-            poster="https://i.ibb.co/KpKT5xyw/image-2026-03-30-223225063.png"
+            controls
+            preload="auto"
+            style={{ display: 'block' }}
           >
             <source src="/vsl.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 via-transparent to-transparent" />
         </motion.div>
 
         <motion.div
