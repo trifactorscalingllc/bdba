@@ -8,7 +8,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const DACK_PHONE = "+14848602177";
+const DACK_PHONE = "+19317716149";
 const DACK_ID = "trifactorscaling@gmail.com";
 
 const dash = (v: unknown) => {
@@ -49,10 +49,10 @@ async function sendToDack(input: Record<string, unknown>) {
   });
 
   return pingram.send({
-    type: "cutbydack",
+    type: "profitablebarbers_com",
     to: { id: DACK_ID, number: DACK_PHONE },
     parameters: { message: buildMessage(input) },
-    templateId: "template_one",
+    templateId: "form_submit",
   });
 }
 
