@@ -8,7 +8,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const DACK_PHONE = "+14848602177";
+const DACK_PHONE = "+19317716149";
 const DACK_ID = "trifactorscaling@gmail.com";
 
 const dash = (v: unknown) => {
@@ -23,7 +23,7 @@ const truncate = (s: string, max = 320) =>
 function buildMessage(input: Record<string, unknown>): string {
   const name = dash(input.fullName ?? input.firstName);
   return [
-    "🪒 New BDBA Lead",
+    "New BDBA Lead",
     "",
     `Name: ${name}`,
     `Phone: ${dash(input.phoneNumber)}`,
