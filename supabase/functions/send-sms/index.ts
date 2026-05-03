@@ -48,12 +48,29 @@ async function sendToDack(input: Record<string, unknown>) {
     baseUrl: "https://api.pingram.io",
   });
 
-  return pingram.send({
-    type: "profitablebarbers_com",
-    to: { id: DACK_ID, number: DACK_PHONE },
-    parameters: { message: buildMessage(input) },
-    templateId: "form_submit",
-  });
+  const message = buildMessage(input);
+  const to = { id: DACK_ID, number: DACK_PHONE };
+
+  try {
+    const result = await pingram.send({
+      type: "profitablebarbers_com",
+      to,
+      parameters: { message },
+      templateId: "form_submit",
+    });
+    console.log("Pingram sent via profitablebarbers_com/form_submit");
+    return { result, combo: "profitablebarbers_com/form_submit" };
+  } catch (primaryErr) {
+    console.error("Primary Pingram combo failed, falling back:", primaryErr);
+    const result = await pingram.send({
+      type: "cutbydack",
+      to,
+      parameters: { message },
+      templateId: "template_one",
+    });
+    console.log("Pingram sent via cutbydack/template_one (fallback)");
+    return { result, combo: "cutbydack/template_one" };
+  }
 }
 
 Deno.serve(async (req) => {

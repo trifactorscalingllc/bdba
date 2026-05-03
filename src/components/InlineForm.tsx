@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 5;
 
 export default function InlineForm() {
   const [step, setStep] = useState(1);
@@ -28,7 +28,6 @@ export default function InlineForm() {
       case 3: return !!firstName && !!phoneNumber && !!email;
       case 4: return !!cutsRange && situationText.trim().length > 10;
       case 5: return !!capitalAvailable;
-      case 6: return true;
       default: return false;
     }
   };
@@ -223,18 +222,6 @@ export default function InlineForm() {
               </motion.div>
             )}
 
-            {step === 6 && (
-              <motion.div key="s6" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4 sm:space-y-6 text-left">
-                <p className="text-white/80 text-xs sm:text-sm md:text-base font-medium leading-relaxed">
-                  Can you make sure to choose a time slot that you can 100% commit to showing up for so we don't waste each other's time?<span className="text-brand-red">*</span>
-                </p>
-                <div className="p-6 sm:p-8 glass-card border-brand-red/20 bg-brand-red/5 rounded-xl sm:rounded-2xl text-center">
-                  <div className="technical-label text-brand-red mb-3 opacity-100 text-[9px] sm:text-[10px]">Coming Soon</div>
-                  <h4 className="text-base sm:text-lg md:text-xl font-black uppercase italic mb-2">Calendar Booking</h4>
-                  <p className="text-[10px] sm:text-xs md:text-sm text-white/60">A calendar integration will be linked here for scheduling your call.</p>
-                </div>
-              </motion.div>
-            )}
           </AnimatePresence>
         </div>
 
