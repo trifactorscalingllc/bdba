@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { ChevronRight, ChevronLeft, Loader2, CheckCircle, CheckCircle2 } from 'lucide-react';
 import { externalSupabase } from '@/lib/external-supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -124,6 +125,25 @@ export default function StandaloneForm() {
       if (!webhookRes.ok) {
         const errText = await webhookRes.text();
         console.error('[GHL Webhook] Error:', webhookRes.status, errText);
+      }
+
+      // 3) Notify Dack via SMS (Pingram) — fire-and-forget, don't block submit on failure
+      try {
+        const { error: smsError } = await supabase.functions.invoke('send-sms', {
+          body: {
+            firstName,
+            phoneNumber,
+            email,
+            hasTime,
+            revenueGoal,
+            cutsRange,
+            situationText,
+            capitalAvailable,
+          },
+        });
+        if (smsError) console.error('[send-sms] Error:', smsError);
+      } catch (smsErr) {
+        console.error('[send-sms] Exception:', smsErr);
       }
 
       setIsSubmitted(true);
