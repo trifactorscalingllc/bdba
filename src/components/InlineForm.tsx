@@ -54,8 +54,7 @@ export default function InlineForm() {
     try {
       const { error } = await supabase.functions.invoke('send-sms', {
         body: {
-          fullName: firstName,
-          instagramHandle: `Revenue: ${revenueGoal} | Capital: ${capitalAvailable}`,
+          firstName,
           phoneNumber,
           email,
           hasTime,
