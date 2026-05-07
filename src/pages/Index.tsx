@@ -16,6 +16,10 @@ import LiquidBackground from '@/components/LiquidBackground';
 export default function Index() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [showAdmin, setShowAdmin] = useState(false);
+
+  const scrollToForm = () => {
+    document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
   
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
