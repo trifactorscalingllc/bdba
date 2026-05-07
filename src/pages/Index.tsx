@@ -58,7 +58,7 @@ export default function Index() {
         
         <Results />
 
-        <section className="py-16 md:py-32 px-2 md:px-4 text-center relative z-10 overflow-hidden">
+        <section id="apply-form" className="py-16 md:py-32 px-2 md:px-4 text-center relative z-10 overflow-hidden scroll-mt-20">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
