@@ -47,10 +47,10 @@ export default function Index() {
         style={{ scaleX }}
       />
 
-      <Navbar onApply={() => setIsFormOpen(true)} />
+      <Navbar onApply={scrollToForm} />
       
       <main className="relative z-10">
-        <Hero onApply={() => setIsFormOpen(true)} />
+        <Hero onApply={scrollToForm} />
         
         <Authority />
         
