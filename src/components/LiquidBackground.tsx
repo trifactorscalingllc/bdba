@@ -19,8 +19,8 @@ export default function LiquidBackground() {
           src={pbLogo}
           alt=""
           draggable={false}
-          className="w-[75vw] max-w-[850px] select-none"
-          style={{ opacity: 0.07 }}
+          className="w-[85vw] max-w-[980px] select-none"
+          style={{ opacity: 0.11 }}
         />
       </div>
       
