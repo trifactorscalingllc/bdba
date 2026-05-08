@@ -3,6 +3,8 @@ import { ArrowRight } from 'lucide-react';
 import MergedOutline from './MergedOutline';
 import jayvBefore from '@/assets/results/jayv-before.png';
 import jayvAfter from '@/assets/results/jayv-after.png';
+import yariBefore from '@/assets/results/yari-before.png';
+import yariAfter from '@/assets/results/yari-after.png';
 
 const transformations = [
   {
@@ -13,6 +15,15 @@ const transformations = [
     label: "60K → 4.6M",
     before: jayvBefore,
     after: jayvAfter,
+  },
+  {
+    name: "Yari",
+    headline: "141x Profile Views in 30 Days",
+    statBefore: "7.8K views",
+    statAfter: "1.1M views",
+    label: "7.8K → 1.1M",
+    before: yariBefore,
+    after: yariAfter,
   },
 ];
 
