@@ -1,4 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
+import pbLogo from '@/assets/pb-logo.png';
 
 export default function LiquidBackground() {
   const { scrollY } = useScroll();
@@ -10,6 +11,21 @@ export default function LiquidBackground() {
   return (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
       <div className="absolute inset-0 bg-brand-black/70 backdrop-blur-[100px] z-10" />
+
+      {/* Faint logo watermark */}
+      <div className="absolute inset-0 flex items-center justify-center z-[5]">
+        <img
+          src={pbLogo}
+          alt=""
+          draggable={false}
+          className="w-[65vw] max-w-[700px] select-none"
+          style={{
+            opacity: 0.045,
+            filter: 'grayscale(60%) blur(1px)',
+            mixBlendMode: 'luminosity',
+          }}
+        />
+      </div>
       
       <motion.div
         style={{ y: y1 }}

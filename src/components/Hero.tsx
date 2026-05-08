@@ -7,7 +7,7 @@ interface HeroProps {
 
 export default function Hero({ onApply }: HeroProps) {
   return (
-    <section className="relative pt-32 md:pt-52 pb-10 md:pb-20 px-4 overflow-hidden">
+    <section className="relative pt-32 md:pt-52 pb-10 md:pb-20 px-4">
       <div className="max-w-5xl mx-auto text-center relative z-10">
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
@@ -20,9 +20,9 @@ export default function Hero({ onApply }: HeroProps) {
             <MergedOutline strokeWidth="3px" strokeColor="#3B82F6">EXACT BLUEPRINT</MergedOutline>
             <span className="text-white">TO A</span>
           </div>
-          <div className="flex justify-center items-center gap-x-[0.3em] whitespace-nowrap">
-            <span className="text-brand-red text-red-shimmer">6-FIGURE</span>
-            <span className="text-white pr-1">BUSINESS&nbsp;</span>
+          <div className="flex justify-center items-center gap-x-[0.4em] whitespace-nowrap">
+            <span className="text-brand-red text-red-shimmer pr-1">6-FIGURE</span>
+            <span className="text-white">BUSINESS</span>
           </div>
         </motion.h1>
 
@@ -31,7 +31,7 @@ export default function Hero({ onApply }: HeroProps) {
           whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          className="relative w-full max-w-3xl mx-auto glass-card overflow-hidden bg-black shadow-2xl will-change-transform"
+          className="relative w-full max-w-3xl mx-auto overflow-hidden bg-black will-change-transform vsl-glow rounded-3xl"
           style={{ aspectRatio: '16/9' }}
         >
           <video

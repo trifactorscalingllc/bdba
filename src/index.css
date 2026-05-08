@@ -239,3 +239,30 @@
     50%  { background-position: 0%   50%; }
     100% { background-position: 100% 50%; }
   }
+
+  /* ─── VSL Glow Border ─────────────────────────────────────── */
+  .vsl-glow {
+    box-shadow:
+      0 0 0 1px rgba(220, 38, 38, 0.35),
+      0 0 25px rgba(220, 38, 38, 0.3),
+      0 0 60px rgba(220, 38, 38, 0.15),
+      0 0 100px rgba(192, 192, 192, 0.06);
+    animation: vsl-pulse 4s ease-in-out infinite;
+  }
+
+  @keyframes vsl-pulse {
+    0%, 100% {
+      box-shadow:
+        0 0 0 1px rgba(220, 38, 38, 0.35),
+        0 0 25px rgba(220, 38, 38, 0.3),
+        0 0 60px rgba(220, 38, 38, 0.15),
+        0 0 100px rgba(192, 192, 192, 0.06);
+    }
+    50% {
+      box-shadow:
+        0 0 0 1px rgba(220, 38, 38, 0.55),
+        0 0 40px rgba(220, 38, 38, 0.45),
+        0 0 90px rgba(220, 38, 38, 0.25),
+        0 0 140px rgba(192, 192, 192, 0.1);
+    }
+  }
