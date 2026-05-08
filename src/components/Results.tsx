@@ -15,6 +15,7 @@ const transformations = [
     label: "60K → 4.6M",
     before: jayvBefore,
     after: jayvAfter,
+    aspect: 951 / 1920,
   },
   {
     name: "Yari",
@@ -24,6 +25,7 @@ const transformations = [
     label: "7.8K → 1.1M",
     before: yariBefore,
     after: yariAfter,
+    aspect: 1170 / 1574,
   },
 ];
 
