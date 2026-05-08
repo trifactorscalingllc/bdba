@@ -7,10 +7,10 @@ import jayvAfter from '@/assets/results/jayv-after.png';
 const transformations = [
   {
     name: "Jayv",
-    headline: "27x Profile Views in 30 Days",
-    statBefore: "172.3K views",
+    headline: "77x Profile Views in 30 Days",
+    statBefore: "60K views",
     statAfter: "4.6M views",
-    label: "172K → 4.6M",
+    label: "60K → 4.6M",
     before: jayvBefore,
     after: jayvAfter,
   },
