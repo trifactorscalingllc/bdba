@@ -10,49 +10,35 @@ export default function LiquidBackground() {
 
   return (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+      {/* Dark overlay */}
       <div className="absolute inset-0 bg-brand-black/70 backdrop-blur-[100px] z-10" />
 
-      {/* Faint logo watermark */}
-      <div className="absolute inset-0 flex items-center justify-center z-[5]">
+      {/* Logo watermark — sits above the dark overlay so it's actually visible */}
+      <div className="absolute inset-0 flex items-center justify-center z-[11]">
         <img
           src={pbLogo}
           alt=""
           draggable={false}
-          className="w-[65vw] max-w-[700px] select-none"
-          style={{
-            opacity: 0.045,
-            filter: 'grayscale(60%) blur(1px)',
-            mixBlendMode: 'luminosity',
-          }}
+          className="w-[60vw] max-w-[680px] select-none"
+          style={{ opacity: 0.05 }}
         />
       </div>
       
       <motion.div
         style={{ y: y1 }}
-        animate={{
-          x: [0, 60, -30, 0],
-          scale: [1, 1.1, 0.95, 1],
-        }}
+        animate={{ x: [0, 60, -30, 0], scale: [1, 1.1, 0.95, 1] }}
         transition={{ duration: 30, repeat: Infinity, ease: "easeInOut" }}
         className="absolute top-[-10%] left-[-10%] w-[30vw] h-[30vw] rounded-full bg-brand-red/15 blur-[150px]"
       />
-
       <motion.div
         style={{ y: y2 }}
-        animate={{
-          x: [0, -80, 60, 0],
-          scale: [1, 0.95, 1.1, 1],
-        }}
+        animate={{ x: [0, -80, 60, 0], scale: [1, 0.95, 1.1, 1] }}
         transition={{ duration: 35, repeat: Infinity, ease: "easeInOut" }}
         className="absolute bottom-[-20%] right-[-10%] w-[35vw] h-[35vw] rounded-full bg-brand-red/10 blur-[180px]"
       />
-      
       <motion.div
         style={{ y: y3 }}
-        animate={{
-          x: [0, 30, -50, 0],
-          scale: [1, 1.15, 0.9, 1],
-        }}
+        animate={{ x: [0, 30, -50, 0], scale: [1, 1.15, 0.9, 1] }}
         transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
         className="absolute top-[40%] left-[40%] w-[20vw] h-[20vw] rounded-full bg-white/4 blur-[120px]"
       />

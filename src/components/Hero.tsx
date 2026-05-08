@@ -21,7 +21,7 @@ export default function Hero({ onApply }: HeroProps) {
             <span className="text-white">TO A</span>
           </div>
           <div className="flex justify-center items-center gap-x-[0.4em] whitespace-nowrap">
-            <span className="text-brand-red text-red-shimmer pr-1">6-FIGURE</span>
+            <span className="text-brand-red text-red-shimmer pr-4">6-FIGURE</span>
             <span className="text-white">BUSINESS</span>
           </div>
         </motion.h1>
