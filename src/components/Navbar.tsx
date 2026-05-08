@@ -24,8 +24,8 @@ export default function Navbar({ onApply }: NavbarProps) {
               className="h-10 md:h-14 object-contain drop-shadow-[0_0_15px_rgba(220,38,38,0.3)]"
             />
           </a>
-          <span className="font-black uppercase tracking-tighter text-sm sm:text-base md:text-xl italic leading-none hidden sm:flex items-center gap-1 pr-3">
-            <span className="text-red-shimmer">Profitable Barbers</span>
+          <span className="font-black uppercase tracking-tighter text-sm sm:text-base md:text-xl italic leading-none hidden sm:flex items-center gap-1 pr-6 whitespace-nowrap overflow-visible">
+            <span className="text-red-shimmer inline-block pr-2">Profitable Barbers</span>
           </span>
         </div>
 
