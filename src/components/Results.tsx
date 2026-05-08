@@ -27,7 +27,7 @@ export default function Results() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-16 will-change-transform"
         >
-          <h2 className="text-sm font-black text-brand-red tracking-[0.3em] uppercase mb-4">The Results</h2>
+          <h2 className="text-sm font-black text-brand-red text-red-shimmer tracking-[0.3em] uppercase mb-4">The Results</h2>
           <h3 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase italic leading-none flex flex-col items-center gap-2">
             <MergedOutline strokeWidth="3px" strokeColor="white">Real Analytics</MergedOutline>
           </h3>
@@ -40,7 +40,7 @@ export default function Results() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="text-center text-lg sm:text-xl md:text-2xl font-black uppercase italic text-brand-red tracking-wide mb-10"
+              className="text-center text-lg sm:text-xl md:text-2xl font-black uppercase italic text-brand-red text-red-shimmer tracking-wide mb-10"
             >
               {item.headline}
             </motion.p>

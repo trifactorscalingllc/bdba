@@ -21,7 +21,7 @@ export default function Hero({ onApply }: HeroProps) {
             <span className="text-white">TO A</span>
           </div>
           <div className="flex justify-center items-center gap-x-[0.3em] whitespace-nowrap">
-            <span className="text-brand-red">6-FIGURE</span>
+            <span className="text-brand-red text-red-shimmer">6-FIGURE</span>
             <span className="text-white pr-1">BUSINESS&nbsp;</span>
           </div>
         </motion.h1>
@@ -59,7 +59,7 @@ export default function Hero({ onApply }: HeroProps) {
             <span className="text-white">turn their</span>{' '}
             <span className="text-brand-silver">clippers</span>{' '}
             <span className="text-white">into</span>{' '}
-            <span className="text-brand-red font-black italic">capital</span>.
+            <span className="text-brand-red text-red-shimmer font-black italic">capital</span>.
           </p>
           
           <button 

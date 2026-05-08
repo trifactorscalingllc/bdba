@@ -13,7 +13,7 @@ export default function Authority() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-12 md:mb-16 will-change-transform"
         >
-          <h2 className="text-sm font-black text-brand-red tracking-[0.3em] uppercase mb-4">The Authority</h2>
+          <h2 className="text-sm font-black text-brand-red text-red-shimmer tracking-[0.3em] uppercase mb-4">The Authority</h2>
           <h3 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase leading-none flex flex-col items-center gap-2">
             <span>From <span className="italic text-brand-silver/70">Broke</span> <span className="italic text-white">Basement Barber</span></span>
             <span>To <span className="italic"><MergedOutline strokeWidth="3px" strokeColor="#DC2626">Financial Freedom.</MergedOutline></span></span>
@@ -84,7 +84,7 @@ export default function Authority() {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="mt-12 text-center will-change-transform"
         >
-          <p className="text-lg sm:text-xl md:text-2xl font-black uppercase italic text-brand-red tracking-wide">
+          <p className="text-lg sm:text-xl md:text-2xl font-black uppercase italic text-brand-red text-red-shimmer tracking-wide">
             "Teaching the exact blueprint to financial freedom at 20 years old"
           </p>
           <a
