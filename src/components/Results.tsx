@@ -1,18 +1,18 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import MergedOutline from './MergedOutline';
-import yariBefore from '@/assets/results/yari-before.png';
-import yariAfter from '@/assets/results/yari-after.png';
+import jayvBefore from '@/assets/results/jayv-before.png';
+import jayvAfter from '@/assets/results/jayv-after.png';
 
 const transformations = [
   {
-    name: "Yari",
-    headline: "38x Profile Views in 30 Days",
-    statBefore: "7.8K views",
-    statAfter: "302.2K views",
-    label: "8K → 203K",
-    before: yariBefore,
-    after: yariAfter,
+    name: "Jayv",
+    headline: "27x Profile Views in 30 Days",
+    statBefore: "172.3K views",
+    statAfter: "4.6M views",
+    label: "172K → 4.6M",
+    before: jayvBefore,
+    after: jayvAfter,
   },
 ];
 
