@@ -215,7 +215,7 @@ export default function InlineForm() {
                   Truly envision your shop and lifestyle 6 months from now when you finally scale past just grinding behind the chair. How much capital do you have available right now to invest into scaling your business?<span className="text-brand-red">*</span>
                 </p>
                 <div className="grid gap-2.5 sm:gap-3">
-                  {['$0 - $500', '$500 - $1,000', '$1,000 - $2,000', '$3,000+'].map((opt) => (
+                  {['Under $1,000', '$1,000 - $2,000', '$2,000 - $3,000', '$3,000+'].map((opt) => (
                     <OptionButton key={opt} label={opt} selected={capitalAvailable === opt} onClick={() => setCapitalAvailable(opt)} />
                   ))}
                 </div>

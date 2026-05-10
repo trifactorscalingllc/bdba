@@ -53,7 +53,7 @@ export default function StandaloneForm() {
   const checkQualified = (): boolean => {
     // Qualified: question1 = A (Yes), question5 capital = B, C, D, or E ($500+)
     const hasTimeQualified = hasTime === 'Yes';
-    const capitalQualified = capitalAvailable !== '$0 - $500';
+    const capitalQualified = capitalAvailable === '$3,000+';
     return hasTimeQualified && capitalQualified;
   };
 
