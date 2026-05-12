@@ -20,10 +20,27 @@ const dash = (v: unknown) => {
 const truncate = (s: string, max = 320) =>
   s.length > max ? `${s.slice(0, max - 1).trimEnd()}…` : s;
 
+function tierFor(capital: unknown): string {
+  switch (String(capital ?? "").trim()) {
+    case "$0 - $500":
+      return "BBA";
+    case "$500 - $1,000":
+      return "Mid Tier";
+    case "$1,000 - $2,000":
+    case "$3,000+":
+      return "Profitable Barbers";
+    default:
+      return "—";
+  }
+}
+
 function buildMessage(input: Record<string, unknown>): string {
   const name = dash(input.fullName ?? input.firstName);
+  const tier = tierFor(input.capitalAvailable);
   return [
     "New BDBA Lead",
+    "",
+    `Qualifies for: ${tier}`,
     "",
     `Name: ${name}`,
     `Phone: ${dash(input.phoneNumber)}`,
