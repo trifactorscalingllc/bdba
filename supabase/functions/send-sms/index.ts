@@ -105,10 +105,38 @@ Deno.serve(async (req) => {
       );
     }
 
-    const result = await sendToDack(body);
+    const makePayload = {
+      firstName: body?.firstName ?? body?.fullName ?? null,
+      phone: body?.phoneNumber ?? null,
+      email: body?.email ?? null,
+      timeCommitment: body?.hasTime ?? null,
+      revenueGoal: body?.revenueGoal ?? null,
+      cutsLast6Months: body?.cutsRange ?? null,
+      whyGoodFit: body?.situationText ?? null,
+      capital: body?.capitalAvailable ?? null,
+    };
+
+    const [dackResult, makeResult] = await Promise.allSettled([
+      sendToDack(body),
+      fetch("https://hook.us2.make.com/ihr8xwcpmhnxthjrmjam6qfly5ni6adk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(makePayload),
+      }).then(async (r) => {
+        if (!r.ok) throw new Error(`Make webhook failed: ${r.status} ${await r.text()}`);
+        return r.status;
+      }),
+    ]);
+
+    if (dackResult.status === "rejected") console.error("Dack send failed:", dackResult.reason);
+    if (makeResult.status === "rejected") console.error("Make webhook failed:", makeResult.reason);
 
     return new Response(
-      JSON.stringify({ success: true, result }),
+      JSON.stringify({
+        success: true,
+        dack: dackResult.status,
+        make: makeResult.status,
+      }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
