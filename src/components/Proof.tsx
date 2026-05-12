@@ -40,6 +40,16 @@ import review30 from '@/assets/reviews/review30.png';
 import review31 from '@/assets/reviews/review31.png';
 import review32 from '@/assets/reviews/review32.png';
 import review33 from '@/assets/reviews/review33.png';
+import proof1 from '@/assets/reviews/proof1.png';
+import proof2 from '@/assets/reviews/proof2.png';
+import proof3 from '@/assets/reviews/proof3.png';
+import proof4 from '@/assets/reviews/proof4.png';
+import proof5 from '@/assets/reviews/proof5.png';
+import proof6 from '@/assets/reviews/proof6.png';
+import proof7 from '@/assets/reviews/proof7.png';
+import proof8 from '@/assets/reviews/proof8.png';
+import proof9 from '@/assets/reviews/proof9.png';
+import proof10 from '@/assets/reviews/proof10.png';
 
 const caseStudies = [
   {
@@ -89,6 +99,8 @@ const caseStudies = [
 ];
 
 const studentReviews = [
+  proof1, proof2, proof3, proof4, proof5,
+  proof6, proof7, proof8, proof9, proof10,
   review1, review2, review3, review4, review5,
   review6, review7, review8, review9, review10,
   review11, review12, review13, review15,
