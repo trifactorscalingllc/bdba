@@ -58,22 +58,6 @@ export default function Index() {
         
         <Proof />
 
-        <section id="apply-form" className="py-16 md:py-32 px-2 md:px-4 text-center relative z-10 overflow-hidden scroll-mt-20">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full sm:w-[85%] md:w-[75%] lg:w-[50%] mx-auto p-4 md:p-16 relative will-change-transform"
-          >
-            <h2 className="text-2xl sm:text-4xl md:text-6xl font-black uppercase italic leading-none mb-12 relative z-10 flex flex-col items-center gap-4">
-              <span className="text-white text-xl sm:text-2xl md:text-3xl"><span className="text-blue-400/80">Apply</span> for</span>
-              <MergedOutline strokeWidth="4px" strokeColor="#DC2626">1-on-1 coaching</MergedOutline>
-            </h2>
-            <InlineForm />
-          </motion.div>
-        </section>
-
         {showAdmin && <AdminDashboard />}
       </main>
 
