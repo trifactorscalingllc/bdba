@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import { motion, useScroll, useSpring } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { Instagram, Youtube } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
@@ -40,6 +41,14 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-brand-black selection:bg-brand-red selection:text-white relative">
+      <Helmet>
+        <title>Profitable Barbers | Scale Your Barbershop to 6 Figures</title>
+        <meta name="description" content="The exact blueprint to a 6-figure barbershop. Premium 1-on-1 mentorship for barbers ready to scale." />
+        <link rel="canonical" href="https://profitablebarbers.com/" />
+        <meta property="og:title" content="Profitable Barbers | Scale Your Barbershop to 6 Figures" />
+        <meta property="og:description" content="The exact blueprint to a 6-figure barbershop. Premium 1-on-1 mentorship for barbers ready to scale." />
+        <meta property="og:url" content="https://profitablebarbers.com/" />
+      </Helmet>
       <LiquidBackground />
       
       <motion.div 
@@ -83,6 +92,7 @@ export default function Index() {
               href="https://www.instagram.com/cutbydack" 
               target="_blank" 
               rel="noopener noreferrer"
+              aria-label="Follow CutByDack on Instagram"
               className="w-12 h-12 glass-card rounded-full border-brand-red text-white flex items-center justify-center hover:bg-brand-red hover:text-white active:bg-white group transition-all"
             >
               <Instagram size={20} className="group-hover:scale-110 transition-transform" />
@@ -91,12 +101,14 @@ export default function Index() {
               href="https://www.tiktok.com/@cutbydack" 
               target="_blank" 
               rel="noopener noreferrer"
+              aria-label="Follow CutByDack on TikTok"
               className="w-12 h-12 glass-card rounded-full border-brand-red text-white flex items-center justify-center hover:bg-brand-red hover:text-white active:bg-white group transition-all"
             >
               <svg 
                 viewBox="0 0 24 24" 
                 fill="currentColor" 
                 className="w-5 h-5 group-hover:scale-110 transition-transform"
+                aria-hidden="true"
               >
                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"></path>
               </svg>
@@ -105,6 +117,7 @@ export default function Index() {
               href="https://www.youtube.com/@uncutdack" 
               target="_blank" 
               rel="noopener noreferrer"
+              aria-label="Subscribe to UncutDack on YouTube"
               className="w-12 h-12 glass-card rounded-full border-brand-red text-white flex items-center justify-center hover:bg-brand-red hover:text-white active:bg-white group transition-all"
             >
               <Youtube size={20} className="group-hover:scale-110 transition-transform" />
