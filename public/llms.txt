@@ -1,0 +1,11 @@
+# Profitable Barbers
+
+> Premium 1-on-1 mentorship helping barbers turn their clippers into capital and scale their barbershop to 6 figures.
+
+Profitable Barbers is a coaching program by CutByDack that teaches working barbers the exact systems used to grow client booking, retention, and revenue. Students apply through a qualification form and receive direct mentorship.
+
+## Pages
+
+- [Home](/): Overview of the Profitable Barbers program, student results, social proof, and the application form.
+- [Apply](/apply): Standalone qualification form for 1-on-1 barber coaching.
+- [Intro](/intro): Short introduction page leading into the application flow.
