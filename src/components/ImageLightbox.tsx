@@ -76,6 +76,7 @@ export default function ImageLightbox({ images, currentIndex, isOpen, onClose }:
 
           <button
             onClick={onClose}
+            aria-label="Close lightbox"
             className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
           >
             <X size={20} />
@@ -87,6 +88,7 @@ export default function ImageLightbox({ images, currentIndex, isOpen, onClose }:
 
           <button
             onClick={(e) => { e.stopPropagation(); goPrev(); }}
+            aria-label="Previous review"
             className="absolute left-2 md:left-6 z-10 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
           >
             <ChevronLeft size={24} />
@@ -94,6 +96,7 @@ export default function ImageLightbox({ images, currentIndex, isOpen, onClose }:
 
           <button
             onClick={(e) => { e.stopPropagation(); goNext(); }}
+            aria-label="Next review"
             className="absolute right-2 md:right-6 z-10 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
           >
             <ChevronRight size={24} />

@@ -150,7 +150,7 @@ export default function Proof() {
             >
               <img 
                 src={study.image} 
-                alt={study.name} 
+                alt={`Profitable Barbers student ${study.name}`} 
                 className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-brand-silver/50 group-hover:scale-105 transition-transform"
                 referrerPolicy="no-referrer"
               />
@@ -193,7 +193,7 @@ export default function Proof() {
             >
               <img 
                 src={src} 
-                alt={`Student review ${index + 1}`} 
+                alt={`Profitable Barbers student review ${index + 1}`} 
                 className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-300"
               />
             </motion.div>
