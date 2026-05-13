@@ -40,6 +40,7 @@ export default function ApplicationForm({ isOpen, onClose }: ApplicationFormProp
           >
             <button 
               onClick={onClose}
+              aria-label="Close application form"
               className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors z-20"
             >
               <X size={24} />

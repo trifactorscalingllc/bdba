@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import LiquidBackground from '@/components/LiquidBackground';
 import logoTransparent from '@/assets/pb-logo.png';
 
@@ -9,9 +10,19 @@ export default function Intro() {
 
   return (
     <div className="min-h-screen bg-brand-black flex flex-col items-center justify-center p-4 relative selection:bg-brand-red selection:text-white">
+      <Helmet>
+        <title>Profitable Barbers Academy Introduction | Scale Your Barbershop</title>
+        <meta name="description" content="An introduction to the Profitable Barbers Academy — premium mentorship for barbers ready to turn their clippers into capital." />
+        <link rel="canonical" href="https://profitablebarbers.com/intro" />
+        <meta property="og:title" content="Profitable Barbers Academy Introduction" />
+        <meta property="og:description" content="An introduction to premium mentorship for barbers ready to scale to 6 figures." />
+        <meta property="og:url" content="https://profitablebarbers.com/intro" />
+      </Helmet>
+
       <LiquidBackground />
 
       <div className="relative z-10 flex flex-col items-center gap-8">
+        <h1 className="sr-only">Profitable Barbers Academy Introduction</h1>
         <img
           src={logoTransparent}
           alt="Profitable Barbers"
