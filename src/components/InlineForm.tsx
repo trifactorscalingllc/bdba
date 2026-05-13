@@ -196,8 +196,9 @@ export default function InlineForm() {
                   ))}
                 </div>
                 <div>
-                  <p className="text-white/60 text-[10px] sm:text-xs mb-2">What makes you a solid fit to run these systems?<span className="text-brand-red">*</span></p>
+                  <label htmlFor="inline-fit-textarea" className="text-white/60 text-[10px] sm:text-xs mb-2 block">What makes you a solid fit to run these systems?<span className="text-brand-red">*</span></label>
                   <textarea
+                    id="inline-fit-textarea"
                     value={situationText}
                     onChange={(e) => setSituationText(e.target.value)}
                     rows={4}
