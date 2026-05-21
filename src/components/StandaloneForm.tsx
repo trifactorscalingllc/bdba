@@ -230,7 +230,7 @@ export default function StandaloneForm() {
                   What is your long-term revenue goal for your barbering business?<span className="text-brand-red">*</span>
                 </p>
                 <div className="grid gap-2.5 sm:gap-3">
-                  {['$5k - $10k/month', '$10k - $20k/month', '$20k - $30k/month', '$30k+/month'].map((opt) => (
+                  {['$0-3K/MONTH', '$3-6K/MONTH', '$6-9K/MONTH', '$9-12K/MONTH', '$12K+'].map((opt) => (
                     <OptionButton key={opt} label={opt} selected={revenueGoal === opt} onClick={() => setRevenueGoal(opt)} />
                   ))}
                 </div>
