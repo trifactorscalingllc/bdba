@@ -197,7 +197,7 @@ export async function fetchVideoAssets(slug: Slug, videoId: string): Promise<Vid
     console.warn("[fetchVideoAssets] error:", error);
     return null;
   }
-  return (data?.payload as VideoAssets) ?? null;
+  return (data?.payload as unknown as VideoAssets) ?? null;
 }
 
 export function getVideos(slug: Slug): VideosJsonlRow[] {
