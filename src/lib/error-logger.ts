@@ -33,7 +33,7 @@ export async function logError(err: unknown, ctx: ErrorLogContext = {}): Promise
       route: ctx.route ?? (typeof window !== "undefined" ? window.location.pathname : null),
       message: message.slice(0, 1000),
       stack: stack ? stack.slice(0, 5000) : null,
-      context: ctx.context ?? null,
+      context: (ctx.context ?? null) as never,
       user_agent: typeof navigator !== "undefined" ? navigator.userAgent : null,
       severity: ctx.severity ?? "error",
     });
