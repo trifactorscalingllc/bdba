@@ -183,6 +183,24 @@ export type Database = {
           },
         ]
       }
+      coaching_library: {
+        Row: {
+          content_md: string
+          file_name: string
+          updated_at: string
+        }
+        Insert: {
+          content_md: string
+          file_name: string
+          updated_at?: string
+        }
+        Update: {
+          content_md?: string
+          file_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
