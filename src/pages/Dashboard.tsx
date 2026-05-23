@@ -89,13 +89,33 @@ function deltaCell(curr: number, prev: number, lowerIsBetter = false): { txt: st
 // ─── page ──────────────────────────────────────────────────────────────────
 
 export default function Dashboard() {
-  const { role, profile } = useAuth();
+  const { user, role, profile } = useAuth();
 
   const cisQuery = useQuery({
     queryKey: ["cis", role, profile?.slug],
     queryFn: fetchCisFromSupabase,
     staleTime: 60_000,
+    // Don't fetch CIS data until we know the user's role — otherwise we'd
+    // fetch then potentially re-fetch when profile arrives.
+    enabled: !!profile,
   });
+
+  // Wait for the profile row to load before deciding which view to render.
+  // Without this gate, a still-loading profile (role=null) would fall into
+  // the "Phase 1: only coach view exists" branch and flash the student-
+  // portal placeholder for a tick before re-rendering as the coach view.
+  if (user && !profile) {
+    return (
+      <>
+        <AppNavbar variant="dashboard" />
+        <div className="min-h-screen flex items-center justify-center pt-32">
+          <div className="font-mono text-xs uppercase tracking-[0.2em] text-white/40">
+            Loading your profile…
+          </div>
+        </div>
+      </>
+    );
+  }
 
   // Loading / error gates
   if (cisQuery.isLoading) {

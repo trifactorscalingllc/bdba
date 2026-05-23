@@ -53,29 +53,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true;
 
-    // Initial session check
-    supabase.auth.getSession().then(async ({ data }) => {
+    // Initial session check.
+    //
+    // ⚠ Critical: `isLoading` is decoupled from `profile` loading. The state
+    // tracks "do we know if you're signed in?" — NOT "do we have your
+    // profile row yet?" Setting isLoading=false the moment getSession()
+    // resolves means ProtectedRoute can route the user immediately, and
+    // profile-dependent UI (Dashboard) gates on `profile` separately.
+    //
+    // Why: the earlier version awaited fetchProfile() inline inside this
+    // .then() callback. When supabase-js fires the synchronous
+    // onAuthStateChange event during/after getSession (with INITIAL_SESSION
+    // or TOKEN_REFRESHED), the auth client may still be holding internal
+    // locks. Awaiting another Supabase call from the listener context could
+    // deadlock — symptom: "Loading…" screen forever after sign-in because
+    // setIsLoading(false) on line `await fetchProfile() → setProfile() →
+    // setIsLoading(false)` never reached.
+    supabase.auth.getSession().then(({ data }) => {
       if (!mounted) return;
       setSession(data.session ?? null);
       setUser(data.session?.user ?? null);
+      setIsLoading(false);
       if (data.session?.user) {
-        const p = await fetchProfile(data.session.user.id);
-        if (mounted) setProfile(p);
+        const uid = data.session.user.id;
+        // Defer profile fetch off the current tick (matches listener pattern).
+        setTimeout(() => {
+          fetchProfile(uid).then((p) => {
+            if (mounted) setProfile(p);
+          });
+        }, 0);
       }
-      if (mounted) setIsLoading(false);
     });
 
     // Subscribe to auth state changes (login/logout/refresh).
     //
-    // ⚠ Critical: per Supabase docs, the callback may be invoked synchronously
-    // by supabase-js while it still holds internal auth locks. Calling another
-    // Supabase method (like .from('profiles').select()) directly inside this
-    // callback can deadlock the auth client — signInWithPassword's promise
-    // never resolves and the login UI hangs on "Signing in…" forever.
-    //
-    // Fix: do the sync state updates immediately, but defer any further
-    // Supabase calls to the next event-loop tick with setTimeout(0). This lets
-    // the auth client release its locks before fetchProfile fires.
+    // Same setTimeout(0) defer pattern as above — never call Supabase methods
+    // synchronously inside this callback or supabase-js can deadlock.
     const { data: sub } = supabase.auth.onAuthStateChange((_event, sess) => {
       if (!mounted) return;
       setSession(sess);
