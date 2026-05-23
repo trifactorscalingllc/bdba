@@ -14,9 +14,9 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import AppNavbar from "@/components/AppNavbar";
-import { fetchCisFromSupabase, getStudents, getProfile, getVideos, getPostType } from "@/lib/cis-bridge";
+import { fetchCisFromSupabase, getStudents, getProfile, getVideos } from "@/lib/cis-bridge";
 import { computeHealthBar } from "@/lib/scoring/health-bar";
-import { computeCurrentWeek, computeStreak } from "@/lib/scoring/five-two";
+import { computeCurrentWeek, computeFiveTwoWeeks, computeStreak } from "@/lib/scoring/five-two";
 import { computeMonthlyRecap } from "@/lib/scoring/recap";
 import type { HealthBarScore } from "@/lib/types";
 
@@ -60,28 +60,9 @@ function formatWeekRange(weekStartIso: string): string {
   return `Week of ${months[start.getUTCMonth()]} ${start.getUTCDate()} – ${months[end.getUTCMonth()]} ${end.getUTCDate()}`;
 }
 
-function currentWeekDayStrip(slug: string, today: Date): Array<"c" | "v" | null> {
-  const todayUtc = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
-  const day = todayUtc.getUTCDay();
-  const diffToMonday = (day + 6) % 7;
-  const weekStart = new Date(todayUtc);
-  weekStart.setUTCDate(weekStart.getUTCDate() - diffToMonday);
-
-  const slots: Array<"c" | "v" | null> = [null, null, null, null, null, null, null];
-  const videos = getVideos(slug);
-  for (const v of videos) {
-    if (!v.posted_date || !v.video_id) continue;
-    const posted = new Date(v.posted_date + "T00:00:00Z");
-    const days = Math.floor((posted.getTime() - weekStart.getTime()) / (24 * 60 * 60 * 1000));
-    if (days < 0 || days > 6) continue;
-    const pt = getPostType(slug, v.video_id);
-    if (slots[days] === null) {
-      if (pt === "converting") slots[days] = "c";
-      else if (pt === "viral") slots[days] = "v";
-    }
-  }
-  return slots;
-}
+// (currentWeekDayStrip was removed when the 5-2 section switched from the
+// blank-7-slot "this week" strip to a 4-week compliance grid. Real evidence
+// > blank boxes when there are no posts this week.)
 
 function deltaCell(curr: number, prev: number, lowerIsBetter = false): { txt: string; cls: string } | null {
   if (curr === prev) return null;
@@ -139,9 +120,11 @@ export default function Dashboard() {
     const healthBar = computeHealthBar(slug, today);
     const currentWeek = computeCurrentWeek(slug, today);
     const streak = computeStreak(slug);
-    const dayStrip = currentWeekDayStrip(slug, today);
+    // Last 4 weeks of 5-2 compliance, newest-first. Each week carries
+    // converting/viral counts + status — real evidence vs an empty day-strip.
+    const last4Weeks = computeFiveTwoWeeks(slug).slice(-4).reverse();
     const recap = computeMonthlyRecap(slug, today);
-    return { slug, profile: p, videos, healthBar, currentWeek, streak, dayStrip, recap };
+    return { slug, profile: p, videos, healthBar, currentWeek, streak, last4Weeks, recap };
   });
 
   const monthNames = ["January", "February", "March", "April", "May", "June",
@@ -250,22 +233,18 @@ export default function Dashboard() {
         {/* ── Section 2: 5-2 Split Compliance ────────────────────────── */}
         <SectionLabel num="Feature 1" title="5-2 Split Compliance" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          {rows.map(({ slug, profile: p, currentWeek, streak, dayStrip }) => {
-            const c = currentWeek?.converting ?? 0;
-            const v = currentWeek?.viral ?? 0;
-            const status = currentWeek?.status ?? "off_track";
-            const statusColor = status === "on_track" ? "text-green-400" : status === "partial" ? "text-yellow-400" : "text-red-400";
-            const statusLabel = status === "on_track"
-              ? "ON TRACK"
-              : status === "partial"
-              ? `PARTIAL — need ${Math.max(0, 5 - c)} more booking + ${Math.max(0, 2 - v)} more reach`
-              : "OFF TRACK";
+          {rows.map(({ slug, profile: p, currentWeek, streak, last4Weeks }) => {
+            const cWeek = currentWeek?.converting ?? 0;
+            const vWeek = currentWeek?.viral ?? 0;
+            const compliantWeeks = last4Weeks.filter((w) => w.status === "on_track").length;
             return (
               <article key={`f5-${slug}`} className="glass-card rounded-2xl p-7">
                 <header className="flex justify-between items-start mb-4">
                   <div>
                     <div className="text-lg font-black italic uppercase tracking-tight">{p.display_name}</div>
-                    <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/60">{weekRangeLabel}</div>
+                    <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.15em] text-white/60">
+                      Last 4 weeks · {compliantWeeks}/{last4Weeks.length} hit the plan
+                    </div>
                   </div>
                   {streak > 0 ? (
                     <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-green-400 bg-green-500/10 border border-green-500/30 px-2.5 py-1 rounded">
@@ -278,16 +257,50 @@ export default function Dashboard() {
                   )}
                 </header>
 
-                <div className="grid grid-cols-7 gap-1.5 mb-3">
-                  {dayStrip.map((slot, i) => (
-                    <DaySlot key={i} slot={slot} />
-                  ))}
-                </div>
+                {/* Last 4 weeks — newest first. Each cell shows B/R counts +
+                    colored status border. Replaces the blank 7-day-this-week
+                    strip that only had data on Sundays. */}
+                {last4Weeks.length === 0 ? (
+                  <div className="text-[13px] text-white/40 italic mb-3">
+                    No posting history yet — week-by-week compliance will appear
+                    as posts are audited.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+                    {last4Weeks.map((w) => {
+                      const border =
+                        w.status === "on_track"  ? "border-green-500/40"
+                        : w.status === "partial" ? "border-yellow-500/40"
+                        : "border-red-500/40";
+                      const txt =
+                        w.status === "on_track"  ? "text-green-400"
+                        : w.status === "partial" ? "text-yellow-400"
+                        : "text-red-400";
+                      return (
+                        <div key={w.weekStart} className={`bg-black/40 border ${border} rounded-lg px-3 py-2.5`}>
+                          <div className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/40">
+                            wk of {w.weekStart.slice(5)}
+                          </div>
+                          <div className="font-mono text-sm font-semibold mt-0.5 text-white">
+                            {w.converting}B · {w.viral}R
+                          </div>
+                          <div className={`font-mono text-[10px] uppercase tracking-[0.15em] mt-0.5 ${txt}`}>
+                            {w.status === "on_track" ? "ON" : w.status === "partial" ? "PART" : "OFF"}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
 
-                <div className="flex flex-wrap gap-4 font-mono text-[11px] text-white/60">
-                  <span>Booking: <span className="text-white font-semibold">{c}B</span></span>
-                  <span>Reach: <span className="text-white font-semibold">{v}V</span></span>
-                  <span className={statusColor}>{statusLabel}</span>
+                <div className="flex flex-wrap gap-4 font-mono text-[11px] text-white/60 pt-3 border-t border-white/10">
+                  <span>
+                    This week ({weekRangeLabel.replace(/^Week of /, "")}):{" "}
+                    <span className="text-white font-semibold">{cWeek}B · {vWeek}R</span>
+                  </span>
+                  {currentWeek === null && (
+                    <span className="text-white/40">no posts yet this week</span>
+                  )}
                 </div>
               </article>
             );
@@ -433,20 +446,6 @@ function Factor({ label, earned, max }: { label: string; earned: number; max: nu
     <div className="bg-black/40 border border-white/10 rounded-lg px-3 py-2.5">
       <div className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/60 mb-1">{label}</div>
       <div className={`text-lg font-black italic ${factorClass(earned, max)}`}>{earned} / {max}</div>
-    </div>
-  );
-}
-
-function DaySlot({ slot }: { slot: "c" | "v" | null }) {
-  const cls = slot === "c"
-    ? "bg-red-500/20 border-red-500/40 text-red-400"
-    : slot === "v"
-    ? "bg-green-500/15 border-green-500/30 text-green-400"
-    : "bg-black/50 border-white/10 text-white/30";
-  const label = slot === "c" ? "B" : slot === "v" ? "R" : "—";
-  return (
-    <div className={`aspect-square rounded-md flex items-center justify-center font-mono text-[11px] font-bold border ${cls}`}>
-      {label}
     </div>
   );
 }

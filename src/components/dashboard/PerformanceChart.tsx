@@ -31,7 +31,7 @@ interface Props {
   videos: VideosJsonlRow[];
 }
 
-type Range = 30 | 60 | 90;
+type Range = "all" | 30 | 60 | 90;
 
 interface ChartPoint {
   date: string;       // YYYY-MM-DD
@@ -51,40 +51,56 @@ function tierColor(tier?: string): string {
   }
 }
 
-function shortDate(iso: string): string {
+function shortDate(iso: string, includeYear = false): string {
   const d = new Date(iso + "T00:00:00Z");
   const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  return `${months[d.getUTCMonth()]} ${d.getUTCDate()}`;
+  const base = `${months[d.getUTCMonth()]} ${d.getUTCDate()}`;
+  return includeYear ? `${base} '${String(d.getUTCFullYear()).slice(-2)}` : base;
 }
 
 export default function PerformanceChart({ videos }: Props) {
-  const [range, setRange] = useState<Range>(30);
+  const [range, setRange] = useState<Range>("all");
 
   const data = useMemo<ChartPoint[]>(() => {
-    const today = new Date();
-    today.setUTCHours(0, 0, 0, 0);
-    const start = new Date(today.getTime() - (range - 1) * 86_400_000);
-
-    // Bucket videos by posted_date
+    // Bucket videos by posted_date — keep the highest-engagement post if
+    // multiple were posted the same day.
     const byDate = new Map<string, VideosJsonlRow>();
     for (const v of videos) {
       if (!v.posted_date) continue;
-      // Keep the highest-engagement post if there are multiple that day
       const existing = byDate.get(v.posted_date);
       const e = (v.likes ?? 0) + (v.comments ?? 0);
       const eEx = existing ? (existing.likes ?? 0) + (existing.comments ?? 0) : -1;
       if (!existing || e > eEx) byDate.set(v.posted_date, v);
     }
 
+    // Determine the window
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+    let startDate: Date;
+    let dayCount: number;
+    if (range === "all") {
+      // Span from the earliest audited post to today
+      const dates = [...byDate.keys()].sort();
+      if (dates.length === 0) return [];
+      startDate = new Date(dates[0] + "T00:00:00Z");
+      dayCount = Math.floor((today.getTime() - startDate.getTime()) / 86_400_000) + 1;
+    } else {
+      dayCount = range;
+      startDate = new Date(today.getTime() - (dayCount - 1) * 86_400_000);
+    }
+
+    // For ALL view, the year matters because audits span multiple years.
+    const includeYear = range === "all" && dayCount > 365;
+
     const out: ChartPoint[] = [];
-    for (let i = 0; i < range; i++) {
-      const d = new Date(start.getTime() + i * 86_400_000);
+    for (let i = 0; i < dayCount; i++) {
+      const d = new Date(startDate.getTime() + i * 86_400_000);
       const iso = d.toISOString().slice(0, 10);
       const v = byDate.get(iso);
       const engagement = v ? Math.max((v.likes ?? 0) + (v.comments ?? 0), 0) : 0;
       out.push({
         date: iso,
-        shortDate: shortDate(iso),
+        shortDate: shortDate(iso, includeYear),
         engagement,
         hasPost: !!v,
         tier: v?.verdict_tier,
@@ -96,32 +112,35 @@ export default function PerformanceChart({ videos }: Props) {
 
   const totals = useMemo(() => {
     const posted = data.filter((d) => d.hasPost).length;
-    const missed = range - posted;
+    const missed = data.length - posted;
     const strong = data.filter((d) => d.tier === "strong").length;
-    return { posted, missed, strong };
-  }, [data, range]);
+    return { posted, missed, strong, days: data.length };
+  }, [data]);
 
   return (
     <div>
       {/* Range toggle + summary row */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-1 bg-black/40 border border-white/10 rounded-full p-1">
-          {[30, 60, 90].map((r) => (
+          {(["all", 90, 60, 30] as Range[]).map((r) => (
             <button
-              key={r}
-              onClick={() => setRange(r as Range)}
+              key={String(r)}
+              onClick={() => setRange(r)}
               className={`font-mono text-[10px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-full transition-colors ${
                 range === r
                   ? "bg-brand-red text-white"
                   : "text-white/60 hover:text-white"
               }`}
             >
-              {r}d
+              {r === "all" ? "All" : `${r}d`}
             </button>
           ))}
         </div>
         <div className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px] text-white/60">
-          <span><span className="text-white font-semibold">{totals.posted}</span> posted</span>
+          <span>
+            <span className="text-white font-semibold">{totals.posted}</span> posted
+            <span className="text-white/40"> · {totals.days}d window</span>
+          </span>
           <span className={totals.missed > totals.posted ? "text-red-400" : ""}>
             <span className="font-semibold">{totals.missed}</span> missed days
           </span>
@@ -142,7 +161,7 @@ export default function PerformanceChart({ videos }: Props) {
               tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 10, fontFamily: "JetBrains Mono, monospace" }}
               tickLine={false}
               axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
-              interval={Math.max(0, Math.floor(range / 12) - 1)}
+              interval={Math.max(0, Math.floor(data.length / 12) - 1)}
             />
             <YAxis
               stroke="rgba(255,255,255,0.4)"

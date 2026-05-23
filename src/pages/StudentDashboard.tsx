@@ -14,19 +14,18 @@ import { motion } from "framer-motion";
 import AppNavbar from "@/components/AppNavbar";
 import PostRow from "@/components/dashboard/PostRow";
 import PerformanceChart from "@/components/dashboard/PerformanceChart";
+import CoachingPatterns from "@/components/dashboard/CoachingPatterns";
 import {
   fetchCisFromSupabase,
   getBusinessLog,
-  getCoachingPrescription,
   getProfile,
   getStudents,
   getVideos,
 } from "@/lib/cis-bridge";
 import { computeHealthBar } from "@/lib/scoring/health-bar";
 import { computeCurrentWeek, computeFiveTwoWeeks, computeStreak } from "@/lib/scoring/five-two";
-import { computeSparkline } from "@/lib/scoring/sparkline";
 import { computeMonthlyRecap } from "@/lib/scoring/recap";
-import type { HealthBarScore, SparklineTrend } from "@/lib/types";
+import type { HealthBarScore } from "@/lib/types";
 
 // ─── tiny helpers ──────────────────────────────────────────────────────────
 
@@ -55,38 +54,6 @@ function factorClass(earned: number, max: number): string {
   return "text-red-400";
 }
 
-
-function MiniSparkline({ trend, width = 220, height = 56 }: { trend: SparklineTrend | null; width?: number; height?: number }) {
-  if (!trend || trend.points.length === 0) {
-    return <div className="font-mono text-[10px] text-white/40">No engagement data yet</div>;
-  }
-  const color = trend.arrow === "up" ? "#22c55e" : trend.arrow === "down" ? "#dc2626" : "#9a9a9a";
-  if (trend.points.length === 1) {
-    return (
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
-        <circle cx={width / 2} cy={height / 2} r={4} fill={color} />
-      </svg>
-    );
-  }
-  const lo = Math.min(...trend.points);
-  const hi = Math.max(...trend.points);
-  const rng = Math.max(hi - lo, 1);
-  const pad = 6;
-  const innerW = width - 2 * pad;
-  const innerH = height - 2 * pad;
-  const pts = trend.points
-    .map((v, i) => {
-      const x = pad + (i * innerW) / (trend.points.length - 1);
-      const y = pad + innerH - ((v - lo) * innerH) / rng;
-      return `${x.toFixed(1)},${y.toFixed(1)}`;
-    })
-    .join(" ");
-  return (
-    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
-      <polyline points={pts} fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 // ─── page ──────────────────────────────────────────────────────────────────
 
@@ -136,7 +103,6 @@ export default function StudentDashboard() {
   const allWeeks = computeFiveTwoWeeks(slug);
   const last4Weeks = allWeeks.slice(-4);
   const streak = computeStreak(slug);
-  const sparkline = computeSparkline(slug);
   const businessLog = getBusinessLog(slug);
   const last30dCutoff = new Date(today.getTime() - 30 * 86_400_000).toISOString().slice(0, 10);
   const recentBiz = businessLog.filter((e) => e.date >= last30dCutoff);
@@ -155,15 +121,6 @@ export default function StudentDashboard() {
   const allAuditedContent = [...videos]
     .filter((v) => v.audited_date)
     .sort((a, b) => (b.audited_date || "").localeCompare(a.audited_date || ""));
-
-  const coachingItems = allAuditedContent
-    .slice(0, 5)
-    .map((v) => ({
-      videoId: v.video_id,
-      postedDate: v.posted_date || "",
-      prescription: getCoachingPrescription(slug, v.video_id),
-    }))
-    .filter((c) => c.prescription.trim());
 
   const recap = computeMonthlyRecap(slug, today);
   const badge = statusBadge(healthBar.status);
@@ -220,20 +177,9 @@ export default function StudentDashboard() {
             </span>
           </div>
 
-          <div className="flex items-end gap-6 mb-5">
-            <div className="flex items-baseline gap-2">
-              <span className="text-6xl md:text-7xl font-black italic tracking-tight leading-none">{healthBar.total}</span>
-              <span className="text-lg text-white/40">/ 100</span>
-            </div>
-            <div className="ml-auto">
-              <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60 mb-1">Engagement trend</div>
-              <MiniSparkline trend={sparkline} />
-              {sparkline && (
-                <div className={`font-mono text-[10px] mt-1 ${sparkline.arrow === "up" ? "text-green-400" : sparkline.arrow === "down" ? "text-red-400" : "text-white/40"}`}>
-                  {sparkline.arrow === "up" ? "↑" : sparkline.arrow === "down" ? "↓" : "→"} {sparkline.label} {sparkline.deltaPct !== 0 && `${sparkline.deltaPct > 0 ? "+" : ""}${sparkline.deltaPct}%`} · last {sparkline.n}
-                </div>
-              )}
-            </div>
+          <div className="flex items-baseline gap-2 mb-5">
+            <span className="text-6xl md:text-7xl font-black italic tracking-tight leading-none">{healthBar.total}</span>
+            <span className="text-lg text-white/40">/ 100</span>
           </div>
 
           <div className="h-3.5 bg-black/60 border border-white/10 rounded-full overflow-hidden mb-2">
@@ -383,24 +329,11 @@ export default function StudentDashboard() {
           )}
         </article>
 
-        {/* ── Coaching items ────────────────────────────────────────── */}
-        {coachingItems.length > 0 && (
-          <>
-            <SectionLabel num="Coaching" title="From Recent Audits" />
-            <article className="glass-card rounded-2xl p-7 mb-12 border-l-[3px] border-l-brand-red">
-              <div className="space-y-4">
-                {coachingItems.map((item, i) => (
-                  <div key={item.videoId} className="flex gap-4 pb-4 border-b border-white/10 last:border-b-0 last:pb-0">
-                    <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-red min-w-[80px] pt-1">
-                      {String(i + 1).padStart(2, "0")} · {item.postedDate}
-                    </div>
-                    <div className="text-[13px] leading-relaxed">{item.prescription}</div>
-                  </div>
-                ))}
-              </div>
-            </article>
-          </>
-        )}
+        {/* ── Coaching synthesis — what's working vs what keeps hurting ── */}
+        <SectionLabel num="Coaching" title="What's Working vs What's Not" />
+        <div className="mb-12">
+          <CoachingPatterns slug={slug} videos={videos} />
+        </div>
 
         {/* ── Monthly Recap ─────────────────────────────────────────── */}
         <SectionLabel num="Recap" title={`${recap.month.name} Recap`} />

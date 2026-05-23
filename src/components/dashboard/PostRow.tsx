@@ -13,8 +13,15 @@
 // italic/links). Bringing in react-markdown is overkill for this.
 
 import { useState, useMemo, type ReactNode } from "react";
-import { getAntiPatternFlagCount } from "@/lib/cis-bridge";
+import { getAntiPatternFlagCount, getAntiPatternFlags } from "@/lib/cis-bridge";
 import type { VideosJsonlRow } from "@/lib/types";
+
+/** Turn a kebab-case anti-pattern slug into a plain-English label.
+ *  Real examples from CIS data: `slow-setup-no-anchor` → "Slow setup, no anchor". */
+function flagToPlain(slug: string): string {
+  const words = slug.replace(/[_-]/g, " ").trim();
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
 
 interface Props {
   slug: string;
@@ -102,7 +109,13 @@ function renderInline(text: string): ReactNode[] {
 //   ---                 → divider
 //   plain paragraph     → p
 function renderAuditMd(md: string): ReactNode {
-  const lines = md.split(/\r?\n/);
+  // Strip the closing CIS metadata footer ("_Plain-English notes from CIS…")
+  // — it's an authoring breadcrumb, not user-facing copy.
+  const stripped = md.replace(
+    /\n*---\s*\n+_Plain-English notes from CIS[\s\S]*?_\s*$/m,
+    "",
+  );
+  const lines = stripped.split(/\r?\n/);
   const out: ReactNode[] = [];
   let listBuf: string[] = [];
   let key = 0;
@@ -186,6 +199,7 @@ export default function PostRow({ slug, video }: Props) {
   const [expanded, setExpanded] = useState(false);
   const tier = tierLabel(video.verdict_tier);
   const flagCount = getAntiPatternFlagCount(slug, video.video_id);
+  const flagList = useMemo(() => getAntiPatternFlags(slug, video.video_id), [slug, video.video_id]);
   const renderedAudit = useMemo(
     () => (video.audit_simple_md ? renderAuditMd(video.audit_simple_md) : null),
     [video.audit_simple_md],
@@ -259,6 +273,24 @@ export default function PostRow({ slug, video }: Props) {
                 : ""}
             </span>
           </div>
+
+          {/* Flag detail — explicit list of WHAT the row's flag count refers to.
+              Plainified kebab-slug → "Slow setup, no anchor" etc. */}
+          {flagList.length > 0 && (
+            <div className="bg-yellow-500/8 border border-yellow-500/25 rounded-lg px-4 py-3 mb-4">
+              <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-yellow-400 mb-2">
+                ⚠ {flagList.length} thing{flagList.length === 1 ? "" : "s"} to fix on this post
+              </div>
+              <ul className="space-y-1">
+                {flagList.map((f) => (
+                  <li key={f} className="text-[13px] text-white/85 pl-4 relative">
+                    <span className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-yellow-500/80" />
+                    {flagToPlain(f)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {renderedAudit ?? (
             <div className="text-[13px] text-white/50 italic">
