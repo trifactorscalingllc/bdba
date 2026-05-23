@@ -123,22 +123,35 @@ let videoCount = 0;
 for (const slug of snapshot.students) {
   const data = snapshot.data[slug] ?? {};
   const auditSimple = data.audit_simple_md ?? {};
-  const rows = (data.videos_jsonl ?? []).map((v) => ({
-    slug,
-    video_id: v.video_id,
-    source_url: v.url ?? null,
-    posted_date: v.posted_date ?? null,
-    audited_date: v.audited_date ?? null,
-    hook_type: v.hook_type ?? null,
-    structure_arc: v.structure_arc ?? null,
-    format_typicality: v.format_typicality ?? null,
-    verdict_tier: v.verdict_tier ?? null,
-    verdict_oneline: v.verdict_oneline ?? null,
-    likes: typeof v.likes === "number" ? v.likes : null,
-    comments: typeof v.comments === "number" ? v.comments : null,
-    views: typeof v.views === "number" ? v.views : null,
-    audit_simple_md: auditSimple[v.video_id] ?? null,
-  }));
+  const metaByVid = data.meta ?? {};
+  const rows = (data.videos_jsonl ?? []).map((v) => {
+    const m = metaByVid[v.video_id] ?? {};
+    return {
+      slug,
+      video_id: v.video_id,
+      source_url: v.url ?? null,
+      posted_date: v.posted_date ?? null,
+      audited_date: v.audited_date ?? null,
+      hook_type: v.hook_type ?? null,
+      structure_arc: v.structure_arc ?? null,
+      format_typicality: v.format_typicality ?? null,
+      verdict_tier: v.verdict_tier ?? null,
+      verdict_oneline: v.verdict_oneline ?? null,
+      likes: typeof v.likes === "number" ? v.likes : null,
+      comments: typeof v.comments === "number" ? v.comments : null,
+      views: typeof v.views === "number" ? v.views : null,
+      audit_simple_md: auditSimple[v.video_id] ?? null,
+      // D-044 extra metadata (hashtags / caption / etc) from meta.json
+      caption: typeof m.description === "string" ? m.description : null,
+      hashtags: Array.isArray(m.hashtags) ? m.hashtags : [],
+      uploader_id: m.uploader ?? null,
+      resolution_px: m.resolution ?? null,
+      comment_count_reported: typeof m.comment_count_reported === "number"
+        ? m.comment_count_reported : null,
+      top_comments_sample: Array.isArray(m.top_comments_sample)
+        ? m.top_comments_sample : [],
+    };
+  });
   if (rows.length === 0) continue;
   // Batch in chunks of 200 to stay under any payload limits
   for (let i = 0; i < rows.length; i += 200) {
@@ -197,6 +210,23 @@ for (const slug of snapshot.students) {
   console.log(`   ✓ ${slug}: ${rows.length} log entries`);
 }
 console.log(`   total: ${bizCount} log entries`);
+
+// ─── Upsert coaching_library (CIS patterns/*.md) ───────────────────────────
+console.log("\n📚 Upserting coaching library…");
+const patterns = snapshot.patterns ?? {};
+const libRows = [
+  { file_name: "anti_patterns.md", content_md: patterns.anti_patterns_md ?? "" },
+  { file_name: "drop_offs.md",     content_md: patterns.drop_offs_md ?? "" },
+  { file_name: "hooks.md",         content_md: patterns.hooks_md ?? "" },
+  { file_name: "structures.md",    content_md: patterns.structures_md ?? "" },
+].filter((r) => r.content_md.trim().length > 0);
+if (libRows.length > 0) {
+  const { error } = await supabase.from("coaching_library").upsert(libRows, { onConflict: "file_name" });
+  if (error) { console.error("   ❌", error.message); process.exit(2); }
+  console.log(`   ✓ ${libRows.length} library files (${libRows.map((r) => r.file_name).join(", ")})`);
+} else {
+  console.log("   (no library content in snapshot — patterns/*.md missing in CIS?)");
+}
 
 console.log("\n✅ Import complete.");
 console.log("   Next: log into the dashboard at /login and confirm the data renders.");

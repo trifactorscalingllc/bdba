@@ -29,6 +29,11 @@ import type { VideosJsonlRow } from "@/lib/types";
 
 interface Props {
   videos: VideosJsonlRow[];
+  /** Initial range — defaults to "all" for the full per-student view. */
+  initialRange?: Range;
+  /** Compact mode hides the toggle pill + legend (used for the 30-day
+   *  preview at the top of the student page). */
+  compact?: boolean;
 }
 
 type Range = "all" | 30 | 60 | 90;
@@ -58,8 +63,8 @@ function shortDate(iso: string, includeYear = false): string {
   return includeYear ? `${base} '${String(d.getUTCFullYear()).slice(-2)}` : base;
 }
 
-export default function PerformanceChart({ videos }: Props) {
-  const [range, setRange] = useState<Range>("all");
+export default function PerformanceChart({ videos, initialRange = "all", compact = false }: Props) {
+  const [range, setRange] = useState<Range>(initialRange);
 
   const data = useMemo<ChartPoint[]>(() => {
     // Bucket videos by posted_date — keep the highest-engagement post if
@@ -97,7 +102,11 @@ export default function PerformanceChart({ videos }: Props) {
       const d = new Date(startDate.getTime() + i * 86_400_000);
       const iso = d.toISOString().slice(0, 10);
       const v = byDate.get(iso);
-      const engagement = v ? Math.max((v.likes ?? 0) + (v.comments ?? 0), 0) : 0;
+      // Use null (not 0) for missed days so the log-scale YAxis doesn't
+      // try log(0) and so Recharts doesn't render a 1-pixel "bar" there.
+      const engagement = v
+        ? Math.max((v.likes ?? 0) + (v.comments ?? 0), 1)
+        : (null as unknown as number);
       out.push({
         date: iso,
         shortDate: shortDate(iso, includeYear),
@@ -119,56 +128,65 @@ export default function PerformanceChart({ videos }: Props) {
 
   return (
     <div>
-      {/* Range toggle + summary row */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-        <div className="flex items-center gap-1 bg-black/40 border border-white/10 rounded-full p-1">
-          {(["all", 90, 60, 30] as Range[]).map((r) => (
-            <button
-              key={String(r)}
-              onClick={() => setRange(r)}
-              className={`font-mono text-[10px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-full transition-colors ${
-                range === r
-                  ? "bg-brand-red text-white"
-                  : "text-white/60 hover:text-white"
-              }`}
-            >
-              {r === "all" ? "All" : `${r}d`}
-            </button>
-          ))}
+      {/* Range toggle + summary row — hidden in compact mode (mini chart) */}
+      {!compact && (
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-1 bg-black/40 border border-white/10 rounded-full p-1">
+            {(["all", 90, 60, 30] as Range[]).map((r) => (
+              <button
+                key={String(r)}
+                onClick={() => setRange(r)}
+                className={`font-mono text-[10px] uppercase tracking-[0.2em] px-4 py-1.5 rounded-full transition-colors ${
+                  range === r
+                    ? "bg-brand-red text-white"
+                    : "text-white/60 hover:text-white"
+                }`}
+              >
+                {r === "all" ? "All" : `${r}d`}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px] text-white/60">
+            <span>
+              <span className="text-white font-semibold">{totals.posted}</span> posted
+              <span className="text-white/40"> · {totals.days}d window</span>
+            </span>
+            <span className={totals.missed > totals.posted ? "text-red-400" : ""}>
+              <span className="font-semibold">{totals.missed}</span> missed days
+            </span>
+            <span className="text-green-400">
+              <span className="font-semibold">{totals.strong}</span> strong
+            </span>
+          </div>
         </div>
-        <div className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-[11px] text-white/60">
-          <span>
-            <span className="text-white font-semibold">{totals.posted}</span> posted
-            <span className="text-white/40"> · {totals.days}d window</span>
-          </span>
-          <span className={totals.missed > totals.posted ? "text-red-400" : ""}>
-            <span className="font-semibold">{totals.missed}</span> missed days
-          </span>
-          <span className="text-green-400">
-            <span className="font-semibold">{totals.strong}</span> strong
-          </span>
-        </div>
-      </div>
+      )}
 
-      {/* Chart */}
-      <div className="w-full" style={{ height: 220 }}>
+      {/* Chart — log-scale Y axis so a single viral post (e.g. Yari's 57k
+          like reel) doesn't crush every other bar to invisibility. */}
+      <div className="w-full" style={{ height: compact ? 120 : 220 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" vertical={false} />
             <XAxis
               dataKey="shortDate"
               stroke="rgba(255,255,255,0.4)"
-              tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 10, fontFamily: "JetBrains Mono, monospace" }}
+              tick={{ fill: "rgba(255,255,255,0.4)", fontSize: compact ? 9 : 10, fontFamily: "JetBrains Mono, monospace" }}
               tickLine={false}
               axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
-              interval={Math.max(0, Math.floor(data.length / 12) - 1)}
+              interval={Math.max(0, Math.floor(data.length / (compact ? 6 : 12)) - 1)}
             />
             <YAxis
+              scale="log"
+              domain={[1, "auto"]}
+              allowDataOverflow={false}
               stroke="rgba(255,255,255,0.4)"
               tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 10, fontFamily: "JetBrains Mono, monospace" }}
               tickLine={false}
               axisLine={false}
-              tickFormatter={(v: number) => (v >= 1000 ? `${(v / 1000).toFixed(0)}k` : `${v}`)}
+              ticks={[1, 10, 100, 1000, 10000, 100000]}
+              tickFormatter={(v: number) =>
+                v >= 1000 ? `${Math.round(v / 1000)}k` : `${v}`
+              }
               width={36}
             />
             <Tooltip
@@ -196,21 +214,24 @@ export default function PerformanceChart({ videos }: Props) {
         </ResponsiveContainer>
       </div>
 
-      {/* Legend */}
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-1 mt-3 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
-        <span className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-sm bg-green-500" /> Strong
-        </span>
-        <span className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-sm bg-yellow-500" /> Mid
-        </span>
-        <span className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-sm bg-red-600" /> Weak
-        </span>
-        <span className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-sm border border-white/20" /> Missed day
-        </span>
-      </div>
+      {/* Legend — hidden in compact mode */}
+      {!compact && (
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-1 mt-3 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
+          <span className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-green-500" /> Strong
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-yellow-500" /> Mid
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm bg-red-600" /> Weak
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-sm border border-white/20" /> Missed day
+          </span>
+          <span className="ml-auto text-white/30">log scale</span>
+        </div>
+      )}
     </div>
   );
 }

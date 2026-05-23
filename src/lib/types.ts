@@ -26,6 +26,13 @@ export interface VideosJsonlRow {
   // attached at fetch time so PostRow can render the expand panel without
   // a separate request per row.
   audit_simple_md?: string;
+  // D-061 push 3 / D-044 extra metadata — used by flag-detail cards to
+  // surface the specific evidence on a given post (e.g. the actual
+  // hashtags used for the hashtag-hail-mary-spam flag).
+  caption?: string;
+  hashtags?: string[];
+  duration_seconds?: number;
+  resolution_px?: string;
 }
 
 // Daily business-log row (D-052 schema).
@@ -110,4 +117,8 @@ export interface CisCache {
     business_log: BusinessLogEntry[];
     answers: Record<string, AnswersJson>;
   }>;
+  // CIS patterns library — keyed by file name (anti_patterns.md, drop_offs.md,
+  // hooks.md, structures.md). Used by flag-details.ts to render rich
+  // description / fix / why cards for every flagged anti-pattern.
+  patterns: Record<string, string>;
 }

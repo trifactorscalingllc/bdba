@@ -14,14 +14,8 @@
 
 import { useState, useMemo, type ReactNode } from "react";
 import { getAntiPatternFlagCount, getAntiPatternFlags } from "@/lib/cis-bridge";
+import { getFlagDetail, getFlagEvidence } from "@/lib/flag-details";
 import type { VideosJsonlRow } from "@/lib/types";
-
-/** Turn a kebab-case anti-pattern slug into a plain-English label.
- *  Real examples from CIS data: `slow-setup-no-anchor` → "Slow setup, no anchor". */
-function flagToPlain(slug: string): string {
-  const words = slug.replace(/[_-]/g, " ").trim();
-  return words.charAt(0).toUpperCase() + words.slice(1);
-}
 
 interface Props {
   slug: string;
@@ -108,13 +102,32 @@ function renderInline(text: string): ReactNode[] {
 //   - bullet            → li under the previous h3 (group consecutive)
 //   ---                 → divider
 //   plain paragraph     → p
+/** Strip coach-only references and internal video IDs from the audit text
+ *  before rendering to a student. The original audit-simple.md was written
+ *  Dack-facing and refers to other videos as "v17 (DPSPb-diZhZ)" — that
+ *  reads as nonsense to a student. Re-frame in second-person plain English. */
+function studentifyAuditPlain(md: string): string {
+  let s = md;
+  // Drop the CIS authoring footer
+  s = s.replace(/\n*---\s*\n+_Plain-English notes from CIS[\s\S]*?_\s*$/m, "");
+  // Strip parenthetical internal IDs: "(DPSPb-diZhZ)" — IG/yt-dlp style slugs
+  s = s.replace(/\s*\([A-Za-z0-9_-]{6,}\)/g, "");
+  // "v17", "v3", etc. → "one of your other posts"
+  s = s.replace(/\bv(\d+)\b/g, "one of your other posts");
+  // "the exact opposite of one of your other posts" / "the opposite of …"
+  s = s.replace(/\bthe exact opposite of\s+/gi, "Compared to ");
+  s = s.replace(/\bthe opposite of\s+/gi, "Compared to ");
+  // "that one had …" → "your stronger posts had …" (we lose specificity
+  // but gain readability for the student)
+  s = s.replace(/\bthat one had\b/g, "your stronger posts had");
+  s = s.replace(/\bthat one was\b/g, "your stronger posts were");
+  // Double spaces from substitutions
+  s = s.replace(/  +/g, " ");
+  return s;
+}
+
 function renderAuditMd(md: string): ReactNode {
-  // Strip the closing CIS metadata footer ("_Plain-English notes from CIS…")
-  // — it's an authoring breadcrumb, not user-facing copy.
-  const stripped = md.replace(
-    /\n*---\s*\n+_Plain-English notes from CIS[\s\S]*?_\s*$/m,
-    "",
-  );
+  const stripped = studentifyAuditPlain(md);
   const lines = stripped.split(/\r?\n/);
   const out: ReactNode[] = [];
   let listBuf: string[] = [];
@@ -274,21 +287,73 @@ export default function PostRow({ slug, video }: Props) {
             </span>
           </div>
 
-          {/* Flag detail — explicit list of WHAT the row's flag count refers to.
-              Plainified kebab-slug → "Slow setup, no anchor" etc. */}
+          {/* Flag detail cards — Evidence + Change + Why for each anti-pattern
+              flagged on THIS post. Pulls description / fix / why from Dack's
+              coaching library (CIS patterns/*.md), surfaces concrete evidence
+              (e.g. the actual hashtags on a hashtag-spam flag) from this video. */}
           {flagList.length > 0 && (
-            <div className="bg-yellow-500/8 border border-yellow-500/25 rounded-lg px-4 py-3 mb-4">
-              <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-yellow-400 mb-2">
+            <div className="mb-5">
+              <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-yellow-400 mb-3">
                 ⚠ {flagList.length} thing{flagList.length === 1 ? "" : "s"} to fix on this post
               </div>
-              <ul className="space-y-1">
-                {flagList.map((f) => (
-                  <li key={f} className="text-[13px] text-white/85 pl-4 relative">
-                    <span className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-yellow-500/80" />
-                    {flagToPlain(f)}
-                  </li>
-                ))}
-              </ul>
+              <div className="space-y-3">
+                {flagList.map((f) => {
+                  const detail = getFlagDetail(f);
+                  const evidence = getFlagEvidence(f, video);
+                  return (
+                    <div
+                      key={f}
+                      className="bg-yellow-500/5 border border-yellow-500/25 border-l-[3px] border-l-yellow-400 rounded-r-lg px-4 py-3"
+                    >
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <div className="font-semibold text-white text-[14px] leading-tight">
+                          {detail.title}
+                        </div>
+                        {detail.severity && (
+                          <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-yellow-400/80 border border-yellow-500/30 rounded px-1.5 py-0.5 mt-0.5 shrink-0">
+                            {detail.severity}
+                          </span>
+                        )}
+                      </div>
+                      {detail.description && (
+                        <p className="text-[13px] text-white/80 leading-relaxed mb-2">
+                          {detail.description}
+                        </p>
+                      )}
+                      {evidence && (
+                        <div className="mt-2 mb-2 bg-black/40 border border-white/10 rounded px-3 py-2">
+                          <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/50 mb-1">
+                            What's on this post
+                          </div>
+                          <div className="text-[12px] text-white/85 leading-snug break-words">
+                            {evidence}
+                          </div>
+                        </div>
+                      )}
+                      {detail.change && (
+                        <div className="mt-2">
+                          <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-green-400 mb-1">
+                            Do this instead
+                          </div>
+                          <p className="text-[13px] text-white/85 leading-relaxed">
+                            {detail.change}
+                          </p>
+                        </div>
+                      )}
+                      {detail.why && (
+                        <div className="mt-2">
+                          <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/50 mb-1">
+                            Why it matters
+                          </div>
+                          <p className="text-[12px] text-white/60 leading-relaxed italic">
+                            {detail.why}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
 

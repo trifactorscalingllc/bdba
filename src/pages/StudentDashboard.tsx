@@ -196,13 +196,26 @@ export default function StudentDashboard() {
             <span>100</span>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-3 mb-6">
             <Factor label="5-2 Compliance" earned={f.fiveTwoCompliance.earned} max={f.fiveTwoCompliance.max} explain={f.fiveTwoCompliance.explain} />
             <Factor label="Strong-Tier %" earned={f.strongTierShare.earned} max={f.strongTierShare.max} explain={f.strongTierShare.explain} />
             <Factor label="New Clients" earned={f.newClients.earned} max={f.newClients.max} explain={f.newClients.explain} />
             <Factor label="No-Show Rate" earned={f.noShowRate.earned} max={f.noShowRate.max} explain={f.noShowRate.explain} />
             <Factor label="Anti-Patterns" earned={f.zeroAntiPattern.earned} max={f.zeroAntiPattern.max} explain={f.zeroAntiPattern.explain} />
             <Factor label="Engagement ↑" earned={f.engagementGrowth.earned} max={f.engagementGrowth.max} explain={f.engagementGrowth.explain} />
+          </div>
+
+          {/* 30-day mini trend — Brad's ask: a quick "how am I trending right
+              now" preview inside the Health Bar card. The full multi-range
+              chart lives below in its own section. */}
+          <div className="pt-5 border-t border-white/10">
+            <div className="flex items-center justify-between mb-2">
+              <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60">
+                Last 30 days · engagement per post
+              </div>
+              <div className="font-mono text-[10px] text-white/40">log scale</div>
+            </div>
+            <PerformanceChart videos={videos} initialRange={30} compact />
           </div>
         </article>
 

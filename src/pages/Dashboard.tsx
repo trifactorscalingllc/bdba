@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import AppNavbar from "@/components/AppNavbar";
-import { fetchCisFromSupabase, getStudents, getProfile, getVideos } from "@/lib/cis-bridge";
+import { fetchCisFromSupabase, getStudents, getProfile, getVideos, getPostType as getPostTypeFromAnswers } from "@/lib/cis-bridge";
 import { computeHealthBar } from "@/lib/scoring/health-bar";
 import { computeCurrentWeek, computeFiveTwoWeeks, computeStreak } from "@/lib/scoring/five-two";
 import { computeMonthlyRecap } from "@/lib/scoring/recap";
@@ -257,16 +257,17 @@ export default function Dashboard() {
                   )}
                 </header>
 
-                {/* Last 4 weeks — newest first. Each cell shows B/R counts +
-                    colored status border. Replaces the blank 7-day-this-week
-                    strip that only had data on Sundays. */}
+                {/* Last 4 weeks — newest first. Each cell shows day-of-week
+                    breakdown for posts that hit ("B Mon · R Thu") + status.
+                    Replaces the blank 7-day-this-week strip + the abstract
+                    "1B · 0R" counts with concrete posting-cadence evidence. */}
                 {last4Weeks.length === 0 ? (
                   <div className="text-[13px] text-white/40 italic mb-3">
                     No posting history yet — week-by-week compliance will appear
                     as posts are audited.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
                     {last4Weeks.map((w) => {
                       const border =
                         w.status === "on_track"  ? "border-green-500/40"
@@ -276,17 +277,48 @@ export default function Dashboard() {
                         w.status === "on_track"  ? "text-green-400"
                         : w.status === "partial" ? "text-yellow-400"
                         : "text-red-400";
+                      // Build day-of-week breakdown for this week
+                      const wkStart = new Date(w.weekStart + "T00:00:00Z");
+                      const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+                      const postsThisWeek = videos.filter((v) => {
+                        if (!v.posted_date || !v.video_id) return false;
+                        const d = new Date(v.posted_date + "T00:00:00Z").getTime();
+                        const ws = wkStart.getTime();
+                        const we = ws + 7 * 86_400_000;
+                        return d >= ws && d < we;
+                      });
+                      const breakdown = postsThisWeek.map((v) => {
+                        const d = new Date(v.posted_date! + "T00:00:00Z");
+                        const dayIdx = (d.getUTCDay() + 6) % 7;
+                        const pt = getPostTypeFromAnswers(slug, v.video_id);
+                        const tag = pt === "viral" ? "R" : "B"; // default to B if untagged
+                        return { day: dayNames[dayIdx], tag };
+                      });
                       return (
                         <div key={w.weekStart} className={`bg-black/40 border ${border} rounded-lg px-3 py-2.5`}>
-                          <div className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/40">
-                            wk of {w.weekStart.slice(5)}
+                          <div className="flex justify-between items-baseline">
+                            <div className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/40">
+                              Wk of {w.weekStart.slice(5)} · {w.converting}B · {w.viral}R
+                            </div>
+                            <div className={`font-mono text-[10px] uppercase tracking-[0.15em] ${txt}`}>
+                              {w.status === "on_track" ? "ON TRACK" : w.status === "partial" ? "PARTIAL" : "OFF TRACK"}
+                            </div>
                           </div>
-                          <div className="font-mono text-sm font-semibold mt-0.5 text-white">
-                            {w.converting}B · {w.viral}R
-                          </div>
-                          <div className={`font-mono text-[10px] uppercase tracking-[0.15em] mt-0.5 ${txt}`}>
-                            {w.status === "on_track" ? "ON" : w.status === "partial" ? "PART" : "OFF"}
-                          </div>
+                          {breakdown.length === 0 ? (
+                            <div className="font-mono text-[11px] text-white/40 italic mt-1">
+                              no posts this week
+                            </div>
+                          ) : (
+                            <div className="font-mono text-[11px] text-white/80 mt-1 flex flex-wrap gap-x-2">
+                              {breakdown.map((b, idx) => (
+                                <span key={idx}>
+                                  <span className={b.tag === "B" ? "text-red-400" : "text-green-400"}>{b.tag}</span>
+                                  <span className="text-white/60"> {b.day}</span>
+                                  {idx < breakdown.length - 1 && <span className="text-white/30"> ·</span>}
+                                </span>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       );
                     })}

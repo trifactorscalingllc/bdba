@@ -29,6 +29,10 @@ import type {
 // Module-scoped cache. Populated by fetchCisFromSupabase().
 let _cache: CisCache | null = null;
 
+// Default empty patterns object for the type — keeps the cache shape stable
+// even when the coaching_library table fetch fails.
+const _emptyPatterns: Record<string, string> = {};
+
 // ─── Async fetcher (called by useCisData TanStack hook) ────────────────────
 
 /** Best-effort parse of CIS profile.md into a StudentProfile. Forgiving
@@ -53,23 +57,34 @@ function parseProfileMd(slug: Slug, txt: string): StudentProfile {
 /** Fetch all dashboard data from Supabase, populate the cache, return the
  *  normalized shape. This is the canonical TanStack queryFn. */
 export async function fetchCisFromSupabase(): Promise<CisCache> {
-  // Fetch in parallel — RLS gates per-row so the coach gets all rows, a
-  // student gets only their own slug (which is enough to render their
-  // dashboard).
-  const [studentsRes, videosRes, answersRes, businessRes] = await Promise.all([
+  // Fetch in parallel — RLS gates per-row. coaching_library is new in D-061
+  // push 3; loads in parallel since it's small and used by flag-detail cards.
+  const [studentsRes, videosRes, answersRes, businessRes, libraryRes] = await Promise.all([
     supabase.from("students").select("*").order("slug"),
     supabase.from("videos").select("*"),
     supabase.from("answers").select("slug,video_id,payload"),
     supabase.from("business_log").select("*"),
+    supabase.from("coaching_library").select("file_name,content_md"),
   ]);
   if (studentsRes.error) throw studentsRes.error;
   if (videosRes.error) throw videosRes.error;
   if (answersRes.error) throw answersRes.error;
   if (businessRes.error) throw businessRes.error;
+  if (libraryRes.error) {
+    // Don't fail the whole dashboard if the coaching_library table doesn't
+    // exist yet (migration hasn't been applied). Just log + continue.
+    console.warn("[cis-bridge] coaching_library fetch failed:", libraryRes.error);
+  }
+
+  const patterns: Record<string, string> = {};
+  for (const r of libraryRes.data ?? []) {
+    patterns[r.file_name as string] = (r.content_md as string) ?? "";
+  }
 
   const cache: CisCache = {
     students: (studentsRes.data ?? []).map((s) => s.slug),
     data: {},
+    patterns,
   };
 
   // Seed per-student buckets.
@@ -110,6 +125,12 @@ export async function fetchCisFromSupabase(): Promise<CisCache> {
       comments: v.comments ?? undefined,
       views: v.views ?? undefined,
       audit_simple_md: (v as { audit_simple_md?: string }).audit_simple_md ?? undefined,
+      caption: (v as { caption?: string }).caption ?? undefined,
+      hashtags: Array.isArray((v as { hashtags?: unknown }).hashtags)
+        ? ((v as { hashtags: unknown[] }).hashtags.filter((x) => typeof x === "string") as string[])
+        : undefined,
+      duration_seconds: (v as { duration_seconds?: number }).duration_seconds ?? undefined,
+      resolution_px: (v as { resolution_px?: string }).resolution_px ?? undefined,
     });
   }
   // Sort each student's videos by posted_date for stable iteration.
@@ -154,6 +175,12 @@ export function getStudents(): Slug[] {
   return [...(_cache?.students ?? [])];
 }
 
+/** Fetch the raw markdown of a pattern library file by name.
+ *  Returns "" if not loaded (e.g. the coaching_library table isn't populated). */
+export function getPatternsMd(fileName: string): string {
+  return _cache?.patterns[fileName] ?? "";
+}
+
 export function getVideos(slug: Slug): VideosJsonlRow[] {
   return _cache?.data[slug]?.videos ?? [];
 }
@@ -168,6 +195,9 @@ export function getProfile(slug: Slug): StudentProfile {
     display_name: slug.charAt(0).toUpperCase() + slug.slice(1),
   };
 }
+
+// Reference the empty fallback to silence unused-var lint if needed.
+void _emptyPatterns;
 
 export function getAnswers(slug: Slug, videoId: string): AnswersJson | null {
   return _cache?.data[slug]?.answers[videoId] ?? null;
