@@ -14,6 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      answers: {
+        Row: {
+          audited_date: string | null
+          created_at: string
+          payload: Json
+          questions_version: number | null
+          slug: string
+          updated_at: string
+          video_id: string
+        }
+        Insert: {
+          audited_date?: string | null
+          created_at?: string
+          payload: Json
+          questions_version?: number | null
+          slug: string
+          updated_at?: string
+          video_id: string
+        }
+        Update: {
+          audited_date?: string | null
+          created_at?: string
+          payload?: Json
+          questions_version?: number | null
+          slug?: string
+          updated_at?: string
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "answers_slug_video_id_fkey"
+            columns: ["slug", "video_id"]
+            isOneToOne: true
+            referencedRelation: "videos"
+            referencedColumns: ["slug", "video_id"]
+          },
+        ]
+      }
       barber_leads: {
         Row: {
           capital_available: string | null
@@ -56,12 +94,224 @@ export type Database = {
         }
         Relationships: []
       }
+      business_log: {
+        Row: {
+          created_at: string
+          cuts: number
+          date: string
+          id: string
+          new_clients: number
+          no_shows: number
+          notes: string | null
+          returning: number
+          revenue: number | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cuts?: number
+          date: string
+          id?: string
+          new_clients?: number
+          no_shows?: number
+          notes?: string | null
+          returning?: number
+          revenue?: number | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cuts?: number
+          date?: string
+          id?: string
+          new_clients?: number
+          no_shows?: number
+          notes?: string | null
+          returning?: number
+          revenue?: number | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_log_slug_fkey"
+            columns: ["slug"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          role: string
+          slug: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          role: string
+          slug?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          role?: string
+          slug?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      students: {
+        Row: {
+          created_at: string
+          display_name: string
+          ig_handle: string | null
+          location: string | null
+          profile_md: string | null
+          shop_name: string | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          ig_handle?: string | null
+          location?: string | null
+          profile_md?: string | null
+          shop_name?: string | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          ig_handle?: string | null
+          location?: string | null
+          profile_md?: string | null
+          shop_name?: string | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      videos: {
+        Row: {
+          aspect_ratio: string | null
+          audited_date: string | null
+          caption: string | null
+          caption_cta: string | null
+          caption_location: string | null
+          comment_count_reported: number | null
+          comments: number | null
+          cover_captured: boolean
+          created_at: string
+          format_typicality: string | null
+          hashtags: Json | null
+          hook_type: string | null
+          likes: number | null
+          metrics_history: Json
+          operator_notes: string | null
+          posted_date: string | null
+          resolution_px: string | null
+          slug: string
+          source_url: string | null
+          structure_arc: string | null
+          thumbnail_url: string | null
+          top_comments_sample: Json | null
+          updated_at: string
+          uploader_id: string | null
+          verdict_oneline: string | null
+          verdict_tier: string | null
+          video_id: string
+          views: number | null
+        }
+        Insert: {
+          aspect_ratio?: string | null
+          audited_date?: string | null
+          caption?: string | null
+          caption_cta?: string | null
+          caption_location?: string | null
+          comment_count_reported?: number | null
+          comments?: number | null
+          cover_captured?: boolean
+          created_at?: string
+          format_typicality?: string | null
+          hashtags?: Json | null
+          hook_type?: string | null
+          likes?: number | null
+          metrics_history?: Json
+          operator_notes?: string | null
+          posted_date?: string | null
+          resolution_px?: string | null
+          slug: string
+          source_url?: string | null
+          structure_arc?: string | null
+          thumbnail_url?: string | null
+          top_comments_sample?: Json | null
+          updated_at?: string
+          uploader_id?: string | null
+          verdict_oneline?: string | null
+          verdict_tier?: string | null
+          video_id: string
+          views?: number | null
+        }
+        Update: {
+          aspect_ratio?: string | null
+          audited_date?: string | null
+          caption?: string | null
+          caption_cta?: string | null
+          caption_location?: string | null
+          comment_count_reported?: number | null
+          comments?: number | null
+          cover_captured?: boolean
+          created_at?: string
+          format_typicality?: string | null
+          hashtags?: Json | null
+          hook_type?: string | null
+          likes?: number | null
+          metrics_history?: Json
+          operator_notes?: string | null
+          posted_date?: string | null
+          resolution_px?: string | null
+          slug?: string
+          source_url?: string | null
+          structure_arc?: string | null
+          thumbnail_url?: string | null
+          top_comments_sample?: Json | null
+          updated_at?: string
+          uploader_id?: string | null
+          verdict_oneline?: string | null
+          verdict_tier?: string | null
+          video_id?: string
+          views?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "videos_slug_fkey"
+            columns: ["slug"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_coach: { Args: never; Returns: boolean }
+      my_slug: { Args: never; Returns: string }
     }
     Enums: {
       [_ in never]: never
