@@ -233,7 +233,7 @@ export default function Dashboard() {
         {/* ── Section 2: 5-2 Split Compliance ────────────────────────── */}
         <SectionLabel num="Feature 1" title="5-2 Split Compliance" />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          {rows.map(({ slug, profile: p, currentWeek, streak, last4Weeks }) => {
+          {rows.map(({ slug, profile: p, videos, currentWeek, streak, last4Weeks }) => {
             const cWeek = currentWeek?.converting ?? 0;
             const vWeek = currentWeek?.viral ?? 0;
             const compliantWeeks = last4Weeks.filter((w) => w.status === "on_track").length;
