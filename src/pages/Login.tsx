@@ -120,7 +120,7 @@ export default function Login() {
           </form>
 
           <div className="mt-6 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
-            Trouble signing in? Contact Brad at TriFactor Scaling.
+            Trouble signing in? Contact the TFS Team.
           </div>
         </motion.div>
       </main>

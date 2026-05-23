@@ -45,8 +45,9 @@ export default class ErrorBoundary extends Component<Props, State> {
             We logged this
           </h2>
           <p className="text-sm text-white/70 leading-relaxed mb-6">
-            The error has been sent to Brad — he'll look at it. Try refreshing,
-            and if it keeps happening, message him directly.
+            The error has been sent to the TFS Team — we'll look into it. Try
+            refreshing, and if it keeps happening, reach out to the TFS Team
+            directly.
           </p>
           <button
             onClick={() => window.location.reload()}

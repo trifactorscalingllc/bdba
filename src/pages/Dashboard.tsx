@@ -103,7 +103,7 @@ export default function Dashboard() {
             <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-red mb-3">Couldn't load dashboard</div>
             <div className="text-sm text-white/70">{String(cisQuery.error)}</div>
             <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
-              If this persists, contact Brad at TriFactor Scaling.
+              If this persists, contact the TFS Team.
             </div>
           </div>
         </div>
