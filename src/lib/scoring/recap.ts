@@ -3,11 +3,48 @@
 
 import {
   getAntiPatternFlagsRaw,
+  getAuditSimpleMd,
   getBusinessLog,
   getCoachingPrescription,
   getProfile,
   getVideos,
 } from "@/lib/cis-bridge";
+
+/** Detect operator/coach-only jargon in a prescription string. When found,
+ *  the recap should NOT surface that text to the student — it's internal
+ *  coaching notes like "Lane 6 is now n=6 OPERATOR-PROVEN... PROMOTE to
+ *  head/proven_scripts.md". */
+function looksLikeOperatorJargon(text: string): boolean {
+  const markers = [
+    /OPERATOR[- ]PROVEN/i,
+    /\bPROMOTE\s+to\s+head\//i,
+    /head\/proven_scripts/i,
+    /\bn=\s*\d+/,
+    /\bLane\s+\d+/i,
+    /IG[- ]attribution/i,
+    /\bCONVERTING\b/,
+    /cross[- ]?ref(erence)?\s+(patterns|structures|hooks)\//i,
+    /patterns\/(structures|anti-patterns|hooks|drop-offs)\.md/i,
+    /audit\.md/i,
+  ];
+  return markers.some((re) => re.test(text));
+}
+
+/** Extract the first bullet of "## N. <title>" from an audit-simple.md body.
+ *  Used as a student-readable fallback when verdict_next_video_prescription
+ *  is mostly operator-jargon. */
+function firstBulletOfSection(md: string, sectionNum: number): string | null {
+  if (!md) return null;
+  const headingRe = new RegExp(`^##\\s+${sectionNum}\\.[^\\n]*\\n`, "m");
+  const m = md.match(headingRe);
+  if (!m || m.index === undefined) return null;
+  const rest = md.slice(m.index + m[0].length);
+  const nextHeading = rest.search(/^##\s/m);
+  const body = nextHeading >= 0 ? rest.slice(0, nextHeading) : rest;
+  const bulletMatch = body.match(/^-\s+([\s\S]+?)(?=\n-\s|\n\s*\n|$)/m);
+  if (!bulletMatch) return null;
+  return bulletMatch[1].replace(/\s+/g, " ").trim();
+}
 import type { Slug, VideosJsonlRow } from "@/lib/types";
 import { computeHealthBar } from "./health-bar";
 import { computeFiveTwoWeeks } from "./five-two";
@@ -201,11 +238,22 @@ export function computeMonthlyRecap(
     .sort((a, b) => (b.audited_date || "").localeCompare(a.audited_date || ""))[0] ||
     videos[videos.length - 1];
   if (mostRecent?.video_id) {
+    // Try the per-video coaching prescription first — but only use it if
+    // it's NOT operator jargon. Otherwise fall back to audit-simple.md
+    // Section 1 ("Stop doing this") which CIS plainifies upstream.
     const presc = getCoachingPrescription(slug, mostRecent.video_id);
-    if (presc) {
-      const firstSentence = presc.split(/(?<=[.!?])\s+/)[0].slice(0, 200);
-      actionItems.push(firstSentence);
+    let chosen = "";
+    if (presc && !looksLikeOperatorJargon(presc)) {
+      chosen = presc.split(/(?<=[.!?])\s+/)[0].slice(0, 220);
     }
+    if (!chosen) {
+      const md = getAuditSimpleMd(slug, mostRecent.video_id);
+      const bullet = firstBulletOfSection(md, 1);
+      if (bullet && !looksLikeOperatorJargon(bullet)) {
+        chosen = bullet.slice(0, 260);
+      }
+    }
+    if (chosen) actionItems.push(chosen);
   }
   if (totalWeeksThis === 0 || thisMonthVideos.length < 7) {
     actionItems.push(`Post more — aim for 7 posts a week (5 booking + 2 reach) to make the 5-and-2 plan work. This month you posted ${thisMonthVideos.length}.`);

@@ -127,17 +127,73 @@ function studentifyAuditPlain(md: string): string {
   return s;
 }
 
+/** Break a long compound bullet into shorter executive points. Long sentences
+ *  like "Add X so it lands when Y, and tighten the first two seconds onto Z"
+ *  get split into two crisp bullets. Conservative: only splits when the bullet
+ *  is genuinely long. Caps at 3 sub-bullets to avoid shredding meaning. */
+function splitCompoundBullet(text: string): string[] {
+  if (text.length < 120) return [text];
+  // Try em-dash split first (most reliable structure separator in audit-simple
+  // copy: "do X — and then Y").
+  const splits: string[] = [];
+  const splitOn = (s: string, sep: RegExp): string[] => {
+    const parts = s.split(sep);
+    return parts.map((p) => p.trim()).filter(Boolean);
+  };
+  const tryRegexes: RegExp[] = [
+    / — and /i,           // " — and "
+    / — /,                 // em dash
+    /;\s+/,                // semicolon
+    /\s+AND\s+/,           // capitalized AND
+    /,\s+and\s+(?=\w{4,})/, // ", and " before a non-trivial clause
+  ];
+  let working = [text];
+  for (const re of tryRegexes) {
+    if (working.length >= 3) break;
+    const next: string[] = [];
+    for (const piece of working) {
+      if (piece.length < 120) {
+        next.push(piece);
+        continue;
+      }
+      const parts = splitOn(piece, re);
+      if (parts.length > 1 && parts.every((p) => p.length >= 20)) {
+        next.push(...parts);
+      } else {
+        next.push(piece);
+      }
+    }
+    working = next;
+  }
+  // Capitalize first letter of each split piece for readability
+  return working.slice(0, 3).map((p) => {
+    p = p.trim();
+    if (!p) return p;
+    return p.charAt(0).toUpperCase() + p.slice(1);
+  });
+  void splits;
+}
+
 function renderAuditMd(md: string): ReactNode {
   const stripped = studentifyAuditPlain(md);
   const lines = stripped.split(/\r?\n/);
   const out: ReactNode[] = [];
   let listBuf: string[] = [];
   let key = 0;
+  // Track which section we're currently inside so the bullet splitter can be
+  // most aggressive in Sections 1 and 2 (Stop doing / Keep doing) where Brad
+  // specifically wants executive bullets.
+  let currentSection = 0;
   const flushList = () => {
     if (listBuf.length === 0) return;
+    const isExecutiveSection = currentSection === 1 || currentSection === 2;
+    // In Stop/Keep sections, split compound bullets into short executive points.
+    const bullets = isExecutiveSection
+      ? listBuf.flatMap((b) => splitCompoundBullet(b))
+      : listBuf;
     out.push(
       <ul key={`ul-${key++}`} className="list-none space-y-1.5 mt-2 mb-4 pl-0">
-        {listBuf.map((b, i) => (
+        {bullets.map((b, i) => (
           <li key={`li-${key}-${i}`} className="text-[13px] leading-relaxed text-white/85 pl-4 relative">
             <span className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-brand-red/70" />
             {renderInline(b)}
@@ -157,12 +213,16 @@ function renderAuditMd(md: string): ReactNode {
     }
     if (line.startsWith("## ")) {
       flushList();
+      // Detect "## N. Title" — track section number for downstream split logic
+      const headingText = line.slice(3);
+      const numMatch = headingText.match(/^(\d+)\./);
+      currentSection = numMatch ? parseInt(numMatch[1], 10) : 0;
       out.push(
         <h3
           key={`h3-${key++}`}
           className="font-mono text-[10px] uppercase tracking-[0.25em] text-brand-red mt-5 mb-1.5"
         >
-          {renderInline(line.slice(3))}
+          {renderInline(headingText)}
         </h3>,
       );
       continue;

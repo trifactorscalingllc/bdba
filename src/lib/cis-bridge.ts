@@ -252,6 +252,15 @@ export function getCoachingPrescription(slug: Slug, videoId: string): string {
   return typeof v === "string" ? v : "";
 }
 
+/** Plain-English audit body (audit-simple.md) for a specific video, or ""
+ *  if the snapshot didn't ship one. Used by the monthly recap to fall back
+ *  away from coach-jargon-laden prescriptions to student-readable content. */
+export function getAuditSimpleMd(slug: Slug, videoId: string): string {
+  const videos = _cache?.data[slug]?.videos ?? [];
+  const v = videos.find((x) => x.video_id === videoId);
+  return v?.audit_simple_md ?? "";
+}
+
 export function getAntiPatternFlagCount(slug: Slug, videoId: string): number {
   return getAntiPatternFlags(slug, videoId).length;
 }

@@ -1,24 +1,19 @@
 // ─── CoachingPatterns — synthesis across the whole audited corpus ──────────
-// Replaces the "From Recent Audits" section that just dumped the last 5
-// `verdict_next_video_prescription` strings.
+// Two side-by-side panels:
+//   ✓ What's been proven to work — hook × structure combos that hit Strong
+//   ✕ What keeps hurting performance — recurring anti-pattern flags
 //
-// This component answers Brad's real coaching question: "Across everything
-// I've shown Dack about this student, what's been proven to work, and what
-// recurring problems are killing their performance?"
-//
-// Three signals computed from the full corpus:
-//   1. PROVEN FORMATS — hook_type / structure_arc combos that landed in
-//      Strong-tier audits more than once
-//   2. RECURRING ANTI-PATTERN FLAGS — most-frequent kebab-slug flags
-//      across every audited video, plainified for display
-//   3. POST-TYPE MIX — converting vs viral counts among Strong-tier posts
-//      (which formats actually move the booking-funnel needle)
-//
-// Pure read; no fetches. Pulls answers via the synchronous cis-bridge
-// helpers, which are populated at page level by the TanStack Query.
+// D-061 push 5 (2026-05-23): each row now has a "See examples" toggle that
+// expands to show 1-3 example posts (date + one-line verdict + relevant
+// audit-simple snippet) so students can see EXACTLY which posts these
+// patterns came from and what the content was.
 
-import { useMemo } from "react";
-import { getAntiPatternFlags, getPostType } from "@/lib/cis-bridge";
+import { useMemo, useState } from "react";
+import {
+  getAntiPatternFlags,
+  getAuditSimpleMd,
+  getPostType,
+} from "@/lib/cis-bridge";
 import type { Slug, VideosJsonlRow } from "@/lib/types";
 
 interface Props {
@@ -27,68 +22,169 @@ interface Props {
 }
 
 function flagToPlain(slug: string): string {
-  const words = slug.replace(/[_-]/g, " ").trim();
-  return words.charAt(0).toUpperCase() + words.slice(1);
+  const w = slug.replace(/[_-]/g, " ").trim();
+  return w.charAt(0).toUpperCase() + w.slice(1);
 }
 
-function tierLabel(t?: string): string {
-  if (!t) return "—";
-  const x = t.toLowerCase();
-  if (x === "strong") return "WORKED";
-  if (x === "mid") return "OK";
-  if (x === "weak") return "DIDN'T";
-  return t;
+/** Pull the first bullet of "## N. <title>" from an audit-simple.md body. */
+function firstBulletOfSection(md: string, sectionNum: number): string | null {
+  if (!md) return null;
+  const headingRe = new RegExp(`^##\\s+${sectionNum}\\.[^\\n]*\\n`, "m");
+  const m = md.match(headingRe);
+  if (!m || m.index === undefined) return null;
+  const rest = md.slice(m.index + m[0].length);
+  const nextHeading = rest.search(/^##\s/m);
+  const body = nextHeading >= 0 ? rest.slice(0, nextHeading) : rest;
+  const bulletMatch = body.match(/^-\s+([\s\S]+?)(?=\n-\s|\n\s*\n|$)/m);
+  if (!bulletMatch) return null;
+  return bulletMatch[1].replace(/\s+/g, " ").trim();
 }
 
 interface ComboCount {
   hook: string;
   structure: string;
   count: number;
+  videos: VideosJsonlRow[];
+}
+
+interface FlagCount {
+  slug: string;
+  plain: string;
+  count: number;
+  pctOfCorpus: number;
+  videos: VideosJsonlRow[];
+}
+
+interface ExampleCardProps {
+  video: VideosJsonlRow;
+  /** Which audit-simple section to surface — 2 for "what worked" examples,
+   *  1 for "what to fix" examples. */
+  sectionForSnippet: 1 | 2;
+}
+
+function ExampleCard({ video, sectionForSnippet }: ExampleCardProps) {
+  const snippet = useMemo(() => {
+    if (!video.audit_simple_md) return null;
+    return firstBulletOfSection(video.audit_simple_md, sectionForSnippet);
+  }, [video.audit_simple_md, sectionForSnippet]);
+
+  return (
+    <div className="bg-black/40 border border-white/10 rounded-lg px-3.5 py-3">
+      <div className="flex items-baseline justify-between gap-3 mb-1.5">
+        <div className="font-mono text-[11px] text-white/60">
+          {video.posted_date ?? "—"}
+        </div>
+        {video.url && (
+          <a
+            href={video.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-[10px] uppercase tracking-[0.15em] text-brand-red hover:underline"
+          >
+            Watch ↗
+          </a>
+        )}
+      </div>
+      {video.verdict_oneline && (
+        <div className="text-[13px] text-white font-semibold mb-1 leading-tight">
+          {video.verdict_oneline}
+        </div>
+      )}
+      {snippet && (
+        <div className="text-[12px] text-white/70 leading-relaxed">
+          {snippet}
+        </div>
+      )}
+      {!snippet && !video.verdict_oneline && (
+        <div className="text-[12px] text-white/40 italic">
+          {video.hook_type ?? "—"} · {video.structure_arc ?? "—"}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function CoachingPatterns({ slug, videos }: Props) {
+  // Per-row expand state keyed by a stable identifier
+  const [openCombo, setOpenCombo] = useState<string | null>(null);
+  const [openFlag, setOpenFlag] = useState<string | null>(null);
+
   const audited = useMemo(() => videos.filter((v) => v.audited_date), [videos]);
   const strong = useMemo(() => audited.filter((v) => v.verdict_tier === "strong"), [audited]);
   const mid    = useMemo(() => audited.filter((v) => v.verdict_tier === "mid"), [audited]);
   const weak   = useMemo(() => audited.filter((v) => v.verdict_tier === "weak"), [audited]);
 
-  // ─── 1. Proven formats — hook × structure combos that worked >1× ─────
+  // ─── 1. Proven formats — hook × structure combos that hit Strong ────
   const provenCombos = useMemo<ComboCount[]>(() => {
-    const counts = new Map<string, number>();
+    const counts = new Map<string, { count: number; videos: VideosJsonlRow[] }>();
     for (const v of strong) {
       const key = `${v.hook_type ?? "—"} || ${v.structure_arc ?? "—"}`;
-      counts.set(key, (counts.get(key) ?? 0) + 1);
+      const ex = counts.get(key) ?? { count: 0, videos: [] };
+      ex.count += 1;
+      ex.videos.push(v);
+      counts.set(key, ex);
     }
     return [...counts.entries()]
-      .map(([k, c]) => {
+      .map(([k, { count, videos: vids }]) => {
         const [hook, structure] = k.split(" || ");
-        return { hook, structure, count: c };
+        // Sort each combo's videos newest-first so the most recent example
+        // shows first when expanded.
+        vids.sort((a, b) => (b.posted_date || "").localeCompare(a.posted_date || ""));
+        return { hook, structure, count, videos: vids };
       })
-      .filter((c) => c.count >= 1) // Show every Strong combo even if only 1× — they're rare for these students
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
   }, [strong]);
 
-  // ─── 2. Recurring anti-pattern flags — across the FULL corpus ────────
-  const flagCounts = useMemo<{ slug: string; plain: string; count: number; pctOfCorpus: number }[]>(() => {
-    const counts = new Map<string, number>();
-    let covered = 0; // how many audits had v4 anti_pattern_flags set
+  // ─── 2. Recurring anti-pattern flags ─────────────────────────────────
+  const flagCounts = useMemo<FlagCount[]>(() => {
+    const counts = new Map<string, { count: number; videos: VideosJsonlRow[] }>();
     for (const v of audited) {
       const flags = getAntiPatternFlags(slug, v.video_id);
-      if (flags.length > 0) covered += 1; // 'covered' counts videos with ≥1 flag, not v4-coverage strictly; close enough for display
-      for (const f of flags) counts.set(f, (counts.get(f) ?? 0) + 1);
+      for (const f of flags) {
+        const ex = counts.get(f) ?? { count: 0, videos: [] };
+        ex.count += 1;
+        ex.videos.push(v);
+        counts.set(f, ex);
+      }
     }
     const total = audited.length;
     return [...counts.entries()]
-      .map(([flagSlug, count]) => ({
-        slug: flagSlug,
-        plain: flagToPlain(flagSlug),
-        count,
-        pctOfCorpus: total > 0 ? Math.round((count / total) * 100) : 0,
-      }))
+      .map(([flagSlug, { count, videos: vids }]) => {
+        vids.sort((a, b) => (b.posted_date || "").localeCompare(a.posted_date || ""));
+        return {
+          slug: flagSlug,
+          plain: flagToPlain(flagSlug),
+          count,
+          pctOfCorpus: total > 0 ? Math.round((count / total) * 100) : 0,
+          videos: vids,
+        };
+      })
       .sort((a, b) => b.count - a.count)
       .slice(0, 6);
   }, [audited, slug]);
+
+  // Attach audit-simple to combo videos (cis-bridge sync read)
+  const enrichedCombos = useMemo<ComboCount[]>(
+    () => provenCombos.map((c) => ({
+      ...c,
+      videos: c.videos.map((v) => ({
+        ...v,
+        audit_simple_md: v.audit_simple_md ?? getAuditSimpleMd(slug, v.video_id),
+      })),
+    })),
+    [provenCombos, slug],
+  );
+  const enrichedFlags = useMemo<FlagCount[]>(
+    () => flagCounts.map((f) => ({
+      ...f,
+      videos: f.videos.map((v) => ({
+        ...v,
+        audit_simple_md: v.audit_simple_md ?? getAuditSimpleMd(slug, v.video_id),
+      })),
+    })),
+    [flagCounts, slug],
+  );
 
   // ─── 3. Post-type mix among Strong posts ─────────────────────────────
   const strongMix = useMemo(() => {
@@ -120,11 +216,11 @@ export default function CoachingPatterns({ slug, videos }: Props) {
             ✓ What's been proven to work
           </div>
           <span className="font-mono text-[10px] text-white/40">
-            {strong.length} of {audited.length} {strong.length === 1 ? "post" : "posts"} = Strong
+            {strong.length} of {audited.length} = Strong
           </span>
         </div>
 
-        {provenCombos.length === 0 ? (
+        {enrichedCombos.length === 0 ? (
           <p className="text-[13px] text-white/60 leading-relaxed">
             No Strong-tier posts in the audited corpus yet. Once a post hits
             Strong, the hook + structure combo that delivered it will appear
@@ -136,25 +232,50 @@ export default function CoachingPatterns({ slug, videos }: Props) {
               Hook + structure combos that landed Strong-tier
             </p>
             <ul className="space-y-2.5">
-              {provenCombos.map((c, i) => (
-                <li key={`${c.hook}-${c.structure}`} className="text-[13px]">
-                  <div className="flex items-start gap-3">
-                    <span className="font-mono text-[11px] text-green-400 min-w-[24px]">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <div>
-                      <div className="text-white">
-                        <span className="font-semibold">{c.hook}</span>
-                        <span className="text-white/40"> + </span>
-                        <span className="font-semibold">{c.structure}</span>
-                      </div>
-                      <div className="font-mono text-[11px] text-white/50 mt-0.5">
-                        Hit Strong {c.count}× — repeat this combo
+              {enrichedCombos.map((c, i) => {
+                const key = `${c.hook}||${c.structure}`;
+                const isOpen = openCombo === key;
+                return (
+                  <li key={key} className="text-[13px]">
+                    <div className="flex items-start gap-3">
+                      <span className="font-mono text-[11px] text-green-400 min-w-[24px] pt-0.5">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-white">
+                          <span className="font-semibold">{c.hook}</span>
+                          <span className="text-white/40"> + </span>
+                          <span className="font-semibold">{c.structure}</span>
+                        </div>
+                        <div className="font-mono text-[11px] text-white/50 mt-0.5">
+                          Hit Strong {c.count}× — repeat this combo
+                        </div>
+                        <button
+                          onClick={() => setOpenCombo(isOpen ? null : key)}
+                          className="font-mono text-[10px] uppercase tracking-[0.2em] text-green-400 hover:text-green-300 mt-1.5 inline-flex items-center gap-1"
+                          aria-expanded={isOpen}
+                        >
+                          {isOpen ? "▼ Hide examples" : "▶ See examples"}
+                          <span className="text-white/40">
+                            ({c.count})
+                          </span>
+                        </button>
+                        {isOpen && (
+                          <div className="space-y-2 mt-3">
+                            {c.videos.map((v) => (
+                              <ExampleCard
+                                key={v.video_id}
+                                video={v}
+                                sectionForSnippet={2}
+                              />
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
-                  </div>
-                </li>
-              ))}
+                  </li>
+                );
+              })}
             </ul>
             {(strongMix.converting > 0 || strongMix.viral > 0) && (
               <div className="mt-4 pt-3 border-t border-white/10 font-mono text-[11px] text-white/60">
@@ -182,11 +303,9 @@ export default function CoachingPatterns({ slug, videos }: Props) {
           </span>
         </div>
 
-        {flagCounts.length === 0 ? (
+        {enrichedFlags.length === 0 ? (
           <p className="text-[13px] text-white/60 leading-relaxed">
-            No recurring anti-pattern flags across the audited corpus. Either
-            this student is dialed in, or v4 anti-pattern flags haven't been
-            backfilled yet.
+            No recurring anti-pattern flags across the audited corpus.
           </p>
         ) : (
           <>
@@ -194,21 +313,45 @@ export default function CoachingPatterns({ slug, videos }: Props) {
               Recurring flags across all {audited.length} audits — fix these to lift the score
             </p>
             <ul className="space-y-2.5">
-              {flagCounts.map((f, i) => (
-                <li key={f.slug} className="text-[13px]">
-                  <div className="flex items-start gap-3">
-                    <span className="font-mono text-[11px] text-brand-red min-w-[24px]">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <div className="flex-1">
-                      <div className="text-white font-semibold">{f.plain}</div>
-                      <div className="font-mono text-[11px] text-white/50 mt-0.5">
-                        Flagged in {f.count} of {audited.length} posts ({f.pctOfCorpus}%)
+              {enrichedFlags.map((f, i) => {
+                const isOpen = openFlag === f.slug;
+                return (
+                  <li key={f.slug} className="text-[13px]">
+                    <div className="flex items-start gap-3">
+                      <span className="font-mono text-[11px] text-brand-red min-w-[24px] pt-0.5">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-white font-semibold">{f.plain}</div>
+                        <div className="font-mono text-[11px] text-white/50 mt-0.5">
+                          Flagged in {f.count} of {audited.length} posts ({f.pctOfCorpus}%)
+                        </div>
+                        <button
+                          onClick={() => setOpenFlag(isOpen ? null : f.slug)}
+                          className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-red hover:text-red-300 mt-1.5 inline-flex items-center gap-1"
+                          aria-expanded={isOpen}
+                        >
+                          {isOpen ? "▼ Hide examples" : "▶ See examples"}
+                          <span className="text-white/40">
+                            ({f.count})
+                          </span>
+                        </button>
+                        {isOpen && (
+                          <div className="space-y-2 mt-3">
+                            {f.videos.slice(0, 6).map((v) => (
+                              <ExampleCard
+                                key={v.video_id}
+                                video={v}
+                                sectionForSnippet={1}
+                              />
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
-                  </div>
-                </li>
-              ))}
+                  </li>
+                );
+              })}
             </ul>
           </>
         )}
