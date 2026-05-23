@@ -65,14 +65,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (mounted) setIsLoading(false);
     });
 
-    // Subscribe to auth state changes (login/logout/refresh)
-    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, sess) => {
+    // Subscribe to auth state changes (login/logout/refresh).
+    //
+    // ⚠ Critical: per Supabase docs, the callback may be invoked synchronously
+    // by supabase-js while it still holds internal auth locks. Calling another
+    // Supabase method (like .from('profiles').select()) directly inside this
+    // callback can deadlock the auth client — signInWithPassword's promise
+    // never resolves and the login UI hangs on "Signing in…" forever.
+    //
+    // Fix: do the sync state updates immediately, but defer any further
+    // Supabase calls to the next event-loop tick with setTimeout(0). This lets
+    // the auth client release its locks before fetchProfile fires.
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, sess) => {
       if (!mounted) return;
       setSession(sess);
       setUser(sess?.user ?? null);
       if (sess?.user) {
-        const p = await fetchProfile(sess.user.id);
-        if (mounted) setProfile(p);
+        const uid = sess.user.id;
+        setTimeout(() => {
+          fetchProfile(uid).then((p) => {
+            if (mounted) setProfile(p);
+          });
+        }, 0);
       } else {
         setProfile(null);
       }
