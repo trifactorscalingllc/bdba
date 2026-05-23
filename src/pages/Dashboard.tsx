@@ -13,12 +13,16 @@ import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import AppNavbar from "@/components/AppNavbar";
-import { useAuth } from "@/lib/auth";
 import { fetchCisFromSupabase, getStudents, getProfile, getVideos, getPostType } from "@/lib/cis-bridge";
 import { computeHealthBar } from "@/lib/scoring/health-bar";
 import { computeCurrentWeek, computeStreak } from "@/lib/scoring/five-two";
 import { computeMonthlyRecap } from "@/lib/scoring/recap";
 import type { HealthBarScore } from "@/lib/types";
+
+// D-061 (2026-05-23): Auth pulled out. This route is reachable by direct
+// URL without sign-in. RLS public_read_*_TEMPORARY_D061 policies grant
+// anon SELECT on the dashboard tables. Re-enable auth by restoring the
+// useAuth() / profile gating below from git history.
 
 // ─── helpers ───────────────────────────────────────────────────────────────
 
@@ -89,33 +93,11 @@ function deltaCell(curr: number, prev: number, lowerIsBetter = false): { txt: st
 // ─── page ──────────────────────────────────────────────────────────────────
 
 export default function Dashboard() {
-  const { user, role, profile } = useAuth();
-
   const cisQuery = useQuery({
-    queryKey: ["cis", role, profile?.slug],
+    queryKey: ["cis"],
     queryFn: fetchCisFromSupabase,
     staleTime: 60_000,
-    // Don't fetch CIS data until we know the user's role — otherwise we'd
-    // fetch then potentially re-fetch when profile arrives.
-    enabled: !!profile,
   });
-
-  // Wait for the profile row to load before deciding which view to render.
-  // Without this gate, a still-loading profile (role=null) would fall into
-  // the "Phase 1: only coach view exists" branch and flash the student-
-  // portal placeholder for a tick before re-rendering as the coach view.
-  if (user && !profile) {
-    return (
-      <>
-        <AppNavbar variant="dashboard" />
-        <div className="min-h-screen flex items-center justify-center pt-32">
-          <div className="font-mono text-xs uppercase tracking-[0.2em] text-white/40">
-            Loading your profile…
-          </div>
-        </div>
-      </>
-    );
-  }
 
   // Loading / error gates
   if (cisQuery.isLoading) {
@@ -141,29 +123,6 @@ export default function Dashboard() {
             <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
               If this persists, contact Brad at TriFactor Scaling.
             </div>
-          </div>
-        </div>
-      </>
-    );
-  }
-
-  // Phase 1: only coach view exists. Student route comes next sprint.
-  if (role !== "coach") {
-    return (
-      <>
-        <AppNavbar variant="dashboard" />
-        <div className="min-h-screen flex items-center justify-center pt-32 px-4">
-          <div className="max-w-md glass-card rounded-3xl p-8 text-center">
-            <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-brand-red mb-3">
-              Student portal
-            </div>
-            <h2 className="text-2xl font-black italic uppercase tracking-tight mb-3">
-              Coming soon
-            </h2>
-            <p className="text-sm text-white/70">
-              Your student dashboard is being built in the next sprint. For now, Dack
-              has access to your coach-side performance review.
-            </p>
           </div>
         </div>
       </>
@@ -203,7 +162,8 @@ export default function Dashboard() {
     <>
       <Helmet>
         <title>Coach Dashboard · PB Assistant</title>
-        <meta name="robots" content="noindex,nofollow" />
+        <meta name="robots" content="noindex,nofollow,noarchive,nosnippet" />
+        <meta name="googlebot" content="noindex,nofollow" />
       </Helmet>
 
       <AppNavbar variant="dashboard" />
@@ -218,7 +178,7 @@ export default function Dashboard() {
         >
           <div>
             <h1 className="text-3xl md:text-4xl font-black italic uppercase tracking-tight">
-              Welcome back, <span className="text-red-shimmer">{profile?.display_name || "Coach"}</span>
+              Welcome back, <span className="text-red-shimmer">Dack</span>
             </h1>
             <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.15em] text-white/60">
               Coach view · {rows.length} students · {totalAudits} total audits

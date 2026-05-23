@@ -1,29 +1,22 @@
-// ─── App-mode navbar — used on /login and /dashboard ────────────────────────
+// ─── App-mode navbar — used on /dashboard ──────────────────────────────────
 // Visually matches the marketing Navbar (same glass-pill, same logo treatment)
 // but contents differ: no Story/Results/Apply, no marketing CTAs.
 //
-// Variants:
-//   "login"     → just logo + "← Marketing site" link (unauthenticated)
-//   "dashboard" → logo + role pill (COACH · NAME) + Sign out button
+// D-061 (2026-05-23): auth pulled out; no role pill / no Sign Out button.
+// Just logo + "← Marketing site" link to bounce back to the funnel.
+//
+// Variants are kept (typed `"login" | "dashboard"`) so re-enabling auth is a
+// pure additive change — the dashboard variant just renders the same way as
+// the login variant for now.
 
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/lib/auth";
 import logoTransparent from "@/assets/pb-logo.png";
 
 interface Props {
   variant: "login" | "dashboard";
 }
 
-export default function AppNavbar({ variant }: Props) {
-  const { profile, signOut } = useAuth();
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate("/login");
-  };
-
+export default function AppNavbar({ variant: _variant }: Props) {
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
@@ -45,26 +38,12 @@ export default function AppNavbar({ variant }: Props) {
           </span>
         </div>
 
-        {variant === "login" && (
-          <a href="/" className="technical-label hover:text-white transition-all">
-            ← Marketing site
-          </a>
-        )}
-
-        {variant === "dashboard" && (
-          <div className="flex items-center gap-4 md:gap-5">
-            <span className="hidden sm:inline-flex font-mono text-[10px] uppercase tracking-[0.2em] text-brand-red bg-red-600/10 border border-red-600/30 rounded-full px-3 py-1.5">
-              {profile?.role === "coach" ? "COACH" : "STUDENT"}
-              {profile?.display_name ? ` · ${profile.display_name}` : ""}
-            </span>
-            <button
-              onClick={handleSignOut}
-              className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60 hover:text-white border border-white/10 hover:border-brand-red rounded-full px-4 py-2 transition-all"
-            >
-              Sign out
-            </button>
-          </div>
-        )}
+        <a
+          href="/"
+          className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60 hover:text-white transition-all"
+        >
+          ← Marketing site
+        </a>
       </div>
     </motion.nav>
   );
