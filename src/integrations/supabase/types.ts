@@ -52,6 +52,45 @@ export type Database = {
           },
         ]
       }
+      app_errors: {
+        Row: {
+          context: Json | null
+          created_at: string
+          id: string
+          message: string
+          route: string | null
+          severity: string
+          stack: string | null
+          user_agent: string | null
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          context?: Json | null
+          created_at?: string
+          id?: string
+          message: string
+          route?: string | null
+          severity?: string
+          stack?: string | null
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          context?: Json | null
+          created_at?: string
+          id?: string
+          message?: string
+          route?: string | null
+          severity?: string
+          stack?: string | null
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       barber_leads: {
         Row: {
           capital_available: string | null
