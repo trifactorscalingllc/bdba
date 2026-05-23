@@ -121,7 +121,7 @@ export async function fetchCisFromSupabase(): Promise<CisCache> {
   for (const a of answersRes.data ?? []) {
     const slug = a.slug as string;
     if (!cache.data[slug]) continue;
-    cache.data[slug].answers[a.video_id] = a.payload as AnswersJson;
+    cache.data[slug].answers[a.video_id] = a.payload as unknown as AnswersJson;
   }
 
   // Business log.
