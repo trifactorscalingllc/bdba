@@ -246,6 +246,7 @@ export type Database = {
       videos: {
         Row: {
           aspect_ratio: string | null
+          audit_simple_md: string | null
           audited_date: string | null
           caption: string | null
           caption_cta: string | null
@@ -276,6 +277,7 @@ export type Database = {
         }
         Insert: {
           aspect_ratio?: string | null
+          audit_simple_md?: string | null
           audited_date?: string | null
           caption?: string | null
           caption_cta?: string | null
@@ -306,6 +308,7 @@ export type Database = {
         }
         Update: {
           aspect_ratio?: string | null
+          audit_simple_md?: string | null
           audited_date?: string | null
           caption?: string | null
           caption_cta?: string | null
