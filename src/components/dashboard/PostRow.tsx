@@ -13,7 +13,8 @@
 // italic/links). Bringing in react-markdown is overkill for this.
 
 import { useState, useMemo, type ReactNode } from "react";
-import { getAntiPatternFlagCount, getAntiPatternFlags } from "@/lib/cis-bridge";
+import { useQuery } from "@tanstack/react-query";
+import { fetchVideoAssets, getAntiPatternFlagCount, getAntiPatternFlags } from "@/lib/cis-bridge";
 import { getFlagDetail, getFlagEvidence } from "@/lib/flag-details";
 import type { VideosJsonlRow } from "@/lib/types";
 
@@ -218,6 +219,28 @@ export default function PostRow({ slug, video }: Props) {
     [video.audit_simple_md],
   );
 
+  // Lazy-load video assets (cover + frames) only when the row is expanded.
+  // Each bundle is ~300 KB so we never pull them up-front. TanStack caches
+  // forever (assets don't change).
+  const assetsQuery = useQuery({
+    queryKey: ["video_assets", slug, video.video_id],
+    queryFn: () => fetchVideoAssets(slug, video.video_id),
+    enabled: expanded,
+    staleTime: Infinity,
+    gcTime: Infinity,
+  });
+
+  // Sort frame timestamps in chronological order (0:00, 0:03, 0:05, …).
+  const frameEntries = useMemo<Array<[string, string]>>(() => {
+    const frames = assetsQuery.data?.frames;
+    if (!frames) return [];
+    const toSec = (k: string) => {
+      const [m = "0", s = "0"] = k.split(":");
+      return parseInt(m, 10) * 60 + parseInt(s, 10);
+    };
+    return Object.entries(frames).sort(([a], [b]) => toSec(a) - toSec(b));
+  }, [assetsQuery.data]);
+
   return (
     <div className="border-b border-white/10 last:border-b-0">
       <button
@@ -258,6 +281,51 @@ export default function PostRow({ slug, video }: Props) {
 
       {expanded && (
         <div className="bg-black/40 border-l-[3px] border-l-brand-red px-6 py-5 mb-1">
+          {/* Frame screenshots — cover prominent + 3-6 timestamped frames in
+              a horizontal row. Lazy-loaded on first expand, then cached. */}
+          {assetsQuery.isLoading && (
+            <div className="mb-4 pb-4 border-b border-white/10 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
+              Loading frame screenshots…
+            </div>
+          )}
+          {assetsQuery.data && (assetsQuery.data.cover || frameEntries.length > 0) && (
+            <div className="mb-4 pb-4 border-b border-white/10">
+              <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/50 mb-3">
+                Cover + key frames {assetsQuery.data.captured_date && (
+                  <span className="text-white/30">· captured {assetsQuery.data.captured_date}</span>
+                )}
+              </div>
+              <div className="flex gap-3 overflow-x-auto pb-1">
+                {assetsQuery.data.cover && (
+                  <figure className="flex-shrink-0">
+                    <img
+                      src={`data:image/png;base64,${assetsQuery.data.cover}`}
+                      alt="Cover"
+                      className="h-44 w-auto rounded-md border border-white/15 object-cover bg-black"
+                      loading="lazy"
+                    />
+                    <figcaption className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/40 mt-1.5 text-center">
+                      Cover
+                    </figcaption>
+                  </figure>
+                )}
+                {frameEntries.map(([ts, b64]) => (
+                  <figure key={ts} className="flex-shrink-0">
+                    <img
+                      src={`data:image/png;base64,${b64}`}
+                      alt={`Frame at ${ts}`}
+                      className="h-44 w-auto rounded-md border border-white/10 object-cover bg-black"
+                      loading="lazy"
+                    />
+                    <figcaption className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/40 mt-1.5 text-center">
+                      {ts}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Quick-glance metrics row */}
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-4 pb-4 border-b border-white/10">
             {video.url && (

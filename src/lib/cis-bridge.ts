@@ -23,6 +23,7 @@ import type {
   CisCache,
   Slug,
   StudentProfile,
+  VideoAssets,
   VideosJsonlRow,
 } from "./types";
 
@@ -179,6 +180,24 @@ export function getStudents(): Slug[] {
  *  Returns "" if not loaded (e.g. the coaching_library table isn't populated). */
 export function getPatternsMd(fileName: string): string {
   return _cache?.patterns[fileName] ?? "";
+}
+
+/** Lazy single-row fetch of video assets (cover + frames). Called by PostRow
+ *  via TanStack Query the first time a row is expanded. Each bundle is
+ *  ~300 KB so we never pull these eagerly. */
+export async function fetchVideoAssets(slug: Slug, videoId: string): Promise<VideoAssets | null> {
+  const { data, error } = await supabase
+    .from("video_assets")
+    .select("payload")
+    .eq("slug", slug)
+    .eq("video_id", videoId)
+    .maybeSingle();
+  if (error) {
+    // eslint-disable-next-line no-console
+    console.warn("[fetchVideoAssets] error:", error);
+    return null;
+  }
+  return (data?.payload as VideoAssets) ?? null;
 }
 
 export function getVideos(slug: Slug): VideosJsonlRow[] {

@@ -228,5 +228,43 @@ if (libRows.length > 0) {
   console.log("   (no library content in snapshot — patterns/*.md missing in CIS?)");
 }
 
+// ─── Upsert video_assets (cover + frames per video) ────────────────────────
+// Read the separate cis-assets.json file (D-061 push 4). Big file (~19 MB)
+// — kept out of the main snapshot to avoid bloating the Cloudflare bundle.
+const ASSETS_PATH = resolve(__dirname, "cis-assets.json");
+if (existsSync(ASSETS_PATH)) {
+  console.log("\n🖼  Upserting video_assets…");
+  const assetsRaw = readFileSync(ASSETS_PATH, "utf-8");
+  const assets = JSON.parse(assetsRaw);
+  let assetCount = 0;
+  for (const slug of Object.keys(assets.data ?? {})) {
+    const perVideo = assets.data[slug] ?? {};
+    const rows = Object.entries(perVideo).map(([video_id, payload]) => ({
+      slug,
+      video_id,
+      payload,
+    }));
+    if (rows.length === 0) continue;
+    // Batch in small chunks — each row is ~300 KB so 5 rows = ~1.5 MB per
+    // request. Stay under PostgREST's default 1 MB payload limit by keeping
+    // the chunk smaller than that on average (assets vary).
+    for (let i = 0; i < rows.length; i += 4) {
+      const chunk = rows.slice(i, i + 4);
+      const { error } = await supabase
+        .from("video_assets")
+        .upsert(chunk, { onConflict: "slug,video_id" });
+      if (error) {
+        console.error(`   ❌ ${slug} batch starting ${i}:`, error.message);
+        process.exit(2);
+      }
+      assetCount += chunk.length;
+    }
+    console.log(`   ✓ ${slug}: ${rows.length} video_assets bundles`);
+  }
+  console.log(`   total: ${assetCount} video_assets bundles`);
+} else {
+  console.log("\n🖼  (no cis-assets.json — skipping video_assets import)");
+}
+
 console.log("\n✅ Import complete.");
 console.log("   Next: log into the dashboard at /login and confirm the data renders.");

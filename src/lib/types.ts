@@ -107,6 +107,15 @@ export interface SparklineTrend {
   n: number;
 }
 
+// Cover + frame screenshots for one video. Stored in Supabase public.video_assets,
+// fetched lazily by PostRow when expanded. Each base64 string is a PNG.
+export interface VideoAssets {
+  video_id: string;
+  captured_date?: string;
+  cover?: string;                // base64 PNG of the IG cover
+  frames?: Record<string, string>; // timestamp ("0:00", "0:03") → base64 PNG
+}
+
 // Internal cache shape used by cis-bridge.
 export interface CisCache {
   students: Slug[];
