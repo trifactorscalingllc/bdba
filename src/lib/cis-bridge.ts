@@ -102,8 +102,8 @@ export async function fetchCisFromSupabase(): Promise<CisCache> {
       audited_date: v.audited_date ?? undefined,
       hook_type: v.hook_type ?? undefined,
       structure_arc: v.structure_arc ?? undefined,
-      format_typicality: v.format_typicality ?? undefined,
-      verdict_tier: v.verdict_tier ?? undefined,
+      format_typicality: (v.format_typicality ?? undefined) as VideosJsonlRow["format_typicality"],
+      verdict_tier: (v.verdict_tier ?? undefined) as VideosJsonlRow["verdict_tier"],
       verdict_oneline: v.verdict_oneline ?? undefined,
       likes: v.likes ?? undefined,
       comments: v.comments ?? undefined,
@@ -121,7 +121,7 @@ export async function fetchCisFromSupabase(): Promise<CisCache> {
   for (const a of answersRes.data ?? []) {
     const slug = a.slug as string;
     if (!cache.data[slug]) continue;
-    cache.data[slug].answers[a.video_id] = a.payload as AnswersJson;
+    cache.data[slug].answers[a.video_id] = a.payload as unknown as AnswersJson;
   }
 
   // Business log.
