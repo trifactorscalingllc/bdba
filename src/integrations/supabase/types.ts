@@ -261,6 +261,35 @@ export type Database = {
         }
         Relationships: []
       }
+      video_assets: {
+        Row: {
+          payload: Json
+          slug: string
+          updated_at: string
+          video_id: string
+        }
+        Insert: {
+          payload: Json
+          slug: string
+          updated_at?: string
+          video_id: string
+        }
+        Update: {
+          payload?: Json
+          slug?: string
+          updated_at?: string
+          video_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_assets_slug_video_id_fkey"
+            columns: ["slug", "video_id"]
+            isOneToOne: true
+            referencedRelation: "videos"
+            referencedColumns: ["slug", "video_id"]
+          },
+        ]
+      }
       videos: {
         Row: {
           aspect_ratio: string | null
