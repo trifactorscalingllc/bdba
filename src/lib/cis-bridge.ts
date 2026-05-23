@@ -91,7 +91,8 @@ export async function fetchCisFromSupabase(): Promise<CisCache> {
   }
 
   // Map videos in. The Supabase columns match VideosJsonlRow 1:1 with one
-  // rename (`source_url` → `url`).
+  // rename (`source_url` → `url`). audit_simple_md is the new D-061 push-2
+  // column — plain-English audit body attached to the row.
   for (const v of videosRes.data ?? []) {
     const slug = v.slug as string;
     if (!cache.data[slug]) continue;
@@ -108,6 +109,7 @@ export async function fetchCisFromSupabase(): Promise<CisCache> {
       likes: v.likes ?? undefined,
       comments: v.comments ?? undefined,
       views: v.views ?? undefined,
+      audit_simple_md: (v as { audit_simple_md?: string }).audit_simple_md ?? undefined,
     });
   }
   // Sort each student's videos by posted_date for stable iteration.

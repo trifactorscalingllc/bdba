@@ -12,9 +12,10 @@ import { Link, useParams, Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import AppNavbar from "@/components/AppNavbar";
+import PostRow from "@/components/dashboard/PostRow";
+import PerformanceChart from "@/components/dashboard/PerformanceChart";
 import {
   fetchCisFromSupabase,
-  getAntiPatternFlagCount,
   getBusinessLog,
   getCoachingPrescription,
   getProfile,
@@ -54,13 +55,6 @@ function factorClass(earned: number, max: number): string {
   return "text-red-400";
 }
 
-function tierLabel(tier?: string): { txt: string; cls: string } {
-  const t = (tier ?? "").toLowerCase();
-  if (t === "strong") return { txt: "WORKED", cls: "text-green-400" };
-  if (t === "mid")    return { txt: "OK",     cls: "text-yellow-400" };
-  if (t === "weak")   return { txt: "DIDN'T", cls: "text-red-400" };
-  return { txt: "—", cls: "text-white/40" };
-}
 
 function MiniSparkline({ trend, width = 220, height = 56 }: { trend: SparklineTrend | null; width?: number; height?: number }) {
   if (!trend || trend.points.length === 0) {
@@ -157,12 +151,12 @@ export default function StudentDashboard() {
     ? (monthlyBiz.no_shows / (monthlyBiz.cuts + monthlyBiz.no_shows)) * 100
     : 0;
 
-  const recentContent = [...videos]
+  // ALL audited posts, newest first. PostRow handles expand/collapse per row.
+  const allAuditedContent = [...videos]
     .filter((v) => v.audited_date)
-    .sort((a, b) => (b.audited_date || "").localeCompare(a.audited_date || ""))
-    .slice(0, 15);
+    .sort((a, b) => (b.audited_date || "").localeCompare(a.audited_date || ""));
 
-  const coachingItems = recentContent
+  const coachingItems = allAuditedContent
     .slice(0, 5)
     .map((v) => ({
       videoId: v.video_id,
@@ -326,56 +320,37 @@ export default function StudentDashboard() {
           </div>
         </article>
 
-        {/* ── Recent Posts ───────────────────────────────────────────── */}
-        <SectionLabel num="Content" title="Recent Audited Posts" />
+        {/* ── Performance bar chart (30/60/90 toggle) ────────────────── */}
+        <SectionLabel num="Trend" title="Posting & Engagement" />
+        <article className="glass-card rounded-2xl p-7 mb-12">
+          <PerformanceChart videos={videos} />
+        </article>
+
+        {/* ── All audited posts (click any row to expand) ────────────── */}
+        <SectionLabel num="Content" title={`All Audited Posts (${allAuditedContent.length})`} />
         <article className="glass-card rounded-2xl overflow-hidden mb-12">
-          {recentContent.length === 0 ? (
+          {allAuditedContent.length === 0 ? (
             <div className="p-7 text-sm text-white/40 italic">No audited posts yet.</div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-[13px]">
-                <thead>
-                  <tr className="bg-black/40 text-white/60 font-mono text-[10px] uppercase tracking-[0.15em]">
-                    <th className="text-left px-4 py-3">Posted</th>
-                    <th className="text-left px-4 py-3">Reviewed</th>
-                    <th className="text-left px-4 py-3">Hook</th>
-                    <th className="text-left px-4 py-3">How it did</th>
-                    <th className="text-left px-4 py-3">Likes / Comments</th>
-                    <th className="text-left px-4 py-3">Flags</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {recentContent.map((v) => {
-                    const tier = tierLabel(v.verdict_tier);
-                    const flagCount = getAntiPatternFlagCount(slug, v.video_id);
-                    return (
-                      <tr key={v.video_id} className="border-t border-white/10 hover:bg-white/[0.02]">
-                        <td className="px-4 py-2.5 font-mono text-[12px] text-white/80">{v.posted_date ?? "—"}</td>
-                        <td className="px-4 py-2.5 font-mono text-[12px] text-white/60">{v.audited_date ?? "—"}</td>
-                        <td className="px-4 py-2.5 text-white/80">{v.hook_type ?? "—"}</td>
-                        <td className={`px-4 py-2.5 font-mono font-bold ${tier.cls}`}>{tier.txt}</td>
-                        <td className="px-4 py-2.5 font-mono text-[12px] text-white/80">
-                          {typeof v.likes === "number" && v.likes >= 0 ? `${v.likes.toLocaleString()}♥` : "—"}
-                          {typeof v.comments === "number" && v.comments >= 0 ? ` · ${v.comments}💬` : ""}
-                        </td>
-                        <td className="px-4 py-2.5">
-                          {flagCount === 0 ? (
-                            <span className="text-green-400 font-mono text-[12px]">✓ all good</span>
-                          ) : (
-                            <span className="text-yellow-400 font-mono text-[12px]">⚠ {flagCount} to fix</span>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
-          {videos.length > 15 && (
-            <div className="px-7 py-3 border-t border-white/10 font-mono text-[11px] text-white/40">
-              Showing 15 most recent of {videos.length} reviewed posts.
-            </div>
+            <>
+              <div className="grid grid-cols-[24px_1fr_1.5fr_1fr_1.5fr_1fr] gap-3 px-4 py-3 bg-black/40 font-mono text-[10px] uppercase tracking-[0.15em] text-white/60 border-b border-white/10">
+                <span />
+                <span>Posted</span>
+                <span>Hook</span>
+                <span>How it did</span>
+                <span>Likes / Comments</span>
+                <span>Flags</span>
+              </div>
+              <div>
+                {allAuditedContent.map((v) => (
+                  <PostRow key={v.video_id} slug={slug} video={v} />
+                ))}
+              </div>
+              <div className="px-4 py-3 border-t border-white/10 font-mono text-[11px] text-white/40">
+                Click any row to expand the full plain-English audit. Showing all{" "}
+                {allAuditedContent.length} reviewed posts.
+              </div>
+            </>
           )}
         </article>
 

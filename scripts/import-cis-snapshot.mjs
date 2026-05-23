@@ -122,6 +122,7 @@ console.log("\n🎬 Upserting videos…");
 let videoCount = 0;
 for (const slug of snapshot.students) {
   const data = snapshot.data[slug] ?? {};
+  const auditSimple = data.audit_simple_md ?? {};
   const rows = (data.videos_jsonl ?? []).map((v) => ({
     slug,
     video_id: v.video_id,
@@ -136,6 +137,7 @@ for (const slug of snapshot.students) {
     likes: typeof v.likes === "number" ? v.likes : null,
     comments: typeof v.comments === "number" ? v.comments : null,
     views: typeof v.views === "number" ? v.views : null,
+    audit_simple_md: auditSimple[v.video_id] ?? null,
   }));
   if (rows.length === 0) continue;
   // Batch in chunks of 200 to stay under any payload limits

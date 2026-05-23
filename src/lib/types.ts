@@ -22,6 +22,10 @@ export interface VideosJsonlRow {
   likes?: number;
   comments?: number;
   views?: number;
+  // D-061 push 2: plain-English audit content (the audit-simple.md body)
+  // attached at fetch time so PostRow can render the expand panel without
+  // a separate request per row.
+  audit_simple_md?: string;
 }
 
 // Daily business-log row (D-052 schema).
