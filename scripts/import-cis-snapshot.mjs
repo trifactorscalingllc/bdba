@@ -41,8 +41,15 @@ function arg(name, fallback) {
   return ix >= 0 && ix + 1 < argv.length ? argv[ix + 1] : fallback;
 }
 
-const DEFAULT_SNAPSHOT = resolve(__dirname, "../../Dack/dack-ai-app/lib/cis-snapshot.json");
-const snapshotPath = arg("--snapshot", DEFAULT_SNAPSHOT);
+// Snapshot file resolution: look in the bdba repo first (the committed
+// seed snapshot for Lovable/CI), then fall back to the sibling dack-ai-app
+// repo (Brad's local dev machine). Override with --snapshot <path>.
+const SEED_SNAPSHOT     = resolve(__dirname, "cis-snapshot.json");
+const SIBLING_SNAPSHOT  = resolve(__dirname, "../../Dack/dack-ai-app/lib/cis-snapshot.json");
+const snapshotPath = arg(
+  "--snapshot",
+  existsSync(SEED_SNAPSHOT) ? SEED_SNAPSHOT : SIBLING_SNAPSHOT
+);
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
