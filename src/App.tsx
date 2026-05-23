@@ -9,6 +9,7 @@ import Apply from "./pages/Apply.tsx";
 import Intro from "./pages/Intro.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import StudentDashboard from "./pages/StudentDashboard.tsx";
 
 // D-061 (2026-05-23): Auth temporarily removed. /dashboard is now reachable
 // by direct URL without sign-in. Re-enable by:
@@ -40,6 +41,17 @@ const App = () => (
             element={
               <ErrorBoundary scope="dashboard">
                 <Dashboard />
+              </ErrorBoundary>
+            }
+          />
+
+          {/* Per-student drill-down view, linked from the coach Health Bar
+              cards. Same auth/RLS profile as /dashboard. */}
+          <Route
+            path="/dashboard/student/:slug"
+            element={
+              <ErrorBoundary scope="student-dashboard">
+                <StudentDashboard />
               </ErrorBoundary>
             }
           />

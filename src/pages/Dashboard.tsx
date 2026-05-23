@@ -10,6 +10,7 @@
 // the student-view PR ships.
 
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import AppNavbar from "@/components/AppNavbar";
@@ -232,9 +233,12 @@ export default function Dashboard() {
                 </div>
 
                 <div className="text-right">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/40 border border-white/10 rounded-lg px-3 py-2">
-                    Student dashboard — next sprint
-                  </span>
+                  <Link
+                    to={`/dashboard/student/${slug}`}
+                    className="inline-block font-mono text-[10px] uppercase tracking-[0.15em] text-white/60 hover:text-white border border-white/10 hover:border-brand-red rounded-lg px-3 py-2 transition-all"
+                  >
+                    Open student dashboard →
+                  </Link>
                 </div>
               </article>
             );
