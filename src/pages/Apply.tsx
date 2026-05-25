@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import StandaloneForm from '@/components/StandaloneForm';
 import LiquidBackground from '@/components/LiquidBackground';
-import logoTransparent from '@/assets/pb-logo.png';
+import PbLogo from '@/components/PbLogo';
 
 export default function Apply() {
   return (
@@ -20,8 +20,7 @@ export default function Apply() {
       <div className="w-full max-w-xl relative z-10">
         <h1 className="sr-only">Apply for 1-on-1 Barber Coaching</h1>
         <div className="flex justify-center mb-8">
-          <img
-            src={logoTransparent}
+          <PbLogo
             alt="Profitable Barbers"
             className="h-16 sm:h-20 md:h-24 object-contain drop-shadow-[0_0_20px_rgba(220,38,38,0.3)]"
           />

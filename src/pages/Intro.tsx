@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import LiquidBackground from '@/components/LiquidBackground';
-import logoTransparent from '@/assets/pb-logo.png';
+import PbLogo from '@/components/PbLogo';
 
 const HERO_IMAGE = 'https://i.ibb.co/KpKT5xyw/image-2026-03-30-223225063.png';
 
@@ -23,8 +23,7 @@ export default function Intro() {
 
       <div className="relative z-10 flex flex-col items-center gap-8">
         <h1 className="sr-only">Profitable Barbers Academy Introduction</h1>
-        <img
-          src={logoTransparent}
+        <PbLogo
           alt="Profitable Barbers"
           className="h-16 sm:h-20 md:h-24 object-contain drop-shadow-[0_0_20px_rgba(220,38,38,0.3)]"
         />
