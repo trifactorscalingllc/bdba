@@ -240,6 +240,35 @@
     100% { background-position: 100% 50%; }
   }
 
+  /* ─── Logo Light Sweep (masked diagonal shimmer) ───────── */
+  .pb-logo-shimmer {
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+            mask-size: contain;
+    -webkit-mask-position: center;
+            mask-position: center;
+    background-image: linear-gradient(
+      135deg,
+      transparent 38%,
+      rgba(255, 240, 200, 0.0) 45%,
+      rgba(255, 245, 215, 0.85) 50%,
+      rgba(255, 240, 200, 0.0) 55%,
+      transparent 62%
+    );
+    background-repeat: no-repeat;
+    background-size: 250% 250%;
+    mix-blend-mode: screen;
+    animation: pb-logo-sweep 3.8s linear infinite;
+  }
+
+  @keyframes pb-logo-sweep {
+    0%   { background-position: 200% 200%; }
+    100% { background-position: -100% -100%; }
+  }
+
+
+
   /* ─── VSL Glow Border ─────────────────────────────────────── */
   .vsl-glow {
     box-shadow:
