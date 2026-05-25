@@ -13,7 +13,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import AppNavbar from "@/components/AppNavbar";
 import { useAuth } from "@/lib/auth";
-import logoTransparent from "@/assets/pb-logo.png";
+import PbLogo from "@/components/PbLogo";
 
 export default function Login() {
   const { user, isLoading: authLoading, signIn } = useAuth();
@@ -62,8 +62,7 @@ export default function Login() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="w-full max-w-md glass-card rounded-3xl px-10 py-12 text-center vsl-glow"
         >
-          <img
-            src={logoTransparent}
+          <PbLogo
             alt=""
             className="h-20 w-auto mx-auto mb-6 drop-shadow-[0_0_25px_rgba(220,38,38,0.35)]"
           />
