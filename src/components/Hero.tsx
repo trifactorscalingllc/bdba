@@ -27,7 +27,7 @@ export default function Hero({ onApply }: HeroProps) {
           </div>
           <div className="text-white block mb-3 whitespace-nowrap">STAY</div>
           <div className="block whitespace-nowrap">
-            <span className="text-blue-400/80 font-black italic">FINANCIALLY STUCK</span>
+            <MergedOutline strokeWidth="3px" strokeColor="#3B82F6">FINANCIALLY STUCK</MergedOutline>
           </div>
         </motion.h1>
 
