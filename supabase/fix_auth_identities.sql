@@ -36,7 +36,15 @@ SELECT
   NOW(),
   NOW()
 FROM auth.users u
-WHERE u.email LIKE '%@bdba.local'
+WHERE u.email IN (
+        'dackbarberacc@gmail.com',
+        'yari@bdba.local',
+        'jay@bdba.local',
+        'cutbykeenan@bdba.local',
+        'george@bdba.local',
+        'abdoul@bdba.local',
+        'eb@bdba.local'
+      )
   AND NOT EXISTS (
     SELECT 1 FROM auth.identities i
     WHERE i.user_id = u.id AND i.provider = 'email'
@@ -54,5 +62,13 @@ SELECT
 FROM auth.users u
 LEFT JOIN public.profiles p   ON p.user_id = u.id
 LEFT JOIN auth.identities i   ON i.user_id = u.id AND i.provider = 'email'
-WHERE u.email LIKE '%@bdba.local'
+WHERE u.email IN (
+        'dackbarberacc@gmail.com',
+        'yari@bdba.local',
+        'jay@bdba.local',
+        'cutbykeenan@bdba.local',
+        'george@bdba.local',
+        'abdoul@bdba.local',
+        'eb@bdba.local'
+      )
 ORDER BY u.email;

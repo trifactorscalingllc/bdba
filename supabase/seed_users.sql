@@ -2,11 +2,12 @@
 -- Seed users — paste this block into Lovable chat as "run this SQL".
 --
 -- Creates 7 accounts (all password-only — nobody types an email):
---   1 coach    → dack@bdba.local       (password: fade2026)
---   6 students → <slug>@bdba.local     (passwords: CHANGE_ME_<SLUG>)
---      Nobody sees @bdba.local. It's the identifier Supabase Auth needs but
---      the login pages bake it in. Dack logs in at /login with just a
---      password; students log in at /login/<slug> with just a password.
+--   1 coach    → dackbarberacc@gmail.com   (password: fade2026)
+--   6 students → <slug>@bdba.local         (passwords: see below)
+--      The email is just Supabase Auth's required identifier — students
+--      never see or type theirs. Login pages bake the value in:
+--        - Login.tsx        → 'dackbarberacc@gmail.com'  (must match below)
+--        - StudentLogin.tsx → '<:slug>@bdba.local'       (slug from URL)
 --
 -- ⚠ BEFORE RUNNING:
 --   1. Replace each CHANGE_ME_* password below with a real one Brad picks.
@@ -42,7 +43,7 @@ WITH new_user AS (
     '00000000-0000-0000-0000-000000000000',
     gen_random_uuid(),
     'authenticated', 'authenticated',
-    'dack@bdba.local',
+    'dackbarberacc@gmail.com',
     crypt('fade2026', gen_salt('bf')),
     NOW(), NOW(), NOW(),
     '{"provider":"email","providers":["email"]}'::jsonb,
