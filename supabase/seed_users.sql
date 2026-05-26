@@ -2,7 +2,7 @@
 -- Seed users — paste this block into Lovable chat as "run this SQL".
 --
 -- Creates 7 accounts (all password-only — nobody types an email):
---   1 coach    → dack@bdba.local       (password: CHANGE_ME_DACK)
+--   1 coach    → dack@bdba.local       (password: fade2026)
 --   6 students → <slug>@bdba.local     (passwords: CHANGE_ME_<SLUG>)
 --      Nobody sees @bdba.local. It's the identifier Supabase Auth needs but
 --      the login pages bake it in. Dack logs in at /login with just a
@@ -38,7 +38,7 @@ WITH new_user AS (
     gen_random_uuid(),
     'authenticated', 'authenticated',
     'dack@bdba.local',
-    crypt('CHANGE_ME_DACK', gen_salt('bf')),
+    crypt('fade2026', gen_salt('bf')),
     NOW(), NOW(), NOW(),
     '{"provider":"email","providers":["email"]}'::jsonb,
     '{}'::jsonb,
@@ -65,7 +65,7 @@ WITH new_user AS (
     gen_random_uuid(),
     'authenticated', 'authenticated',
     'yari@bdba.local',
-    crypt('CHANGE_ME_YARI', gen_salt('bf')),
+    crypt('taperwave', gen_salt('bf')),
     NOW(), NOW(), NOW(),
     '{"provider":"email","providers":["email"]}'::jsonb,
     '{}'::jsonb,
@@ -92,7 +92,7 @@ WITH new_user AS (
     gen_random_uuid(),
     'authenticated', 'authenticated',
     'jay@bdba.local',
-    crypt('CHANGE_ME_JAY', gen_salt('bf')),
+    crypt('micdrop88', gen_salt('bf')),
     NOW(), NOW(), NOW(),
     '{"provider":"email","providers":["email"]}'::jsonb,
     '{}'::jsonb,
@@ -119,7 +119,7 @@ WITH new_user AS (
     gen_random_uuid(),
     'authenticated', 'authenticated',
     'cutbykeenan@bdba.local',
-    crypt('CHANGE_ME_KEENAN', gen_salt('bf')),
+    crypt('texture99', gen_salt('bf')),
     NOW(), NOW(), NOW(),
     '{"provider":"email","providers":["email"]}'::jsonb,
     '{}'::jsonb,
@@ -146,7 +146,7 @@ WITH new_user AS (
     gen_random_uuid(),
     'authenticated', 'authenticated',
     'george@bdba.local',
-    crypt('CHANGE_ME_GEORGE', gen_salt('bf')),
+    crypt('allentwn7', gen_salt('bf')),
     NOW(), NOW(), NOW(),
     '{"provider":"email","providers":["email"]}'::jsonb,
     '{}'::jsonb,
@@ -173,7 +173,7 @@ WITH new_user AS (
     gen_random_uuid(),
     'authenticated', 'authenticated',
     'abdoul@bdba.local',
-    crypt('CHANGE_ME_ABDOUL', gen_salt('bf')),
+    crypt('confdnce4', gen_salt('bf')),
     NOW(), NOW(), NOW(),
     '{"provider":"email","providers":["email"]}'::jsonb,
     '{}'::jsonb,
@@ -200,7 +200,7 @@ WITH new_user AS (
     gen_random_uuid(),
     'authenticated', 'authenticated',
     'eb@bdba.local',
-    crypt('CHANGE_ME_EB', gen_salt('bf')),
+    crypt('dcfresh22', gen_salt('bf')),
     NOW(), NOW(), NOW(),
     '{"provider":"email","providers":["email"]}'::jsonb,
     '{}'::jsonb,
