@@ -4,15 +4,12 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "@/components/ErrorBoundary";
-import { AuthProvider } from "@/lib/auth";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index.tsx";
 import Apply from "./pages/Apply.tsx";
 import Intro from "./pages/Intro.tsx";
 import ThankYouApply from "./pages/ThankYouApply.tsx";
 import CaseStudies from "./pages/CaseStudies.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import Login from "./pages/Login.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import StudentDashboard from "./pages/StudentDashboard.tsx";
 
