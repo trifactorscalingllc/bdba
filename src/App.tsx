@@ -13,6 +13,7 @@ import ThankYouApply from "./pages/ThankYouApply.tsx";
 import CaseStudies from "./pages/CaseStudies.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Login from "./pages/Login.tsx";
+import StudentLogin from "./pages/StudentLogin.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import StudentDashboard from "./pages/StudentDashboard.tsx";
 
@@ -50,8 +51,11 @@ const App = () => (
             <Route path="/thank-you-apply" element={<ThankYouApply />} />
             <Route path="/case-studies" element={<CaseStudies />} />
 
-            {/* Auth — direct-URL only, noindex/nofollow. */}
+            {/* Auth — direct-URL only, noindex/nofollow.
+                /login        = coach (email + password)
+                /login/:slug  = student (password only — slug from URL) */}
             <Route path="/login" element={<Login />} />
+            <Route path="/login/:slug" element={<StudentLogin />} />
 
             {/* Coach-only main dashboard. Students who hit this get bounced
                 to their own /dashboard/student/<slug> by ProtectedRoute. */}

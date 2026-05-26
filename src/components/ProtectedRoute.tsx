@@ -37,8 +37,12 @@ export default function ProtectedRoute({ children, requireRole, requireSlug }: P
   }
 
   if (!user) {
-    // Pass along the attempted URL so login can redirect back after auth
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    // Pick the right login page. If this route is slug-scoped (i.e., a
+    // /dashboard/student/:slug page), the unauthenticated user is most
+    // likely a student who needs the password-only /login/<slug> screen.
+    // Otherwise they're hitting a coach-only route → standard /login.
+    const loginPath = requireSlug ? `/login/${requireSlug}` : "/login";
+    return <Navigate to={loginPath} state={{ from: location }} replace />;
   }
 
   // Compute the "home" route for the current user — coach goes to the main
