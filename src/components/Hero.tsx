@@ -14,17 +14,15 @@ export default function Hero({ onApply }: HeroProps) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.1] mb-20 uppercase italic px-4 sm:px-8 will-change-transform"
+          className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter leading-[1.15] mb-16 md:mb-20 uppercase italic px-4 sm:px-8 will-change-transform"
         >
-          <div className="flex justify-center items-center gap-x-[0.3em] mb-2 flex-wrap whitespace-nowrap">
+          <div className="flex justify-center items-center gap-x-[0.3em] mb-3 whitespace-nowrap">
             <span className="text-white">THE</span>
             <MergedOutline strokeWidth="3px" strokeColor="#3B82F6">REAL REASON</MergedOutline>
           </div>
-          <div className="text-white block mb-2">MOST BARBERS STAY STUCK</div>
-          <div className="flex justify-center items-center gap-x-[0.4em] whitespace-nowrap">
-            <span className="text-white">UNDER</span>
-            <span className="text-brand-red text-red-shimmer pl-4">$5K/MONTH</span>
-          </div>
+          <div className="text-white block mb-3 whitespace-nowrap">MOST BARBERS</div>
+          <div className="text-white block mb-3 whitespace-nowrap">STAY STUCK UNDER</div>
+          <div className="text-brand-red text-red-shimmer block whitespace-nowrap">$5K/MONTH</div>
         </motion.h1>
 
         <motion.div 
