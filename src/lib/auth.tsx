@@ -53,6 +53,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true;
 
+    // Security: require password on every fresh browser session. Supabase
+    // persists sessions in localStorage by default, so reopening the site
+    // auto-signs the user back in. We gate that by setting a sessionStorage
+    // sentinel after sign-in. If the sentinel is missing on initial mount
+    // (new tab / closed-browser visit), we sign out the stored session
+    // before treating it as valid. Same-tab refresh keeps the sentinel and
+    // stays signed in.
+    const SENTINEL_KEY = "pb_session_alive";
+    const sentinelPresent = typeof sessionStorage !== "undefined" && sessionStorage.getItem(SENTINEL_KEY) === "1";
+    if (!sentinelPresent) {
+      // Fire-and-forget; clears any persisted localStorage session.
+      supabase.auth.signOut().catch(() => {});
+    }
+
+
     // Initial session check.
     //
     // ⚠ Critical: `isLoading` is decoupled from `profile` loading. The state
