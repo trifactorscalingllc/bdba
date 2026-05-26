@@ -228,6 +228,28 @@ export default function Proof() {
           </div>
         </motion.div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-20 md:mt-28 text-center will-change-transform"
+        >
+          <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase italic tracking-wide leading-tight mb-8 px-4">
+            <span className="text-white">The </span>
+            <span className="text-brand-red text-red-shimmer">Results Spoke.</span>
+            <br />
+            <span className="text-white">Are You Ready To Take The </span>
+            <span className="text-brand-red text-red-shimmer">Next Step?</span>
+          </p>
+          <a
+            href="#apply-form"
+            className="mt-6 inline-block px-10 py-4 bg-brand-red text-white font-black uppercase tracking-widest text-sm md:text-base rounded-full shadow-[0_0_20px_rgba(220,38,38,0.4)] hover:shadow-[0_0_30px_rgba(220,38,38,0.6)] hover:scale-105 transition-all duration-300 animate-[glow_4s_ease-in-out_infinite]"
+          >
+            Apply Now
+          </a>
+        </motion.div>
+
       </div>
     </section>
   );
