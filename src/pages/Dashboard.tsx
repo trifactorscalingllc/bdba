@@ -27,6 +27,30 @@ import type { HealthBarScore } from "@/lib/types";
 
 // ─── helpers ───────────────────────────────────────────────────────────────
 
+/** Render an unknown error value as a human-readable string.
+ *  Supabase PostgrestError is a POJO ({ message, details, hint, code }),
+ *  so plain String(err) becomes "[object Object]" — surface the real fields. */
+function formatErr(err: unknown): string {
+  if (err == null) return "Unknown error";
+  if (err instanceof Error) return err.message || err.name || "Error";
+  if (typeof err === "string") return err;
+  if (typeof err === "object") {
+    const e = err as { message?: unknown; code?: unknown; hint?: unknown; details?: unknown };
+    const parts: string[] = [];
+    if (e.code) parts.push(`[${String(e.code)}]`);
+    if (e.message) parts.push(String(e.message));
+    if (e.details) parts.push(String(e.details));
+    if (e.hint) parts.push(`(${String(e.hint)})`);
+    if (parts.length) return parts.join(" ");
+    try {
+      return JSON.stringify(err);
+    } catch {
+      return Object.prototype.toString.call(err);
+    }
+  }
+  return String(err);
+}
+
 function statusBadge(status: HealthBarScore["status"]): { cls: string; label: string } {
   const map: Record<string, { cls: string; label: string }> = {
     price_raise_ready: { cls: "bg-green-500/15 text-green-400 border-green-500/30", label: "✓ Price raise ready" },
@@ -101,7 +125,7 @@ export default function Dashboard() {
         <div className="min-h-screen flex items-center justify-center pt-32 px-4">
           <div className="max-w-md glass-card rounded-3xl p-8 text-center">
             <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-brand-red mb-3">Couldn't load dashboard</div>
-            <div className="text-sm text-white/70">{String(cisQuery.error)}</div>
+            <div className="text-sm text-white/70 break-words">{formatErr(cisQuery.error)}</div>
             <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
               If this persists, contact the TFS Team.
             </div>
