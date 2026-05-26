@@ -21,6 +21,11 @@
 --   - Dack opens /login                 (password only)
 --   - Each student opens /login/<slug>  (password only — Brad texts them
 --                                        their personal URL + password)
+--
+-- IMPORTANT: each user gets TWO rows of auth state — one in auth.users
+-- (password hash) and one in auth.identities (provider link). Supabase
+-- Auth's signIn checks both. The block at the bottom of this file
+-- backfills any missing identities; do not remove it.
 -- ─────────────────────────────────────────────────────────────────────────────
 
 -- We use a CTE to insert each user into auth.users and capture the returned
@@ -215,3 +220,34 @@ ON CONFLICT (user_id) DO UPDATE
   SET role = EXCLUDED.role,
       slug = EXCLUDED.slug,
       display_name = EXCLUDED.display_name;
+
+-- ─────────────────────────────────────────────────────────────────────────────
+-- Auth identity backfill — REQUIRED.
+--
+-- Supabase Auth's signIn checks BOTH auth.users AND auth.identities. Inserts
+-- above only populated auth.users; without an email-provider identity row,
+-- signIn rejects every login with "Invalid login credentials." This block
+-- adds the missing identity for each @bdba.local user. Idempotent.
+-- ─────────────────────────────────────────────────────────────────────────────
+INSERT INTO auth.identities (
+  id, user_id, identity_data, provider, provider_id,
+  last_sign_in_at, created_at, updated_at
+)
+SELECT
+  gen_random_uuid(),
+  u.id,
+  jsonb_build_object(
+    'sub',            u.id::text,
+    'email',          u.email,
+    'email_verified', true,
+    'phone_verified', false
+  ),
+  'email',
+  u.id::text,
+  NOW(), NOW(), NOW()
+FROM auth.users u
+WHERE u.email LIKE '%@bdba.local'
+  AND NOT EXISTS (
+    SELECT 1 FROM auth.identities i
+    WHERE i.user_id = u.id AND i.provider = 'email'
+  );
