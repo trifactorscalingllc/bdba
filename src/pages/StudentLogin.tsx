@@ -77,7 +77,7 @@ export default function StudentLogin() {
     const result = await signIn(email, password);
     if (result.error) {
       setSubmitting(false);
-      setError("Wrong password. Try again or text Brad.");
+      setError("Wrong password. Try again or contact the TFS Team.");
       return;
     }
     // Leave submitting=true; the useEffect above navigates once the profile
@@ -112,7 +112,7 @@ export default function StudentLogin() {
               </h1>
               <p className="text-sm text-white/60 mb-8">
                 The link you used doesn't match any student. Double-check the
-                URL or text Brad.
+                URL or contact the TFS Team.
               </p>
             </>
           ) : (
@@ -157,7 +157,7 @@ export default function StudentLogin() {
               </form>
 
               <div className="mt-6 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
-                Forgot your password? Text Brad.
+                Forgot your password? Contact the TFS Team.
               </div>
             </>
           )}
