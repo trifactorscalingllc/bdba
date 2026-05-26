@@ -14,16 +14,16 @@ export default function Hero({ onApply }: HeroProps) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl sm:text-4xl md:text-7xl font-black tracking-tighter leading-[1.1] mb-20 uppercase italic px-4 sm:px-8 will-change-transform"
+          className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter leading-[1.1] mb-20 uppercase italic px-4 sm:px-8 will-change-transform"
         >
-          <div className="text-white block mb-2 whitespace-nowrap">REVEALING THE</div>
-          <div className="flex justify-center items-center gap-x-[0.3em] mb-2 whitespace-nowrap">
-            <MergedOutline strokeWidth="3px" strokeColor="#3B82F6">EXACT BLUEPRINT</MergedOutline>
-            <span className="text-white">TO A</span>
+          <div className="flex justify-center items-center gap-x-[0.3em] mb-2 flex-wrap whitespace-nowrap">
+            <span className="text-white">THE</span>
+            <MergedOutline strokeWidth="3px" strokeColor="#3B82F6">REAL REASON</MergedOutline>
           </div>
+          <div className="text-white block mb-2">MOST BARBERS STAY STUCK</div>
           <div className="flex justify-center items-center gap-x-[0.4em] whitespace-nowrap">
-            <span className="text-brand-red text-red-shimmer pr-4">6-FIGURE</span>
-            <span className="text-white">BUSINESS</span>
+            <span className="text-white">UNDER</span>
+            <span className="text-brand-red text-red-shimmer pl-4">$5K/MONTH</span>
           </div>
         </motion.h1>
 
