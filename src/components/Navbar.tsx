@@ -31,7 +31,7 @@ export default function Navbar({ onApply }: NavbarProps) {
           <a href="/" className="block">
             <PbLogo
               alt="PB Logo"
-              className="h-10 md:h-14 object-contain drop-shadow-[0_0_15px_rgba(220,38,38,0.3)]"
+              className={`object-contain drop-shadow-[0_0_15px_rgba(220,38,38,0.3)] transition-all duration-300 ease-out ${isScrolled ? 'h-8 md:h-10' : 'h-10 md:h-14'}`}
             />
           </a>
           <span className="font-black uppercase tracking-tighter text-sm sm:text-base md:text-xl italic leading-none hidden sm:flex items-center gap-1 pr-6 whitespace-nowrap overflow-visible">
