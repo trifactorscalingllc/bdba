@@ -20,9 +20,8 @@ import AppNavbar from "@/components/AppNavbar";
 import { useAuth } from "@/lib/auth";
 import PbLogo from "@/components/PbLogo";
 
-// Baked-in identifier for the coach account. Matches the placeholder used in
-// supabase/seed_users.sql for Dack's auth.users row.
-const COACH_EMAIL = "dack@bdba.local";
+// Baked-in identifier for the coach account.
+const COACH_EMAIL = "dackbarberacc@gmail.com";
 
 export default function Login() {
   const { user, profile, role, slug, isLoading: authLoading, signIn } = useAuth();
