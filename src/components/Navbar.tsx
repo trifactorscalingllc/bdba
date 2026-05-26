@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Scissors, Menu } from 'lucide-react';
 import MergedOutline from './MergedOutline';
@@ -8,19 +9,29 @@ interface NavbarProps {
 }
 
 export default function Navbar({ onApply }: NavbarProps) {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   return (
     <motion.nav 
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="fixed top-0 left-0 w-full z-50 px-4 py-6"
+      className={`fixed top-0 left-0 w-full z-50 px-4 transition-all duration-300 ease-out ${isScrolled ? 'py-2' : 'py-6'}`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between glass-card rounded-full bg-black/40 backdrop-blur-xl px-4 md:px-8 py-3 md:py-4 border-white/10 shadow-2xl relative">
+      <div className={`max-w-7xl mx-auto flex items-center justify-between glass-card rounded-full bg-black/40 backdrop-blur-xl px-4 md:px-8 border-white/10 shadow-2xl relative transition-all duration-300 ease-out ${isScrolled ? 'py-2 md:py-3' : 'py-3 md:py-4'}`}>
         <div className="flex items-center gap-2 md:gap-4 z-10">
           <a href="/" className="block">
             <PbLogo
               alt="PB Logo"
-              className="h-10 md:h-14 object-contain drop-shadow-[0_0_15px_rgba(220,38,38,0.3)]"
+              className={`object-contain drop-shadow-[0_0_15px_rgba(220,38,38,0.3)] transition-all duration-300 ease-out ${isScrolled ? 'h-8 md:h-10' : 'h-10 md:h-14'}`}
             />
           </a>
           <span className="font-black uppercase tracking-tighter text-sm sm:text-base md:text-xl italic leading-none hidden sm:flex items-center gap-1 pr-6 whitespace-nowrap overflow-visible">
@@ -58,7 +69,7 @@ export default function Navbar({ onApply }: NavbarProps) {
           </div>
           <button 
             onClick={onApply}
-            className="bg-brand-red text-white px-10 py-4 rounded-full text-xs font-black uppercase italic hover:bg-red-500 active:scale-95 transition-all btn-sheen red-pulse"
+            className={`bg-brand-red text-white rounded-full text-xs font-black uppercase italic hover:bg-red-500 active:scale-95 transition-all btn-sheen red-pulse ${isScrolled ? 'px-8 py-3' : 'px-10 py-4'}`}
           >
             Apply
           </button>
@@ -67,7 +78,7 @@ export default function Navbar({ onApply }: NavbarProps) {
         <div className="md:hidden z-10">
           <button 
             onClick={onApply}
-            className="bg-brand-red text-white px-6 py-2 rounded-full text-[10px] font-black uppercase italic hover:bg-red-500 active:scale-95 transition-all btn-sheen red-pulse"
+            className={`bg-brand-red text-white rounded-full text-[10px] font-black uppercase italic hover:bg-red-500 active:scale-95 transition-all btn-sheen red-pulse ${isScrolled ? 'px-4 py-1.5' : 'px-6 py-2'}`}
           >
             Apply
           </button>
