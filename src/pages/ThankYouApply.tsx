@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import LiquidBackground from '@/components/LiquidBackground';
@@ -14,8 +14,13 @@ import MergedOutline from '@/components/MergedOutline';
  *
  * --- TYPEFORM SETUP (TODO — do this on the Typeform side) ---
  * In your Typeform (EytKMkv4), go to Settings → Endings → toggle "Redirect on
- * completion" and set the URL to:
- *     https://profitablebarbers.com/thank-you-apply
+ * completion" and set the URL to (include the response_id param exactly):
+ *     https://profitablebarbers.com/thank-you-apply?response_id={{response_id}}
+ *
+ * The response_id param is what gates this page — visitors who didn't come
+ * from a real Typeform submission won't have it and will be bounced to /.
+ * Once they land with a valid response_id, a sessionStorage flag is set so
+ * refreshes and back navigation continue to work within the session.
  *
  * --- CALENDLY SETUP (TODO — replace placeholder URL) ---
  * Replace CALENDLY_URL below with the real scheduling URL once Dack creates
@@ -28,6 +33,25 @@ const CALENDLY_URL = 'https://calendly.com/PLACEHOLDER-DACK/strategy-call'; // T
 
 export default function ThankYouApply() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [authorized, setAuthorized] = useState(false);
+
+  // Gate: only allow visitors who came from a real Typeform submission
+  // (?response_id=...) OR who already have a session flag set from this tab.
+  // Without either, bounce to / silently.
+  useEffect(() => {
+    const responseId = searchParams.get('response_id');
+    const hasFlag = sessionStorage.getItem('dack_applied') === 'true';
+
+    if (responseId) {
+      sessionStorage.setItem('dack_applied', 'true');
+      setAuthorized(true);
+    } else if (hasFlag) {
+      setAuthorized(true);
+    } else {
+      navigate('/', { replace: true });
+    }
+  }, [navigate, searchParams]);
 
   // Listen for Calendly's "event_scheduled" postMessage. When it fires, set the
   // sessionStorage token that gates /case-studies and forward the user there.
@@ -53,6 +77,8 @@ export default function ThankYouApply() {
     script.async = true;
     document.body.appendChild(script);
   }, []);
+
+  if (!authorized) return null;
 
   return (
     <div className="min-h-screen bg-brand-black flex flex-col items-center justify-start p-4 pt-12 md:pt-20 relative selection:bg-brand-red selection:text-white">
