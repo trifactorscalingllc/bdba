@@ -1,11 +1,12 @@
 -- ─────────────────────────────────────────────────────────────────────────────
 -- Seed users — paste this block into Lovable chat as "run this SQL".
 --
--- Creates 7 accounts:
---   1 coach  → dackbarberacc@gmail.com         (password: CHANGE_ME_DACK)
---   6 students → <slug>@bdba.local              (passwords: CHANGE_ME_<SLUG>)
---      students never see the @bdba.local email — they log in at
---      /login/<slug> with just a password.
+-- Creates 7 accounts (all password-only — nobody types an email):
+--   1 coach    → dack@bdba.local       (password: CHANGE_ME_DACK)
+--   6 students → <slug>@bdba.local     (passwords: CHANGE_ME_<SLUG>)
+--      Nobody sees @bdba.local. It's the identifier Supabase Auth needs but
+--      the login pages bake it in. Dack logs in at /login with just a
+--      password; students log in at /login/<slug> with just a password.
 --
 -- ⚠ BEFORE RUNNING:
 --   1. Replace each CHANGE_ME_* password below with a real one Brad picks.
@@ -17,9 +18,9 @@
 --      everything is already in place.
 --
 -- After running:
---   - Dack opens /login (email + password)
---   - Each student opens /login/<their-slug> (password only) — Brad texts
---     them the URL + their password.
+--   - Dack opens /login                 (password only)
+--   - Each student opens /login/<slug>  (password only — Brad texts them
+--                                        their personal URL + password)
 -- ─────────────────────────────────────────────────────────────────────────────
 
 -- We use a CTE to insert each user into auth.users and capture the returned
@@ -36,7 +37,7 @@ WITH new_user AS (
     '00000000-0000-0000-0000-000000000000',
     gen_random_uuid(),
     'authenticated', 'authenticated',
-    'dackbarberacc@gmail.com',
+    'dack@bdba.local',
     crypt('CHANGE_ME_DACK', gen_salt('bf')),
     NOW(), NOW(), NOW(),
     '{"provider":"email","providers":["email"]}'::jsonb,

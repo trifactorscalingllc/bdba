@@ -1,14 +1,16 @@
-// ─── /login page — PB Assistant dashboard login ──────────────────────────────
-// Direct-URL only. Not linked from the marketing site. Brad texts the URL
-// to Dack; he bookmarks /dashboard which auto-redirects here if logged out.
+// ─── /login — coach (Dack) login, password-only ────────────────────────────
+// Mirrors the student-only /login/:slug experience. Dack bookmarks /login and
+// only ever types a password — the email identifier dack@bdba.local is baked
+// in client-side and never shown.
 //
-// On successful sign-in:
-//   • coach → /dashboard (or returnTo if redirected here from a coach route)
-//   • student → /dashboard/student/<their-slug> (their own page)
+// (Note: the email isn't a secret. Even if a visitor inspected the source and
+// saw `dack@bdba.local`, they'd still need the password. The placeholder
+// domain is just Supabase Auth's "identifier" slot — it's not a real Gmail
+// inbox.)
 //
-// We wait for the profile row to load before navigating — that's the only
-// way to know whether the just-signed-in user is coach or student. While
-// the profile loads we keep the form submitting state on.
+// On successful sign-in: → /dashboard (or returnTo if redirected here from a
+// coach-only route). Students who land on /login by accident get bounced to
+// their own /dashboard/student/<slug> as soon as their profile loads.
 
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -18,30 +20,30 @@ import AppNavbar from "@/components/AppNavbar";
 import { useAuth } from "@/lib/auth";
 import PbLogo from "@/components/PbLogo";
 
+// Baked-in identifier for the coach account. Matches the placeholder used in
+// supabase/seed_users.sql for Dack's auth.users row.
+const COACH_EMAIL = "dack@bdba.local";
+
 export default function Login() {
   const { user, profile, role, slug, isLoading: authLoading, signIn } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const returnTo = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname;
 
-  // Pick the right post-login destination for a user. Coach goes to the main
-  // dashboard (or back to whatever coach-only URL they were trying to reach);
-  // student always goes to their own /dashboard/student/<slug>.
+  // Coach goes to /dashboard (or returnTo). If a student happened to land on
+  // /login, send them to their own page instead.
   const destinationFor = (r: typeof role, s: typeof slug): string => {
     if (r === "coach") return returnTo ?? "/dashboard";
     if (r === "student" && s) return `/dashboard/student/${s}`;
     return "/dashboard";
   };
 
-  // If user is already signed in AND we know their role, bounce immediately.
-  // We gate on `profile` not `user` because role/slug come from the profile
-  // row — bouncing on `user` alone would send students to /dashboard before
-  // we knew to route them to their own page.
+  // If already signed in AND profile loaded, bounce. Gate on `profile` not
+  // `user` so we know role/slug before routing.
   useEffect(() => {
     if (!authLoading && user && profile) {
       navigate(destinationFor(role, slug), { replace: true });
@@ -52,15 +54,14 @@ export default function Login() {
     e.preventDefault();
     setError(null);
     setSubmitting(true);
-    const result = await signIn(email, password);
+    const result = await signIn(COACH_EMAIL, password);
     if (result.error) {
       setSubmitting(false);
-      setError(result.error);
+      setError("Wrong password. Try again.");
       return;
     }
-    // Don't navigate here — leave submitting=true and let the useEffect above
-    // fire once the profile row finishes loading. That guarantees we know
-    // role + slug before routing.
+    // Leave submitting=true; the useEffect above navigates once the profile
+    // row loads. Same pattern as StudentLogin.
   };
 
   return (
@@ -84,27 +85,13 @@ export default function Login() {
             className="h-20 w-auto mx-auto mb-6 drop-shadow-[0_0_25px_rgba(220,38,38,0.35)]"
           />
           <h1 className="text-3xl font-black italic uppercase tracking-tight leading-tight mb-2">
-            Welcome back
+            Welcome back, Dack
           </h1>
           <p className="text-sm text-white/60 mb-8">
-            Sign in to your coaching dashboard
+            Enter your password to open the coaching dashboard
           </p>
 
           <form onSubmit={handleSubmit} className="text-left space-y-4">
-            <div>
-              <label className="block font-mono text-[10px] uppercase tracking-[0.2em] text-white/60 mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="dack@profitablebarbers.com"
-                className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-brand-red focus:ring-2 focus:ring-brand-red/15 focus:outline-none transition"
-              />
-            </div>
             <div>
               <label className="block font-mono text-[10px] uppercase tracking-[0.2em] text-white/60 mb-2">
                 Password
@@ -112,6 +99,7 @@ export default function Login() {
               <input
                 type="password"
                 autoComplete="current-password"
+                autoFocus
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -136,7 +124,7 @@ export default function Login() {
           </form>
 
           <div className="mt-6 font-mono text-[10px] uppercase tracking-[0.15em] text-white/40">
-            Trouble signing in? Contact the TFS Team.
+            Trouble signing in? Contact Brad.
           </div>
         </motion.div>
       </main>
