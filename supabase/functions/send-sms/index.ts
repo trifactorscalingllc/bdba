@@ -199,14 +199,12 @@ Deno.serve(async (req) => {
       );
     }
 
-    const [pingramResult, ghlResult] = await Promise.allSettled([
-      sendToDack(body),
+    const [ghlResult] = await Promise.allSettled([
       upsertToGHL(body),
     ]);
 
-    if (pingramResult.status === "rejected") {
-      console.error("Pingram send failed:", pingramResult.reason);
-    }
+    const pingramResult = { status: "fulfilled" as const, value: { skipped: true } };
+
     if (ghlResult.status === "rejected") {
       console.error("GHL upsert failed:", ghlResult.reason);
     }
