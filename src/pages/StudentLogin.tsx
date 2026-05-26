@@ -77,7 +77,7 @@ export default function StudentLogin() {
     const result = await signIn(email, password);
     if (result.error) {
       setSubmitting(false);
-      setError("Wrong password. Try again or text Brad.");
+      setError("Wrong password. Try again or contact the TFS Team.");
       return;
     }
     // Leave submitting=true; the useEffect above navigates once the profile
