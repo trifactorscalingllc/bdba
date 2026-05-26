@@ -3,9 +3,12 @@
 // to Dack; he bookmarks /dashboard which auto-redirects here if logged out.
 //
 // On successful sign-in:
-//   • coach → /dashboard
-//   • student → /dashboard (component picks the right view based on role)
-//   • returnTo location (if redirected here from a protected route) → there
+//   • coach → /dashboard (or returnTo if redirected here from a coach route)
+//   • student → /dashboard/student/<their-slug> (their own page)
+//
+// We wait for the profile row to load before navigating — that's the only
+// way to know whether the just-signed-in user is coach or student. While
+// the profile loads we keep the form submitting state on.
 
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
@@ -16,7 +19,7 @@ import { useAuth } from "@/lib/auth";
 import PbLogo from "@/components/PbLogo";
 
 export default function Login() {
-  const { user, isLoading: authLoading, signIn } = useAuth();
+  const { user, profile, role, slug, isLoading: authLoading, signIn } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setEmail] = useState("");
@@ -24,26 +27,40 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const returnTo = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname ?? "/dashboard";
+  const returnTo = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname;
 
-  // If user is already signed in, bounce them to the dashboard immediately
+  // Pick the right post-login destination for a user. Coach goes to the main
+  // dashboard (or back to whatever coach-only URL they were trying to reach);
+  // student always goes to their own /dashboard/student/<slug>.
+  const destinationFor = (r: typeof role, s: typeof slug): string => {
+    if (r === "coach") return returnTo ?? "/dashboard";
+    if (r === "student" && s) return `/dashboard/student/${s}`;
+    return "/dashboard";
+  };
+
+  // If user is already signed in AND we know their role, bounce immediately.
+  // We gate on `profile` not `user` because role/slug come from the profile
+  // row — bouncing on `user` alone would send students to /dashboard before
+  // we knew to route them to their own page.
   useEffect(() => {
-    if (!authLoading && user) {
-      navigate(returnTo, { replace: true });
+    if (!authLoading && user && profile) {
+      navigate(destinationFor(role, slug), { replace: true });
     }
-  }, [authLoading, user, navigate, returnTo]);
+  }, [authLoading, user, profile, role, slug, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSubmitting(true);
     const result = await signIn(email, password);
-    setSubmitting(false);
     if (result.error) {
+      setSubmitting(false);
       setError(result.error);
-    } else {
-      navigate(returnTo, { replace: true });
+      return;
     }
+    // Don't navigate here — leave submitting=true and let the useEffect above
+    // fire once the profile row finishes loading. That guarantees we know
+    // role + slug before routing.
   };
 
   return (
