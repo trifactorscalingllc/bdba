@@ -19,13 +19,13 @@ export default function InlineForm() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
-      className="w-full mx-auto glass-card bg-black/40 backdrop-blur-xl overflow-hidden relative z-10 shadow-[0_0_100px_rgba(0,0,0,1)]"
+      className="w-full mx-auto bg-black/40 overflow-hidden relative z-10 rounded-2xl"
     >
-      <div className="p-4 sm:p-6 md:p-8">
+      <div className="p-0">
         <iframe
           title="Profitable Barbers Application"
           src={formUrl}
-          className="w-full border-0"
+          className="w-full border-0 rounded-2xl"
           style={{ height: '600px' }}
           allow="fullscreen"
         />
