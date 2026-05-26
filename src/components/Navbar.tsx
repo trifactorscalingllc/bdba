@@ -24,9 +24,9 @@ export default function Navbar({ onApply }: NavbarProps) {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="fixed top-0 left-0 w-full z-50 px-4 py-6"
+      className={`fixed top-0 left-0 w-full z-50 px-4 transition-all duration-300 ease-out ${isScrolled ? 'py-2' : 'py-6'}`}
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between glass-card rounded-full bg-black/40 backdrop-blur-xl px-4 md:px-8 py-3 md:py-4 border-white/10 shadow-2xl relative">
+      <div className={`max-w-7xl mx-auto flex items-center justify-between glass-card rounded-full bg-black/40 backdrop-blur-xl px-4 md:px-8 border-white/10 shadow-2xl relative transition-all duration-300 ease-out ${isScrolled ? 'py-2 md:py-3' : 'py-3 md:py-4'}`}>
         <div className="flex items-center gap-2 md:gap-4 z-10">
           <a href="/" className="block">
             <PbLogo
