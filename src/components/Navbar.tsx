@@ -78,7 +78,7 @@ export default function Navbar({ onApply }: NavbarProps) {
         <div className="md:hidden z-10">
           <button 
             onClick={onApply}
-            className="bg-brand-red text-white px-6 py-2 rounded-full text-[10px] font-black uppercase italic hover:bg-red-500 active:scale-95 transition-all btn-sheen red-pulse"
+            className={`bg-brand-red text-white rounded-full text-[10px] font-black uppercase italic hover:bg-red-500 active:scale-95 transition-all btn-sheen red-pulse ${isScrolled ? 'px-4 py-1.5' : 'px-6 py-2'}`}
           >
             Apply
           </button>
