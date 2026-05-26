@@ -7,6 +7,8 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import Index from "./pages/Index.tsx";
 import Apply from "./pages/Apply.tsx";
 import Intro from "./pages/Intro.tsx";
+import ThankYouApply from "./pages/ThankYouApply.tsx";
+import CaseStudies from "./pages/CaseStudies.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import StudentDashboard from "./pages/StudentDashboard.tsx";
@@ -32,6 +34,14 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/apply" element={<Apply />} />
           <Route path="/intro" element={<Intro />} />
+
+          {/* Post-application flow. /thank-you-apply is the Typeform redirect
+              target and embeds Calendly. On successful booking it stores a
+              sessionStorage token and forwards to /case-studies, which is
+              token-gated (bounces to / without the token). Both pages are
+              noindex/nofollow. */}
+          <Route path="/thank-you-apply" element={<ThankYouApply />} />
+          <Route path="/case-studies" element={<CaseStudies />} />
 
           {/* Dashboard — direct-URL only, unlinked from marketing site,
               noindex/nofollow. ErrorBoundary still wraps to capture any
