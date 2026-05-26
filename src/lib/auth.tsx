@@ -129,12 +129,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return { error: error.message };
+    // Mark this tab's session as "alive" so refreshes don't trigger sign-out.
+    // Cleared automatically when the tab/browser closes.
+    try { sessionStorage.setItem("pb_session_alive", "1"); } catch {}
     return { error: null };
   };
 
   const signOut = async () => {
+    try { sessionStorage.removeItem("pb_session_alive"); } catch {}
     await supabase.auth.signOut();
   };
+
 
   const value: AuthContextValue = {
     user,
