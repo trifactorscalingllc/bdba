@@ -7,6 +7,7 @@
 //
 // D-061 (2026-05-23): No auth. Public via /dashboard/student/:slug URL.
 
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -15,6 +16,7 @@ import AppNavbar from "@/components/AppNavbar";
 import PostRow from "@/components/dashboard/PostRow";
 import PerformanceChart from "@/components/dashboard/PerformanceChart";
 import CoachingPatterns from "@/components/dashboard/CoachingPatterns";
+import BusinessLogForm from "@/components/dashboard/BusinessLogForm";
 import {
   fetchCisFromSupabase,
   getBusinessLog,
@@ -59,6 +61,7 @@ function factorClass(earned: number, max: number): string {
 
 export default function StudentDashboard() {
   const { slug } = useParams<{ slug: string }>();
+  const [logFormOpen, setLogFormOpen] = useState(false);
 
   const cisQuery = useQuery({
     queryKey: ["cis"],
@@ -316,8 +319,18 @@ export default function StudentDashboard() {
         {/* ── Shop numbers ──────────────────────────────────────────── */}
         <SectionLabel num="Business" title="Shop Numbers — Last 30 Days" />
         <article className="glass-card rounded-2xl p-7 mb-12">
+          <div className="flex justify-end mb-4">
+            <button
+              onClick={() => setLogFormOpen(true)}
+              className="font-mono text-[10px] uppercase tracking-[0.2em] text-white hover:text-white bg-brand-red hover:bg-red-500 px-4 py-2 rounded-full transition active:scale-95"
+            >
+              + Log today's numbers
+            </button>
+          </div>
           {recentBiz.length === 0 ? (
-            <div className="text-sm text-white/40 italic">No business-log entries in the last 30 days.</div>
+            <div className="text-sm text-white/40 italic">
+              No business-log entries in the last 30 days. Click <strong>+ Log today's numbers</strong> above to add your first entry.
+            </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               <Stat label="New clients" val={monthlyBiz.new_clients} cls="text-green-400" />
@@ -341,6 +354,13 @@ export default function StudentDashboard() {
             </div>
           )}
         </article>
+
+        <BusinessLogForm
+          slug={slug}
+          displayName={profile.display_name || slug}
+          open={logFormOpen}
+          onClose={() => setLogFormOpen(false)}
+        />
 
         {/* ── Coaching synthesis — what's working vs what keeps hurting ── */}
         <SectionLabel num="Coaching" title="What's Working vs What's Not" />
