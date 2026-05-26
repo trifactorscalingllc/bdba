@@ -112,7 +112,7 @@ export default function StudentLogin() {
               </h1>
               <p className="text-sm text-white/60 mb-8">
                 The link you used doesn't match any student. Double-check the
-                URL or text Brad.
+                URL or contact the TFS Team.
               </p>
             </>
           ) : (
