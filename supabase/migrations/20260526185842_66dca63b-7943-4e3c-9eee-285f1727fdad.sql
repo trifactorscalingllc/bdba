@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION public.is_coach() TO authenticated, anon; GRANT EXECUTE ON FUNCTION public.my_slug() TO authenticated, anon;
