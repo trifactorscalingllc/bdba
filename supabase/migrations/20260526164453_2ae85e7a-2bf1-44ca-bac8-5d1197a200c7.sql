@@ -1,0 +1,2 @@
+ALTER TABLE public.videos DROP CONSTRAINT IF EXISTS videos_verdict_tier_check;
+ALTER TABLE public.videos ADD CONSTRAINT videos_verdict_tier_check CHECK (verdict_tier IS NULL OR verdict_tier = ANY (ARRAY['strong','mid','weak','average','above_average','below_average']));
