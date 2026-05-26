@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Scissors, Menu } from 'lucide-react';
 import MergedOutline from './MergedOutline';
