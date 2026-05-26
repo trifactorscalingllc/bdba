@@ -19,10 +19,16 @@ export default function Hero({ onApply }: HeroProps) {
           <div className="flex justify-center items-center gap-x-[0.3em] mb-3 whitespace-nowrap">
             <span className="text-white">THE</span>
             <MergedOutline strokeWidth="3px" strokeColor="#3B82F6">REAL REASON</MergedOutline>
+            <span className="text-white">WHY</span>
           </div>
-          <div className="text-white block mb-3 whitespace-nowrap">MOST BARBERS</div>
-          <div className="text-white block mb-3 whitespace-nowrap">STAY STUCK UNDER</div>
-          <div className="text-brand-red text-red-shimmer block whitespace-nowrap">$5K/MONTH</div>
+          <div className="block mb-3 whitespace-nowrap">
+            <span className="text-brand-red text-red-shimmer">90%</span>
+            <span className="text-white"> OF BARBERS</span>
+          </div>
+          <div className="text-white block mb-3 whitespace-nowrap">STAY</div>
+          <div className="block whitespace-nowrap">
+            <span className="text-blue-400/80 font-black italic">FINANCIALLY STUCK</span>
+          </div>
         </motion.h1>
 
         <motion.div 
