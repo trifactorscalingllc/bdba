@@ -33,6 +33,7 @@
 
   html {
     zoom: 0.9;
+    scroll-behavior: smooth;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }

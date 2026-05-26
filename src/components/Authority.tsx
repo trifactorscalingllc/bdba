@@ -88,7 +88,7 @@ export default function Authority() {
             "Teaching the exact blueprint to financial freedom at 20 years old"
           </p>
           <a
-            href="#apply"
+            href="#apply-form"
             className="mt-6 inline-block px-10 py-4 bg-brand-red text-white font-black uppercase tracking-widest text-sm md:text-base rounded-full shadow-[0_0_20px_rgba(220,38,38,0.4)] hover:shadow-[0_0_30px_rgba(220,38,38,0.6)] hover:scale-105 transition-all duration-300 animate-[glow_4s_ease-in-out_infinite]"
           >
             Apply Now

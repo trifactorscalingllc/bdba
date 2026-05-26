@@ -62,7 +62,7 @@ export default function Hero({ onApply }: HeroProps) {
           </p>
         </motion.div>
 
-        <section id="apply-form" className="pt-12 md:pt-20 px-2 md:px-4 text-center relative z-10 overflow-hidden scroll-mt-20">
+        <section id="apply-form" className="pt-12 md:pt-20 px-2 md:px-4 text-center relative z-10 overflow-hidden scroll-mt-32 md:scroll-mt-36">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
