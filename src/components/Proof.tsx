@@ -7,6 +7,8 @@ import yariImg from '@/assets/yari.png';
 import georgeImg from '@/assets/george.png';
 import jayvinImg from '@/assets/jayvin.png';
 import keenanImg from '@/assets/keenan.png';
+import abdoulImg from '@/assets/abdoul.png';
+import ebImg from '@/assets/eb.png';
 import review1 from '@/assets/reviews/review1.png';
 import review2 from '@/assets/reviews/review2.png';
 import review3 from '@/assets/reviews/review3.png';
@@ -95,6 +97,28 @@ const caseStudies = [
     projects: "500+",
     instagram: "https://www.instagram.com/cutbykeenan/",
     image: keenanImg
+  },
+  {
+    name: "Abdoul",
+    metric: "Rapid growth",
+    shortMetric: "Growth",
+    timeframe: "with coaching",
+    shortTimeframe: "Coached",
+    rating: "5.0",
+    projects: "500+",
+    instagram: "https://www.instagram.com/abdoultheebarber/",
+    image: abdoulImg
+  },
+  {
+    name: "EB",
+    metric: "Rapid growth",
+    shortMetric: "Growth",
+    timeframe: "with coaching",
+    shortTimeframe: "Coached",
+    rating: "5.0",
+    projects: "500+",
+    instagram: "https://www.instagram.com/ebthabarber/",
+    image: ebImg
   }
 ];
 
