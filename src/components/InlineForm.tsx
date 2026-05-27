@@ -4,13 +4,9 @@ import { motion } from 'framer-motion';
 export default function InlineForm() {
   const formUrl = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const utmSource = urlParams.get('utm_source') || '';
-    const utmCampaign = urlParams.get('utm_campaign') || '';
-    const params = new URLSearchParams();
-    params.set('typeform-embed', 'iframe');
-    if (utmSource) params.set('utm_source', utmSource);
-    if (utmCampaign) params.set('utm_campaign', utmCampaign);
-    return `https://form.typeform.com/to/EytKMkv4?${params.toString()}`;
+    const utmSource = urlParams.get('utm_source') || 'xxxxx';
+    const utmCampaign = urlParams.get('utm_campaign') || 'xxxxx';
+    return `https://form.typeform.com/to/EytKMkv4?utm_source=${encodeURIComponent(utmSource)}&utm_campaign=${encodeURIComponent(utmCampaign)}`;
   }, []);
 
   return (
