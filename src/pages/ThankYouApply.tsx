@@ -29,7 +29,7 @@ import MergedOutline from '@/components/MergedOutline';
  * and forward the applicant to /case-studies.
  */
 
-const CALENDLY_URL = 'https://calendly.com/PLACEHOLDER-DACK/strategy-call'; // TODO: replace with real Calendly URL
+const CALENDLY_URL = 'https://calendly.com/dackbarberacc/30min';
 
 export default function ThankYouApply() {
   const navigate = useNavigate();
