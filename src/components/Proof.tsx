@@ -52,6 +52,7 @@ import proof7 from '@/assets/reviews/proof7.png';
 import proof8 from '@/assets/reviews/proof8.png';
 import proof9 from '@/assets/reviews/proof9.png';
 import proof10 from '@/assets/reviews/proof10.png';
+import georgeBookedOut from '@/assets/reviews/george-booked-out-clean.png';
 
 const caseStudies = [
   {
