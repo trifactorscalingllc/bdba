@@ -47,24 +47,6 @@ export default function Results() {
           </h3>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-20 max-w-2xl mx-auto"
-        >
-          <p className="text-center text-lg sm:text-xl md:text-2xl font-black uppercase italic text-brand-red text-red-shimmer tracking-wide mb-6">
-            George — Completely Booked Out, +8 New Clients In One Week
-          </p>
-          <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl vsl-glow">
-            <img
-              src={georgeBookedOut}
-              alt="George booked out calendar screenshot with +8 new clients in one week"
-              className="w-full h-auto block"
-            />
-          </div>
-        </motion.div>
 
 
         {transformations.map((item, index) => (
