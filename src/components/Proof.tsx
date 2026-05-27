@@ -124,6 +124,7 @@ const caseStudies = [
 ];
 
 const studentReviews = [
+  georgeBookedOut,
   proof1, proof2, proof3, proof4, proof5,
   proof6, proof7, proof8, proof9, proof10,
   review1, review2, review3, review4, review5,
