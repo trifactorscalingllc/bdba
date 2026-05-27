@@ -52,6 +52,7 @@ import proof7 from '@/assets/reviews/proof7.png';
 import proof8 from '@/assets/reviews/proof8.png';
 import proof9 from '@/assets/reviews/proof9.png';
 import proof10 from '@/assets/reviews/proof10.png';
+import georgeBookedOut from '@/assets/reviews/george-booked-out-clean.png';
 
 const caseStudies = [
   {
@@ -123,6 +124,7 @@ const caseStudies = [
 ];
 
 const studentReviews = [
+  georgeBookedOut,
   proof1, proof2, proof3, proof4, proof5,
   proof6, proof7, proof8, proof9, proof10,
   review1, review2, review3, review4, review5,
