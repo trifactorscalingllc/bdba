@@ -33,25 +33,6 @@ const CALENDLY_URL = 'https://calendly.com/dackbarberacc/30min';
 
 export default function ThankYouApply() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const [authorized, setAuthorized] = useState(false);
-
-  // Gate: only allow visitors who came from a real Typeform submission
-  // (?response_id=...) OR who already have a session flag set from this tab.
-  // Without either, bounce to / silently.
-  useEffect(() => {
-    const responseId = searchParams.get('response_id');
-    const hasFlag = sessionStorage.getItem('dack_applied') === 'true';
-
-    if (responseId) {
-      sessionStorage.setItem('dack_applied', 'true');
-      setAuthorized(true);
-    } else if (hasFlag) {
-      setAuthorized(true);
-    } else {
-      navigate('/', { replace: true });
-    }
-  }, [navigate, searchParams]);
 
   // Listen for Calendly's "event_scheduled" postMessage. When it fires, set the
   // sessionStorage token that gates /case-studies and forward the user there.
@@ -77,8 +58,6 @@ export default function ThankYouApply() {
     script.async = true;
     document.body.appendChild(script);
   }, []);
-
-  if (!authorized) return null;
 
   return (
     <div className="min-h-screen bg-brand-black flex flex-col items-center justify-start p-4 pt-12 md:pt-20 relative selection:bg-brand-red selection:text-white">
