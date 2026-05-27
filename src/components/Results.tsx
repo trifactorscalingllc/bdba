@@ -5,7 +5,7 @@ import jayvBefore from '@/assets/results/jayv-before.png';
 import jayvAfter from '@/assets/results/jayv-after.png';
 import yariBefore from '@/assets/results/yari-before.png';
 import yariAfter from '@/assets/results/yari-after.png';
-import georgeBookedOut from '@/assets/results-george-booked-out.png';
+
 
 const transformations = [
   {
