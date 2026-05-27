@@ -16,7 +16,7 @@ export default function ApplicationForm({ isOpen, onClose }: ApplicationFormProp
     if (step < totalSteps) {
       setStep(step + 1);
     } else {
-      window.location.href = "https://whop.com/high-ticket-barbers";
+      window.location.href = "https://form.typeform.com/to/EytKMkv4?utm_source=xxxxx&utm_campaign=xxxxx";
     }
   };
 
