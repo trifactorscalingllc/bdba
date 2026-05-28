@@ -10,8 +10,9 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useParams, Navigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 import AppNavbar from "@/components/AppNavbar";
 import PostRow from "@/components/dashboard/PostRow";
 import PerformanceChart from "@/components/dashboard/PerformanceChart";
