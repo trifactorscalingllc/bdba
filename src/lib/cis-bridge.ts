@@ -153,6 +153,7 @@ export async function fetchCisFromSupabase(): Promise<CisCache> {
     const slug = e.slug as string;
     if (!cache.data[slug]) continue;
     cache.data[slug].business_log.push({
+      id: e.id,
       date: e.date,
       new_clients: e.new_clients ?? 0,
       returning: e.returning ?? 0,
