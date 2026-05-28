@@ -63,6 +63,16 @@ function factorClass(earned: number, max: number): string {
 export default function StudentDashboard() {
   const { slug } = useParams<{ slug: string }>();
   const [logFormOpen, setLogFormOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const deleteEntry = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("business_log").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cis"] }),
+  });
+
 
   const cisQuery = useQuery({
     queryKey: ["cis"],
