@@ -37,6 +37,7 @@ export interface VideosJsonlRow {
 
 // Daily business-log row (D-052 schema).
 export interface BusinessLogEntry {
+  id?: string;
   date: string;
   new_clients?: number;
   returning?: number;
