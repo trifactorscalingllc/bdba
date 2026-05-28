@@ -1,0 +1,3 @@
+CREATE POLICY "student inserts own business_log" ON public.business_log FOR INSERT TO authenticated WITH CHECK (slug = my_slug());
+CREATE POLICY "student updates own business_log" ON public.business_log FOR UPDATE TO authenticated USING (slug = my_slug()) WITH CHECK (slug = my_slug());
+CREATE POLICY "student deletes own business_log" ON public.business_log FOR DELETE TO authenticated USING (slug = my_slug());

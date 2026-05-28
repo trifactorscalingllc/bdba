@@ -10,8 +10,9 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useParams, Navigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 import AppNavbar from "@/components/AppNavbar";
 import PostRow from "@/components/dashboard/PostRow";
 import PerformanceChart from "@/components/dashboard/PerformanceChart";
@@ -62,6 +63,16 @@ function factorClass(earned: number, max: number): string {
 export default function StudentDashboard() {
   const { slug } = useParams<{ slug: string }>();
   const [logFormOpen, setLogFormOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const deleteEntry = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("business_log").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["cis"] }),
+  });
+
 
   const cisQuery = useQuery({
     queryKey: ["cis"],
@@ -353,7 +364,48 @@ export default function StudentDashboard() {
               />
             </div>
           )}
+
+          {recentBiz.length > 0 && (
+            <div className="mt-6 pt-5 border-t border-white/10">
+              <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60 mb-3">
+                Daily entries · click 🗑 to remove a mistyped day
+              </div>
+              <div className="space-y-1.5 max-h-72 overflow-y-auto pr-1">
+                {[...recentBiz].sort((a, b) => b.date.localeCompare(a.date)).map((e) => (
+                  <div
+                    key={e.id ?? e.date}
+                    className="flex items-center gap-3 bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-[12px]"
+                  >
+                    <span className="font-mono text-white/60 w-24 shrink-0">{e.date}</span>
+                    <span className="flex-1 font-mono text-white/80 truncate">
+                      <span className="text-green-400">{e.new_clients ?? 0}</span> new ·{" "}
+                      <span>{e.returning ?? 0}</span> ret ·{" "}
+                      <span>{e.cuts ?? 0}</span> cuts ·{" "}
+                      <span className="text-red-400">{e.no_shows ?? 0}</span> no-show
+                      {e.revenue != null && e.revenue > 0 && (
+                        <> · <span>${Number(e.revenue).toLocaleString()}</span></>
+                      )}
+                    </span>
+                    <button
+                      onClick={() => {
+                        if (!e.id) return;
+                        if (confirm(`Delete entry for ${e.date}? This can't be undone.`)) {
+                          deleteEntry.mutate(e.id);
+                        }
+                      }}
+                      disabled={!e.id || deleteEntry.isPending}
+                      className="font-mono text-[10px] uppercase tracking-wider text-white/40 hover:text-red-400 hover:bg-red-500/10 px-2 py-1 rounded transition disabled:opacity-40"
+                      aria-label={`Delete entry for ${e.date}`}
+                    >
+                      🗑
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </article>
+
 
         <BusinessLogForm
           slug={slug}
