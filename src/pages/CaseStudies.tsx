@@ -63,24 +63,7 @@ const CASE_STUDIES: CaseStudy[] = [
 ];
 
 export default function CaseStudies() {
-  const navigate = useNavigate();
   const [activeStudy, setActiveStudy] = useState<CaseStudy | null>(null);
-  const [authorized, setAuthorized] = useState(false);
-
-  // Token gate: bounce home if they didn't come through the booking flow.
-  // Uses an authorized-state flag so the page renders nothing until the
-  // check finishes — prevents unauthorized visitors from briefly seeing
-  // the content before the redirect kicks in.
-  useEffect(() => {
-    const hasToken = sessionStorage.getItem('dack_booked_call') === 'true';
-    if (hasToken) {
-      setAuthorized(true);
-    } else {
-      navigate('/', { replace: true });
-    }
-  }, [navigate]);
-
-  if (!authorized) return null;
 
   return (
     <div className="min-h-screen bg-brand-black relative selection:bg-brand-red selection:text-white">
