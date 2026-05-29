@@ -8,17 +8,9 @@ import PbLogo from '@/components/PbLogo';
 import MergedOutline from '@/components/MergedOutline';
 
 /**
- * /case-studies — TOKEN-GATED
+ * /case-studies — PUBLIC
  *
- * Reached only after a successful Calendly booking on /thank-you-apply, which
- * sets sessionStorage('dack_booked_call'). If the token is missing, the user
- * is bounced to the homepage.
- *
- * The token is intentionally session-scoped (cleared when the tab closes) so
- * it can't be casually shared. It's NOT real authentication — anyone who
- * inspects the JS or sets the sessionStorage key manually can reach this page.
- * For a public funnel page that's the right trade-off: it keeps casual visitors
- * out without making the post-booking experience brittle.
+ * Student win showcase. Anyone can browse.
  *
  * --- VIDEO PLACEHOLDERS ---
  * Each card below has a TODO marker for: thumbnail image, video URL (YouTube
