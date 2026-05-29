@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, X, Instagram, CalendarCheck } from 'lucide-react';
@@ -8,17 +8,9 @@ import PbLogo from '@/components/PbLogo';
 import MergedOutline from '@/components/MergedOutline';
 
 /**
- * /case-studies — TOKEN-GATED
+ * /case-studies — PUBLIC
  *
- * Reached only after a successful Calendly booking on /thank-you-apply, which
- * sets sessionStorage('dack_booked_call'). If the token is missing, the user
- * is bounced to the homepage.
- *
- * The token is intentionally session-scoped (cleared when the tab closes) so
- * it can't be casually shared. It's NOT real authentication — anyone who
- * inspects the JS or sets the sessionStorage key manually can reach this page.
- * For a public funnel page that's the right trade-off: it keeps casual visitors
- * out without making the post-booking experience brittle.
+ * Student win showcase. Anyone can browse.
  *
  * --- VIDEO PLACEHOLDERS ---
  * Each card below has a TODO marker for: thumbnail image, video URL (YouTube
@@ -71,31 +63,13 @@ const CASE_STUDIES: CaseStudy[] = [
 ];
 
 export default function CaseStudies() {
-  const navigate = useNavigate();
   const [activeStudy, setActiveStudy] = useState<CaseStudy | null>(null);
-  const [authorized, setAuthorized] = useState(false);
-
-  // Token gate: bounce home if they didn't come through the booking flow.
-  // Uses an authorized-state flag so the page renders nothing until the
-  // check finishes — prevents unauthorized visitors from briefly seeing
-  // the content before the redirect kicks in.
-  useEffect(() => {
-    const hasToken = sessionStorage.getItem('dack_booked_call') === 'true';
-    if (hasToken) {
-      setAuthorized(true);
-    } else {
-      navigate('/', { replace: true });
-    }
-  }, [navigate]);
-
-  if (!authorized) return null;
 
   return (
     <div className="min-h-screen bg-brand-black relative selection:bg-brand-red selection:text-white">
       <Helmet>
-        <title>Welcome To The Vault | Profitable Barbers</title>
-        <meta name="robots" content="noindex, nofollow" />
-        <meta name="description" content="Student case studies — for booked applicants only." />
+        <title>Student Wins | Profitable Barbers</title>
+        <meta name="description" content="Real student results and case studies from Profitable Barbers." />
       </Helmet>
 
       <LiquidBackground />
