@@ -14,22 +14,32 @@ export default function Hero({ onApply }: HeroProps) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter leading-[1.15] mb-16 md:mb-20 uppercase italic px-4 sm:px-8 will-change-transform"
+          className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter leading-[1.15] mb-6 md:mb-8 uppercase italic px-4 sm:px-8 will-change-transform"
         >
           <div className="flex justify-center items-center gap-x-[0.3em] mb-3 whitespace-nowrap">
             <span className="text-white">THE</span>
-            <MergedOutline strokeWidth="3px" strokeColor="#3B82F6" fillColor="#3B82F6">REAL REASON</MergedOutline>
-            <span className="text-white">WHY</span>
+            <MergedOutline strokeWidth="3px" strokeColor="#3B82F6" fillColor="#3B82F6">6-FIGURE BLUEPRINT</MergedOutline>
           </div>
-          <div className="block mb-3 whitespace-nowrap">
-            <span className="text-brand-red text-red-shimmer">90%</span>
-            <span className="text-white"> OF BARBERS</span>
+          <div className="flex justify-center items-center gap-x-[0.3em] mb-3 whitespace-nowrap">
+            <span className="text-white">TAKING</span>
+            <span className="text-brand-red text-red-shimmer">STUCK</span>
+            <span className="text-white">BARBERS</span>
           </div>
-          <div className="text-white block mb-3 whitespace-nowrap">STAY</div>
-          <div className="block whitespace-nowrap">
-            <MergedOutline strokeWidth="3px" strokeColor="#3B82F6" fillColor="#3B82F6">FINANCIALLY STUCK</MergedOutline>
+          <div className="flex justify-center items-center gap-x-[0.3em] mb-3 whitespace-nowrap">
+            <MergedOutline strokeWidth="3px" strokeColor="#3B82F6" fillColor="#3B82F6">FULLY BOOKED</MergedOutline>
+            <span className="text-white">IN 90 DAYS</span>
           </div>
         </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.15, duration: 0.8 }}
+          className="text-brand-silver/70 font-medium tracking-[0.15em] uppercase text-xs sm:text-sm md:text-base mb-12 md:mb-16 will-change-transform"
+        >
+          No following <span className="text-brand-silver/40">·</span> No storefront <span className="text-brand-silver/40">·</span> No loyal clients yet
+        </motion.p>
 
         <motion.div 
           initial={{ opacity: 0, scale: 0.98, filter: "blur(20px)" }}
