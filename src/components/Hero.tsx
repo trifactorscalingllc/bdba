@@ -14,19 +14,19 @@ export default function Hero({ onApply }: HeroProps) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tighter leading-[1.15] mb-6 md:mb-8 uppercase italic px-4 sm:px-8 will-change-transform"
+          className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.15] mb-6 md:mb-8 uppercase italic px-4 sm:px-8 will-change-transform"
         >
-          <div className="flex justify-center items-center gap-x-[0.3em] mb-3 whitespace-nowrap">
+          <div className="flex justify-center items-center gap-x-[0.4em] mb-3 whitespace-nowrap">
             <span className="text-white">THE</span>
-            <MergedOutline strokeWidth="3px" strokeColor="#3B82F6" fillColor="#3B82F6">6-FIGURE BLUEPRINT</MergedOutline>
+            <span className="text-brand-red text-red-shimmer px-[0.05em]">6-FIGURE BLUEPRINT</span>
           </div>
-          <div className="flex justify-center items-center gap-x-[0.3em] mb-3 whitespace-nowrap">
+          <div className="flex justify-center items-center gap-x-[0.4em] mb-3 whitespace-nowrap">
             <span className="text-white">TAKING</span>
             <span className="text-brand-red text-red-shimmer">STUCK</span>
             <span className="text-white">BARBERS</span>
           </div>
-          <div className="flex justify-center items-center gap-x-[0.3em] mb-3 whitespace-nowrap">
-            <MergedOutline strokeWidth="3px" strokeColor="#3B82F6" fillColor="#3B82F6">FULLY BOOKED</MergedOutline>
+          <div className="flex justify-center items-center gap-x-[0.4em] mb-3 whitespace-nowrap">
+            <span className="text-brand-red text-red-shimmer px-[0.05em]">FULLY BOOKED</span>
             <span className="text-white">IN 90 DAYS</span>
           </div>
         </motion.h1>
@@ -87,7 +87,7 @@ export default function Hero({ onApply }: HeroProps) {
             className="w-full sm:w-[85%] md:w-[75%] lg:w-[65%] mx-auto p-4 md:p-8 relative will-change-transform"
           >
             <h2 className="text-2xl sm:text-4xl md:text-6xl font-black uppercase italic leading-none mb-12 relative z-10 flex flex-col items-center gap-4">
-              <span className="text-white text-xl sm:text-2xl md:text-3xl"><span className="text-blue-400/80">Apply</span> for</span>
+              <span className="text-white text-xl sm:text-2xl md:text-3xl"><span className="text-brand-red text-red-shimmer">Apply</span> for</span>
               <MergedOutline strokeWidth="4px" strokeColor="#DC2626">1-on-1 coaching</MergedOutline>
             </h2>
             <InlineForm />

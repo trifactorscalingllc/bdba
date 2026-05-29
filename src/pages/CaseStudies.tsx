@@ -135,9 +135,9 @@ export default function CaseStudies() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="text-center text-xl sm:text-2xl md:text-4xl font-black uppercase italic tracking-tight leading-tight mb-8 md:mb-12 will-change-transform"
+      className="text-center text-xl sm:text-2xl md:text-4xl font-black uppercase italic leading-tight mb-8 md:mb-12 will-change-transform"
     >
-      <span className="text-blue-400">STEP {step}:</span>{' '}
+      <span className="text-brand-red text-red-shimmer">STEP {step}:</span>{' '}
       <span className="text-white">{children}</span>
     </motion.h2>
   );
@@ -173,10 +173,10 @@ export default function CaseStudies() {
               </span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tighter leading-[1.15] uppercase italic px-4">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight leading-[1.15] uppercase italic px-4">
               <div className="text-white block mb-2 whitespace-nowrap">Welcome To</div>
               <div className="flex justify-center items-center whitespace-nowrap">
-                <MergedOutline strokeWidth="3px" strokeColor="#3B82F6" fillColor="#3B82F6">The Vault</MergedOutline>
+                <span className="text-brand-red text-red-shimmer px-[0.05em]">The Vault</span>
               </div>
             </h1>
 
@@ -216,7 +216,7 @@ export default function CaseStudies() {
                   <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-full bg-brand-red/90 flex items-center justify-center shadow-[0_0_40px_rgba(220,38,38,0.6)] group-hover:scale-110 transition-transform mb-6">
                     <Play size={32} className="text-white ml-1" fill="white" />
                   </div>
-                  <p className="text-blue-400 text-xs sm:text-sm font-black uppercase tracking-widest mb-2">
+                  <p className="text-brand-red text-red-shimmer text-xs sm:text-sm font-black uppercase tracking-widest mb-2">
                     Video coming soon
                   </p>
                   <p className="text-white/80 text-sm sm:text-base max-w-sm text-center px-6 leading-relaxed">
@@ -320,7 +320,7 @@ export default function CaseStudies() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
                     {/* Question text */}
                     <div className="p-6 md:p-10 flex flex-col justify-center">
-                      <p className="text-blue-400 text-xs sm:text-sm font-black uppercase tracking-[0.25em] mb-3">
+                      <p className="text-brand-red text-red-shimmer text-xs sm:text-sm font-black uppercase tracking-[0.25em] mb-3">
                         FAQ #{faq.num}
                       </p>
                       <h3 className="text-xl sm:text-2xl md:text-3xl font-black uppercase italic text-white tracking-tight leading-tight">
@@ -358,10 +358,10 @@ export default function CaseStudies() {
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               className="text-center will-change-transform"
             >
-              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tighter leading-[1.15] uppercase italic px-4">
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tight leading-[1.15] uppercase italic px-4">
                 <div className="text-white block mb-2 whitespace-nowrap">While You Wait,</div>
                 <div className="flex justify-center items-center whitespace-nowrap">
-                  <MergedOutline strokeWidth="3px" strokeColor="#3B82F6" fillColor="#3B82F6">Watch The Wins</MergedOutline>
+                  <span className="text-brand-red text-red-shimmer px-[0.05em]">Watch The Wins</span>
                 </div>
               </h2>
               <p className="mt-6 text-base sm:text-lg md:text-xl text-white/80 leading-relaxed font-medium max-w-2xl mx-auto">
@@ -504,7 +504,7 @@ export default function CaseStudies() {
                     </>
                   ) : activeVideo.kind === 'faq' ? (
                     <>
-                      <p className="text-blue-400 font-black uppercase tracking-widest text-xs sm:text-sm">
+                      <p className="text-brand-red text-red-shimmer font-black uppercase tracking-widest text-xs sm:text-sm">
                         FAQ #{activeVideo.data.num}
                       </p>
                       <h3 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase italic tracking-tight text-white max-w-2xl">
