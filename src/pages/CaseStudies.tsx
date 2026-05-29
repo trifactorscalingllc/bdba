@@ -68,9 +68,8 @@ export default function CaseStudies() {
   return (
     <div className="min-h-screen bg-brand-black relative selection:bg-brand-red selection:text-white">
       <Helmet>
-        <title>Welcome To The Vault | Profitable Barbers</title>
-        <meta name="robots" content="noindex, nofollow" />
-        <meta name="description" content="Student case studies — for booked applicants only." />
+        <title>Student Wins | Profitable Barbers</title>
+        <meta name="description" content="Real student results and case studies from Profitable Barbers." />
       </Helmet>
 
       <LiquidBackground />
