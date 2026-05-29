@@ -216,22 +216,29 @@
 
   /* ─── Deep Red Metallic Shimmer ─────────────────────────────── */
   .text-red-shimmer {
+    /* Tightened palette: peak at red-400 instead of near-white, so long
+       phrases like "WATCH THE WINS" never wash out at the trailing edge
+       when the shimmer's bright spot is mid-pan. Saturated red base
+       holds even when the highlight lands on the last few letters. */
     background: linear-gradient(
       105deg,
-      #5c0000,
+      #7f1d1d 0%,
       #991b1b 15%,
-      #dc2626 28%,
-      #ff6b6b 38%,
-      #ffcdd2 50%,
-      #ff6b6b 62%,
-      #dc2626 72%,
+      #b91c1c 30%,
+      #dc2626 42%,
+      #f87171 50%,
+      #dc2626 58%,
+      #b91c1c 70%,
       #991b1b 85%,
-      #5c0000
+      #7f1d1d 100%
     );
     background-size: 300% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    /* tiny right buffer prevents italic trailing letters from being
+       cropped by the background's text bounding box */
+    padding-right: 0.05em;
     animation: red-text-shimmer 3s ease-in-out infinite;
   }
 
