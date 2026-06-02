@@ -74,7 +74,7 @@ const caseStudies = [
     shortTimeframe: "Retention",
     rating: "5.0",
     projects: "750+",
-    instagram: "https://www.instagram.com/cutsbyygeorge/",
+    instagram: "https://www.instagram.com/geofadeit/",
     image: georgeImg
   },
   {
