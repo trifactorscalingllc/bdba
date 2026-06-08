@@ -7,7 +7,7 @@
 //
 // D-061 (2026-05-23): No auth. Public via /dashboard/student/:slug URL.
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -366,6 +366,10 @@ export default function StudentDashboard() {
           )}
 
           {recentBiz.length > 0 && (
+            <AovComparison slug={slug} cuts={monthlyBiz.cuts} revenue={monthlyBiz.revenue} />
+          )}
+
+          {recentBiz.length > 0 && (
             <div className="mt-6 pt-5 border-t border-white/10">
               <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60 mb-3">
                 Daily entries · click 🗑 to remove a mistyped day
@@ -482,6 +486,134 @@ function Factor({ label, earned, max, explain }: { label: string; earned: number
     <div className="bg-black/40 border border-white/10 rounded-lg px-3 py-2.5" title={explain}>
       <div className="font-mono text-[9px] uppercase tracking-[0.15em] text-white/60 mb-1">{label}</div>
       <div className={`text-lg font-black italic ${factorClass(earned, max)}`}>{earned} / {max}</div>
+    </div>
+  );
+}
+
+// Average-per-cut (AOV) vs the price the student charges. AOV is computed
+// from the last-30-day totals (revenue ÷ cuts); the price is typed in by the
+// student and remembered in their browser (per slug). The difference shows
+// whether each visit is actually worth more or less than their sticker price.
+function AovComparison({ slug, cuts, revenue }: { slug: string; cuts: number; revenue: number }) {
+  const storageKey = `bdba:cut-price:${slug}`;
+  const [price, setPrice] = useState<string>("");
+
+  // Reload the saved price whenever we switch students.
+  useEffect(() => {
+    try {
+      setPrice(localStorage.getItem(storageKey) ?? "");
+    } catch {
+      setPrice("");
+    }
+  }, [storageKey]);
+
+  const savePrice = (v: string) => {
+    setPrice(v);
+    try {
+      if (v === "") localStorage.removeItem(storageKey);
+      else localStorage.setItem(storageKey, v);
+    } catch {
+      /* localStorage unavailable — keep in-memory only */
+    }
+  };
+
+  const money = (n: number) =>
+    `$${n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+  const aov = cuts > 0 && revenue > 0 ? revenue / cuts : null;
+  const priceNum = price !== "" && Number(price) > 0 ? Number(price) : null;
+  const diff = aov != null && priceNum != null ? aov - priceNum : null;
+
+  return (
+    <div className="mt-6 pt-5 border-t border-white/10">
+      <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60 mb-3">
+        What you actually make per cut
+      </div>
+
+      {aov == null ? (
+        <div className="text-sm text-white/40 italic">
+          Log your <strong>cuts</strong> and <strong>revenue</strong> above to see your average per cut.
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Average per cut (AOV) — auto-calculated */}
+            <div className="bg-black/40 border border-white/10 rounded-lg px-4 py-3">
+              <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/60 mb-1">
+                Average per cut (AOV)
+              </div>
+              <div className="text-2xl font-black italic tracking-tight text-white">{money(aov)}</div>
+              <div className="font-mono text-[10px] text-white/40 mt-1">
+                ${revenue.toLocaleString()} ÷ {cuts} cuts
+              </div>
+            </div>
+
+            {/* Your price per cut — student input */}
+            <div className="bg-black/40 border border-white/10 rounded-lg px-4 py-3">
+              <label className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/60 mb-1 block">
+                Your price per cut
+              </label>
+              <div className="flex items-baseline">
+                <span className="text-2xl font-black italic text-white/50 mr-1">$</span>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="1"
+                  value={price}
+                  onChange={(e) => savePrice(e.target.value)}
+                  placeholder="0"
+                  className="w-full bg-transparent text-2xl font-black italic tracking-tight text-white placeholder-white/20 focus:outline-none border-b border-white/10 focus:border-brand-red transition"
+                />
+              </div>
+              <div className="font-mono text-[10px] text-white/40 mt-1">What you charge for one cut</div>
+            </div>
+
+            {/* Difference */}
+            <div className="bg-black/40 border border-white/10 rounded-lg px-4 py-3">
+              <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/60 mb-1">
+                Difference
+              </div>
+              {diff == null ? (
+                <div className="text-2xl font-black italic tracking-tight text-white/30">—</div>
+              ) : (
+                <div
+                  className={`text-2xl font-black italic tracking-tight ${
+                    diff >= 0 ? "text-green-400" : "text-red-400"
+                  }`}
+                >
+                  {diff >= 0 ? "+" : "−"}
+                  {money(Math.abs(diff))}
+                </div>
+              )}
+              <div className="font-mono text-[10px] text-white/40 mt-1">Average per cut − your price</div>
+            </div>
+          </div>
+
+          {diff != null && (
+            <div
+              className={`mt-4 text-[13px] leading-relaxed rounded-xl px-5 py-3 border ${
+                diff >= 0
+                  ? "bg-green-500/5 border-green-500/20 text-green-300"
+                  : "bg-red-500/5 border-red-500/20 text-red-300"
+              }`}
+            >
+              {diff >= 0 ? (
+                <>
+                  You actually make <strong>{money(Math.abs(diff))} more</strong> on each visit than your $
+                  {priceNum} price — tips, add-ons, and rebooks are pushing every cut above your base rate.
+                </>
+              ) : (
+                <>
+                  You're making <strong>{money(Math.abs(diff))} less</strong> per visit than your ${priceNum}{" "}
+                  price — no-shows, discounts, or unpaid cuts are dragging your real take below your sticker
+                  price.
+                </>
+              )}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
