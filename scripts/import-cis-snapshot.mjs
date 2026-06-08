@@ -170,13 +170,17 @@ let answerCount = 0;
 for (const slug of snapshot.students) {
   const data = snapshot.data[slug] ?? {};
   const answers = data.answers ?? {};
-  const rows = Object.entries(answers).map(([video_id, payload]) => ({
-    slug,
-    video_id,
-    payload,
-    questions_version: payload?.questions_version ?? null,
-    audited_date: payload?.audited_date ?? null,
-  }));
+  // Build set of valid video_ids for this student to skip orphaned answers
+  const validVideoIds = new Set((data.videos_jsonl ?? []).map((v) => v.video_id));
+  const rows = Object.entries(answers)
+    .filter(([video_id]) => validVideoIds.has(video_id))
+    .map(([video_id, payload]) => ({
+      slug,
+      video_id,
+      payload,
+      questions_version: payload?.questions_version ?? null,
+      audited_date: payload?.audited_date ?? null,
+    }));
   if (rows.length === 0) continue;
   for (let i = 0; i < rows.length; i += 100) {
     const chunk = rows.slice(i, i + 100);
