@@ -24,6 +24,7 @@ export default function Hero({ onApply }: HeroProps) {
             <span className="text-white">TAKING</span>
             <span className="text-brand-red text-red-shimmer">STUCK</span>
             <span className="text-white">BARBERS</span>
+            <span className="text-white">TO</span>
           </div>
           <div className="flex justify-center items-center gap-x-[0.4em] mb-3 whitespace-nowrap">
             <span className="text-brand-red text-red-shimmer px-[0.05em]">FULLY BOOKED</span>
