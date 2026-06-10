@@ -14,19 +14,19 @@ export default function Hero({ onApply }: HeroProps) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.15] mb-6 md:mb-8 uppercase italic px-4 sm:px-8 will-change-transform"
+          className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-black tracking-tight leading-[1.15] mb-6 md:mb-8 uppercase italic px-6 sm:px-10 will-change-transform"
         >
-          <div className="flex justify-center items-center gap-x-[0.4em] mb-3 whitespace-nowrap">
+          <div className="flex flex-wrap justify-center items-center gap-x-[0.4em] gap-y-1 mb-3 pr-[0.15em]">
             <span className="text-white">THE</span>
             <span className="text-brand-red text-red-shimmer px-[0.05em]">6-FIGURE BLUEPRINT</span>
           </div>
-          <div className="flex justify-center items-center gap-x-[0.4em] mb-3 whitespace-nowrap">
+          <div className="flex flex-wrap justify-center items-center gap-x-[0.4em] gap-y-1 mb-3 pr-[0.15em]">
             <span className="text-white">TAKING</span>
             <span className="text-brand-red text-red-shimmer">STUCK</span>
             <span className="text-white">BARBERS</span>
             <span className="text-white">TO</span>
           </div>
-          <div className="flex justify-center items-center gap-x-[0.4em] mb-3 whitespace-nowrap">
+          <div className="flex flex-wrap justify-center items-center gap-x-[0.4em] gap-y-1 mb-3 pr-[0.15em]">
             <span className="text-brand-red text-red-shimmer px-[0.05em]">FULLY BOOKED</span>
             <span className="text-white">IN 90 DAYS</span>
           </div>
