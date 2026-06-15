@@ -71,8 +71,8 @@ const CASE_STUDIES: CaseStudy[] = [
   },
   {
     name: 'George',
-    handle: '@georgecuts',  // TODO: confirm real handle
-    instagram: 'https://www.instagram.com/georgecuts',
+    handle: '@geofadeit',
+    instagram: 'https://www.instagram.com/geofadeit',
     tagline: 'From Random Walk-Ins To High-Paying Clientele', // TODO: replace
     thumbnail: 'https://placehold.co/640x800/0a0a0a/dc2626?text=GEORGE+%E2%80%94+VIDEO+SOON', // TODO: replace
     videoEmbedUrl: '', // TODO
