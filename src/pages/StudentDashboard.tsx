@@ -131,10 +131,13 @@ export default function StudentDashboard() {
     ? (monthlyBiz.no_shows / (monthlyBiz.cuts + monthlyBiz.no_shows)) * 100
     : 0;
 
-  // ALL audited posts, newest first. PostRow handles expand/collapse per row.
+  // ALL audited posts, NEWEST-FIRST by the reel's post date (audited_date breaks
+  // ties so a freshly-audited post still surfaces). PostRow handles expand/collapse.
   const allAuditedContent = [...videos]
     .filter((v) => v.audited_date)
-    .sort((a, b) => (b.audited_date || "").localeCompare(a.audited_date || ""));
+    .sort((a, b) =>
+      (b.posted_date || "").localeCompare(a.posted_date || "")
+      || (b.audited_date || "").localeCompare(a.audited_date || ""));
 
   const recap = computeMonthlyRecap(slug, today);
   const badge = statusBadge(healthBar.status);

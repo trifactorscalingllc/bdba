@@ -134,10 +134,11 @@ export async function fetchCisFromSupabase(): Promise<CisCache> {
       resolution_px: (v as { resolution_px?: string }).resolution_px ?? undefined,
     });
   }
-  // Sort each student's videos by posted_date for stable iteration.
+  // Sort each student's videos NEWEST-FIRST by posted_date (the reel's post date).
+  // Display surfaces (StudentDashboard feed, coach views) inherit this order.
   for (const slug of Object.keys(cache.data)) {
     cache.data[slug].videos.sort((a, b) =>
-      (a.posted_date || "").localeCompare(b.posted_date || ""),
+      (b.posted_date || "").localeCompare(a.posted_date || ""),
     );
   }
 
