@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes, useParams } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -76,6 +76,11 @@ const App = () => (
               path="/dashboard/student/:slug"
               element={<StudentDashboardGuarded />}
             />
+
+            {/* Short-link redirects for social bios/descriptions. */}
+            <Route path="/tt" element={<Navigate to="/apply?utm_source=tiktok&utm_medium=bio&utm_campaign=evergreen" replace />} />
+            <Route path="/ig" element={<Navigate to="/apply?utm_source=instagram&utm_medium=bio&utm_campaign=evergreen" replace />} />
+            <Route path="/yt" element={<Navigate to="/apply?utm_source=youtube&utm_medium=description&utm_campaign=evergreen" replace />} />
 
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
