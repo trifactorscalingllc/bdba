@@ -7,9 +7,17 @@ export default function StandaloneForm() {
 
   const formUrl = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const utmSource = urlParams.get('utm_source') || 'xxxxx';
-    const utmCampaign = urlParams.get('utm_campaign') || 'xxxxx';
-    return `https://form.typeform.com/to/EytKMkv4?utm_source=${encodeURIComponent(utmSource)}&utm_campaign=${encodeURIComponent(utmCampaign)}`;
+    const utmSource = urlParams.get('utm_source');
+    const utmCampaign = urlParams.get('utm_campaign');
+    const utmMedium = urlParams.get('utm_medium');
+    const utmContent = urlParams.get('utm_content');
+    const tfParams = new URLSearchParams();
+    if (utmSource) tfParams.set('utm_source', utmSource);
+    if (utmCampaign) tfParams.set('utm_campaign', utmCampaign);
+    if (utmMedium) tfParams.set('utm_medium', utmMedium);
+    if (utmContent) tfParams.set('utm_content', utmContent);
+    const qs = tfParams.toString();
+    return `https://form.typeform.com/to/EytKMkv4${qs ? '?' + qs : ''}`;
   }, []);
 
   // Typeform's "Redirect on completion" setting redirects the IFRAME, not the
