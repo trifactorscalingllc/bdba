@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/lib/auth";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import GARouteTracker from "@/components/GARouteTracker";
 import Index from "./pages/Index.tsx";
 import Apply from "./pages/Apply.tsx";
 import Intro from "./pages/Intro.tsx";
@@ -41,6 +42,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
+          <GARouteTracker />
           <Routes>
             {/* Marketing site — UNTOUCHED. */}
             <Route path="/" element={<Index />} />
