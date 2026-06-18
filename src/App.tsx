@@ -77,6 +77,11 @@ const App = () => (
               element={<StudentDashboardGuarded />}
             />
 
+            {/* Short-link redirects for social bios/descriptions. */}
+            <Route path="/tt" element={<Navigate to="/apply?utm_source=tiktok&utm_medium=bio&utm_campaign=evergreen" replace />} />
+            <Route path="/ig" element={<Navigate to="/apply?utm_source=instagram&utm_medium=bio&utm_campaign=evergreen" replace />} />
+            <Route path="/yt" element={<Navigate to="/apply?utm_source=youtube&utm_medium=description&utm_campaign=evergreen" replace />} />
+
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
